@@ -16,6 +16,12 @@ var rootCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 }
 
+func init() {
+	rootCmd.SetHelpCommand(&cobra.Command{
+		Hidden: true,
+	})
+}
+
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)

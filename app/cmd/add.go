@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"sort"
@@ -10,14 +11,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var cwd, _ = os.Getwd()
+
 func init() {
-	rootCmd.AddCommand(connect)
+	rootCmd.AddCommand(add)
 }
 
-var connect = &cobra.Command{
+var add = &cobra.Command{
 	Args:  cobra.ExactValidArgs(2),
-	Use:   "connect <source> <destination>",
-	Short: "Connecting to cloud",
+	Use:   "add <source> <destination>",
+	Short: "Add to synchronized folder (" + cwd + ")",
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 
 		var source = args[0]
@@ -58,10 +61,13 @@ var connect = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Run")
-		output, err := exec.Command("rclone", "sync", args[0], args[1]).Output()
-		fmt.Println(output)
-		return err
+		fmt.Println("rclone", "sync", args[0], args[1], "--dry-run")
+		//output, err := exec.Command("rclone", "sync", args[0], args[1], "--dry-run").Output()
+		command := exec.Command("rclone", "sync", args[0], args[1], "--dry-run", "--progress")
+		command.Stdout = os.Stdout
+		command.Stderr = os.Stderr
+
+		return command.Run()
 	},
 	DisableFlagsInUseLine: true,
 }
