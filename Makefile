@@ -14,18 +14,18 @@ clean:
 	rm -rf $(CURDIR)/.build/*
 
 cross-build: clean vendor  ## Build project for all supported platform
-	for os in $(TARGET_OS);do                                                                                                  \
-		for arch in $(TARGET_ARCH);do                                                                                          \
-			echo $$os/$$arch;                                                                                                  \
-			env GOOS=$$os GOARCH=$$arch go build -o $(CURDIR)/.build/rcloud-$$os-$$arch ./cmd/rcloud/main.go ; \
-		done;                                                                                                                  \
+	for os in $(TARGET_OS);do                                                                           \
+		for arch in $(TARGET_ARCH);do                                                                   \
+			echo $$os/$$arch;                                                                           \
+			env GOOS=$$os GOARCH=$$arch go build -o $(CURDIR)/.build/rcloud-$$os-$$arch ./app/main.go ; \
+		done;                                                                                           \
 	done;
 
 build: clean vendor ## Build project for local
-	go build -o $(CURDIR)/.build/rcloud ./cmd/rcloud/main.go
+	go build -o $(CURDIR)/.build/rcloud ./app/main.go
 
 run: ## Run without build project
-	go run ./cmd/rcloud/main.go
+	go run ./app/main.go
 
 vendor:
 	go mod vendor
