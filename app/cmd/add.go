@@ -21,7 +21,7 @@ var add = &cobra.Command{
 	Args:  cobra.ExactValidArgs(2),
 	Use:   "add <source> <destination>",
 	Short: "Add to synchronized folder (" + cwd + ")",
-	PreRunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(cmd *cobra.Command, args []string) error {
 
 		var source = args[0]
 		var destination = args[1]
@@ -57,13 +57,9 @@ var add = &cobra.Command{
 			destination, _ = filepath.Abs(args[1])
 		}
 
-		fmt.Println("PreRunE", source, destination)
-		return nil
-	},
-	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("rclone", "sync", args[0], args[1], "--dry-run")
+		fmt.Println("rclone", "sync", source, destination, "--dry-run")
 		//output, err := exec.Command("rclone", "sync", args[0], args[1], "--dry-run").Output()
-		command := exec.Command("rclone", "sync", args[0], args[1], "--dry-run", "--progress")
+		command := exec.Command("rclone", "sync", source, destination, "--dry-run", "--progress")
 		command.Stdout = os.Stdout
 		command.Stderr = os.Stderr
 
