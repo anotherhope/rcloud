@@ -9,7 +9,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "rcloud",
-	Short: "rcloud is a backup real-time backup system",
+	Short: "rcloud is a backup real time backup system",
 	CompletionOptions: cobra.CompletionOptions{
 		HiddenDefaultCmd: true,
 	},

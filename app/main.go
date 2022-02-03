@@ -18,5 +18,9 @@ func main() {
 		}
 	}
 
+	conf := LoadConfig()
+
+	fmt.Println("conf", conf)
+
 	cmd.Execute()
 }

@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var cwd, _ = os.Getwd()
@@ -49,7 +50,6 @@ var add = &cobra.Command{
 			}
 
 			availableChoices := strings.Split(string(output), "\n")
-			fmt.Println(availableChoices, remote+":")
 			if i := sort.SearchStrings(availableChoices, remote+":"); i > 0 {
 				return fmt.Errorf("rclone remote not availaible for destination")
 			}
@@ -57,13 +57,28 @@ var add = &cobra.Command{
 			destination, _ = filepath.Abs(args[1])
 		}
 
-		fmt.Println("rclone", "sync", source, destination, "--dry-run")
-		//output, err := exec.Command("rclone", "sync", args[0], args[1], "--dry-run").Output()
-		command := exec.Command("rclone", "sync", source, destination, "--dry-run", "--progress")
-		command.Stdout = os.Stdout
-		command.Stderr = os.Stderr
+		/*
+			//repositories := viper.Get("repositories")
+			if repositories == nil {
+				repositories.Directory
+				/*
+					viper.Set("repositories", &.Directory{
+						Source:      source,
+						Destination: destination,
+					})
+		*/
+		//}
 
-		return command.Run()
+		viper.SafeWriteConfig()
+
+		//fmt.Println("rclone", "sync", source, destination, "--dry-run")
+		//output, err := exec.Command("rclone", "sync", args[0], args[1], "--dry-run").Output()
+		//command := exec.Command("rclone", "sync", source, destination, "--dry-run", "--progress")
+		//command.Stdout = os.Stdout
+		//command.Stderr = os.Stderr
+
+		//return //command.Run()
+		return nil
 	},
 	DisableFlagsInUseLine: true,
 }
