@@ -17,11 +17,11 @@ var status = &cobra.Command{
 	Short: "Show status of synchronized folders",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var output = [][]string{}
-		var max = []int{4, 5, 6, 11}
-		output = append(output, []string{"NAME", "STATUS", "SOURCE", "DESTINATION"})
+		var max = []int{9, 5, 6, 11}
+		output = append(output, []string{"RCLOUD ID", "STATUS", "SOURCE", "DESTINATION"})
 		for _, repository := range repositories.List() {
-			if max[0] < len(repository.Name) {
-				max[0] = len(repository.Name)
+			if max[0] < len(repository.Name[0:12]) {
+				max[0] = len(repository.Name[0:12])
 			}
 
 			if max[1] < len(repository.Status()) {
@@ -36,7 +36,7 @@ var status = &cobra.Command{
 				max[3] = len(repository.Destination)
 			}
 
-			output = append(output, []string{repository.Name, repository.Status(), repository.Source, repository.Destination})
+			output = append(output, []string{repository.Name[0:12], repository.Status(), repository.Source, repository.Destination})
 		}
 
 		for _, line := range output {

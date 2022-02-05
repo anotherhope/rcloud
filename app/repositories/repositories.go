@@ -67,6 +67,13 @@ func Del(n string) error {
 		}
 	}
 
+	for k, v := range repo {
+		if strings.HasPrefix(v.Name, n) {
+			config.Set("repositories", append(repo[:k], repo[k+1:]...))
+			return nil
+		}
+	}
+
 	return fmt.Errorf("repository not exists")
 }
 

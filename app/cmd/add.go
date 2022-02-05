@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"crypto/sha1"
 	"fmt"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -57,8 +57,11 @@ var add = &cobra.Command{
 			destination, _ = filepath.Abs(args[1])
 		}
 
+		h := sha1.New()
+		h.Write([]byte(source + destination))
+
 		return repositories.Add(&config.Directory{
-			Name:        path.Base(source),
+			Name:        fmt.Sprintf("%x", h.Sum(nil)),
 			Source:      source,
 			Destination: destination,
 			Watch:       100 * time.Millisecond,
