@@ -20,6 +20,11 @@ jobs:
     - name: Build
       run: make cross-build
 
+    #- name: Run coverage
+    #  run: go test -race -coverprofile=coverage.out -covermode=atomic
+    #- name: Upload coverage to Codecov
+    #  run: bash <(curl -s https://codecov.io/bash)
+
     - name: Clean
       uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
