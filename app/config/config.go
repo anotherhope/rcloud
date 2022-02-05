@@ -28,6 +28,7 @@ func Get() *Config {
 
 func Set(key string, value interface{}) {
 	viper.Set(key, value)
+	viper.WriteConfig()
 }
 
 func init() {
@@ -42,4 +43,7 @@ func init() {
 	}
 
 	viper.Unmarshal(instance)
+
+	viper.SafeWriteConfig()
+	viper.WriteConfig()
 }
