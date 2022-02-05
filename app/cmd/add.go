@@ -15,66 +15,66 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(add)
-}
+	cmd := &cobra.Command{
+		Args:  cobra.ExactValidArgs(2),
+		Use:   "add <source> <destination>",
+		Short: "Add to synchronized folder (" + cwd + ")",
+		RunE: func(cmd *cobra.Command, args []string) error {
 
-var add = &cobra.Command{
-	Args:  cobra.ExactValidArgs(2),
-	Use:   "add <source> <destination>",
-	Short: "Add to synchronized folder (" + cwd + ")",
-	RunE: func(cmd *cobra.Command, args []string) error {
+			var source = args[0]
+			var destination = args[1]
 
-		var source = args[0]
-		var destination = args[1]
+			if strings.Contains(source, ":") {
+				remote := strings.Split(source, ":")[0]
+				output, err := exec.Command("rclone", "listremotes").Output()
+				if err != nil {
+					return err
+				}
 
-		if strings.Contains(source, ":") {
-			remote := strings.Split(source, ":")[0]
-			output, err := exec.Command("rclone", "listremotes").Output()
-			if err != nil {
-				return err
+				availableChoices := strings.Split(string(output), "\n")
+				if i := sort.SearchStrings(availableChoices, remote+":"); i == 0 {
+					return fmt.Errorf("rclone remote not availaible for source")
+				}
+			} else {
+				source, _ = filepath.Abs(args[0])
 			}
 
-			availableChoices := strings.Split(string(output), "\n")
-			if i := sort.SearchStrings(availableChoices, remote+":"); i == 0 {
-				return fmt.Errorf("rclone remote not availaible for source")
+			if strings.Contains(destination, ":") {
+				remote := strings.Split(destination, ":")[0]
+				output, err := exec.Command("rclone", "listremotes").Output()
+				if err != nil {
+					return err
+				}
+
+				availableChoices := strings.Split(string(output), "\n")
+				if i := sort.SearchStrings(availableChoices, remote+":"); i > 0 {
+					return fmt.Errorf("rclone remote not availaible for destination")
+				}
+			} else {
+				destination, _ = filepath.Abs(args[1])
 			}
-		} else {
-			source, _ = filepath.Abs(args[0])
-		}
 
-		if strings.Contains(destination, ":") {
-			remote := strings.Split(destination, ":")[0]
-			output, err := exec.Command("rclone", "listremotes").Output()
-			if err != nil {
-				return err
-			}
+			h := sha1.New()
+			h.Write([]byte(source + destination))
 
-			availableChoices := strings.Split(string(output), "\n")
-			if i := sort.SearchStrings(availableChoices, remote+":"); i > 0 {
-				return fmt.Errorf("rclone remote not availaible for destination")
-			}
-		} else {
-			destination, _ = filepath.Abs(args[1])
-		}
+			return repositories.Add(&config.Directory{
+				Name:        fmt.Sprintf("%x", h.Sum(nil)),
+				Source:      source,
+				Destination: destination,
+				Watch:       100 * time.Millisecond,
+			})
 
-		h := sha1.New()
-		h.Write([]byte(source + destination))
+			//fmt.Println("rclone", "sync", source, destination, "--dry-run")
+			//output, err := exec.Command("rclone", "sync", args[0], args[1], "--dry-run").Output()
+			//command := exec.Command("rclone", "sync", source, destination, "--dry-run", "--progress")
+			//command.Stdout = os.Stdout
+			//command.Stderr = os.Stderr
 
-		return repositories.Add(&config.Directory{
-			Name:        fmt.Sprintf("%x", h.Sum(nil)),
-			Source:      source,
-			Destination: destination,
-			Watch:       100 * time.Millisecond,
-		})
+			//return //command.Run()
+			//return nil
+		},
+		DisableFlagsInUseLine: true,
+	}
 
-		//fmt.Println("rclone", "sync", source, destination, "--dry-run")
-		//output, err := exec.Command("rclone", "sync", args[0], args[1], "--dry-run").Output()
-		//command := exec.Command("rclone", "sync", source, destination, "--dry-run", "--progress")
-		//command.Stdout = os.Stdout
-		//command.Stderr = os.Stderr
-
-		//return //command.Run()
-		//return nil
-	},
-	DisableFlagsInUseLine: true,
+	rootCmd.AddCommand(cmd)
 }
