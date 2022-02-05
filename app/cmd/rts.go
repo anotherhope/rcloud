@@ -14,8 +14,4 @@ func init() {
 var run = &cobra.Command{
 	Use:   "rts",
 	Short: "Real Time Synchronization",
-	/*RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("rts")
-		return nil
-	},*/
 }
