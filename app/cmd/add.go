@@ -61,7 +61,7 @@ var add = &cobra.Command{
 			Name:        path.Base(source),
 			Source:      source,
 			Destination: destination,
-			Watch:       100 * time.Microsecond,
+			Watch:       100 * time.Millisecond,
 		})
 
 		//fmt.Println("rclone", "sync", source, destination, "--dry-run")
