@@ -2,17 +2,16 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"sort"
 	"strings"
 
+	"github.com/anotherhope/rcloud/app/config"
+	"github.com/anotherhope/rcloud/app/repositories"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
-
-var cwd, _ = os.Getwd()
 
 func init() {
 	rootCmd.AddCommand(add)
@@ -57,19 +56,11 @@ var add = &cobra.Command{
 			destination, _ = filepath.Abs(args[1])
 		}
 
-		/*
-			//repositories := viper.Get("repositories")
-			if repositories == nil {
-				repositories.Directory
-				/*
-					viper.Set("repositories", &.Directory{
-						Source:      source,
-						Destination: destination,
-					})
-		*/
-		//}
-
-		viper.SafeWriteConfig()
+		return repositories.Add(&config.Directory{
+			Name:        path.Base(source),
+			Source:      source,
+			Destination: destination,
+		})
 
 		//fmt.Println("rclone", "sync", source, destination, "--dry-run")
 		//output, err := exec.Command("rclone", "sync", args[0], args[1], "--dry-run").Output()
@@ -78,7 +69,7 @@ var add = &cobra.Command{
 		//command.Stderr = os.Stderr
 
 		//return //command.Run()
-		return nil
+		//return nil
 	},
 	DisableFlagsInUseLine: true,
 }

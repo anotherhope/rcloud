@@ -7,6 +7,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var cwd, _ = os.Getwd()
+
 var rootCmd = &cobra.Command{
 	Use:   "rcloud",
 	Short: "rcloud is a backup real time backup system",
