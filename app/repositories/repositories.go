@@ -6,21 +6,36 @@ import (
 	"github.com/anotherhope/rcloud/app/config"
 )
 
+func Contains(name string) bool {
+	for _, d := range config.Get().Repositories {
+		if name == d.Destination {
+			return true
+		}
+	}
+	return false
+}
+
 func Add(d *config.Directory) error {
-	if value, ok := config.Get().Repositories[d.Name]; ok {
-		return fmt.Errorf("value already existe %s", value.Name)
+	if Contains(d.Destination) {
+		return fmt.Errorf("value already existe %s", d.Name)
 	}
 
-	config.Get().Repositories[d.Name] = d
-	config.Set("repositories", config.Get().Repositories)
+	config.Set("repositories", append(config.Get().Repositories, d))
 	return nil
 }
 
 func Del(n string) {
-	delete(config.Get().Repositories, n)
-	config.Set("repositories", config.Get().Repositories)
+	repo := config.Get().Repositories
+
+	for k, v := range repo {
+		if v.Name == n {
+			config.Set("repositories", append(repo[:k], repo[k+1:]...))
+			break
+		}
+	}
+
 }
 
-func List() map[string]*config.Directory {
+func List() []*config.Directory {
 	return config.Get().Repositories
 }

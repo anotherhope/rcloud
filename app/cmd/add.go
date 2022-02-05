@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/anotherhope/rcloud/app/config"
 	"github.com/anotherhope/rcloud/app/repositories"
@@ -60,6 +61,7 @@ var add = &cobra.Command{
 			Name:        path.Base(source),
 			Source:      source,
 			Destination: destination,
+			Watch:       100 * time.Microsecond,
 		})
 
 		//fmt.Println("rclone", "sync", source, destination, "--dry-run")

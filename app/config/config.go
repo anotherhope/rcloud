@@ -2,22 +2,24 @@ package config
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Repositories map[string]*Directory
+	Repositories []*Directory
 }
 
 type Directory struct {
-	Name        string `mapstructure:"name"`
-	Source      string `mapstructure:"source"`
-	Destination string `mapstructure:"destination"`
+	Name        string        `mapstructure:"name"`
+	Source      string        `mapstructure:"source"`
+	Destination string        `mapstructure:"destination"`
+	Watch       time.Duration `mapstructure:"watch"`
 }
 
 var instance *Config = &Config{
-	Repositories: map[string]*Directory{},
+	Repositories: []*Directory{},
 }
 
 func Get() *Config {
