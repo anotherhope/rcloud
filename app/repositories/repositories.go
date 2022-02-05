@@ -57,16 +57,17 @@ func Add(d *config.Directory) error {
 	return nil
 }
 
-func Del(n string) {
+func Del(n string) error {
 	repo := config.Get().Repositories
 
 	for k, v := range repo {
 		if v.Name == n {
 			config.Set("repositories", append(repo[:k], repo[k+1:]...))
-			break
+			return nil
 		}
 	}
 
+	return fmt.Errorf("repository not exists")
 }
 
 func List() []*config.Directory {

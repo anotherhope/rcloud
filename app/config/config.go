@@ -18,6 +18,11 @@ type Directory struct {
 	Watch       time.Duration `mapstructure:"watch"`
 }
 
+func (d *Directory) Status() string {
+
+	return ""
+}
+
 var instance *Config = &Config{
 	Repositories: []*Directory{},
 }

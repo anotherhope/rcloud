@@ -14,9 +14,7 @@ var del = &cobra.Command{
 	Use:   "del <folder>",
 	Short: "Delete synchronized folder",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		repositories.Del(args[0])
-
-		return nil
+		return repositories.Del(args[0])
 	},
 	DisableFlagsInUseLine: true,
 }
