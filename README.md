@@ -1,6 +1,6 @@
 # File system notifications for Go
 
-![example workflow](https://github.com/github.com/anotherhope/actions/workflows/go.yml/badge.svg)
+[![Go Build](https://github.com/github.com/anotherhope/actions/workflows/go.yml/badge.svg)](https://github.com/github.com/anotherhope/actions/workflows/go.yml/badge.svg)
 [![Go Reference](https://pkg.go.dev/badge/github.com/anotherhope/rcloud.svg)](https://pkg.go.dev/github.com/anotherhope/rcloud) [![Go Report Card](https://goreportcard.com/badge/github.com/anotherhope/rcloud)](https://goreportcard.com/report/github.com/anotherhope/rcloud)
 
 # Rcloud
