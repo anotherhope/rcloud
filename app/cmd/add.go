@@ -33,7 +33,7 @@ func init() {
 
 				availableChoices := strings.Split(string(output), "\n")
 				if i := sort.SearchStrings(availableChoices, remote+":"); i == 0 {
-					return fmt.Errorf("rclone remote not availaible for source")
+					return fmt.Errorf("rclone remote not available for source")
 				}
 			} else {
 				source, _ = filepath.Abs(args[0])
@@ -48,7 +48,7 @@ func init() {
 
 				availableChoices := strings.Split(string(output), "\n")
 				if i := sort.SearchStrings(availableChoices, remote+":"); i > 0 {
-					return fmt.Errorf("rclone remote not availaible for destination")
+					return fmt.Errorf("rclone remote not available for destination")
 				}
 			} else {
 				destination, _ = filepath.Abs(args[1])
