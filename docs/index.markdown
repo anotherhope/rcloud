@@ -25,6 +25,18 @@ print_hi('Tom')
 
 Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
 
+test [![Go](workflow-pass)]
+
+[![Go](https://github.com/anotherhope/rcloud/actions/workflows/go.yml/badge.svg)](https://github.com/anotherhope/rcloud/actions/workflows/go.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/anotherhope/rcloud.svg)](https://pkg.go.dev/github.com/anotherhope/rcloud) [![Go Report Card](https://goreportcard.com/badge/github.com/anotherhope/rcloud)](https://goreportcard.com/report/github.com/anotherhope/rcloud)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d5102bdf5504b9ce56ce/maintainability)](https://codeclimate.com/github/anotherhope/rcloud/maintainability)
+
+
 [jekyll-docs]: https://jekyllrb.com/docs/home
 [jekyll-gh]:   https://github.com/jekyll/jekyll
 [jekyll-talk]: https://talk.jekyllrb.com/
+
+[workflow-pass]: https://github.com/anotherhope/rcloud/actions/workflows/go.yml/badge.svg
+[workflow-reference]: https://pkg.go.dev/badge/github.com/anotherhope/rcloud.svg
+[workflow-report]: https://goreportcard.com/badge/github.com/anotherhope/rcloud
+[workflow-maintainability]: https://api.codeclimate.com/v1/badges/d5102bdf5504b9ce56ce/maintainability
