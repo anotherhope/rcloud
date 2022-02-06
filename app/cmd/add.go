@@ -3,10 +3,6 @@ package cmd
 import (
 	"crypto/sha1"
 	"fmt"
-	"os/exec"
-	"path/filepath"
-	"sort"
-	"strings"
 	"time"
 
 	"github.com/anotherhope/rcloud/app/config"
@@ -21,37 +17,16 @@ func init() {
 		Short: "Add to synchronized folder (" + cwd + ")",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
+			var err error
 			var source = args[0]
 			var destination = args[1]
 
-			if strings.Contains(source, ":") {
-				remote := strings.Split(source, ":")[0]
-				output, err := exec.Command("rclone", "listremotes").Output()
-				if err != nil {
-					return err
-				}
-
-				availableChoices := strings.Split(string(output), "\n")
-				if i := sort.SearchStrings(availableChoices, remote+":"); i == 0 {
-					return fmt.Errorf("rclone remote not available for source")
-				}
-			} else {
-				source, _ = filepath.Abs(args[0])
+			if source, err = repositories.IsValid(source); err != nil {
+				return err
 			}
 
-			if strings.Contains(destination, ":") {
-				remote := strings.Split(destination, ":")[0]
-				output, err := exec.Command("rclone", "listremotes").Output()
-				if err != nil {
-					return err
-				}
-
-				availableChoices := strings.Split(string(output), "\n")
-				if i := sort.SearchStrings(availableChoices, remote+":"); i > 0 {
-					return fmt.Errorf("rclone remote not available for destination")
-				}
-			} else {
-				destination, _ = filepath.Abs(args[1])
+			if destination, err = repositories.IsValid(destination); err != nil {
+				return err
 			}
 
 			h := sha1.New()

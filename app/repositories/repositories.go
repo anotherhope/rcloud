@@ -2,6 +2,9 @@ package repositories
 
 import (
 	"fmt"
+	"os/exec"
+	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/anotherhope/rcloud/app/config"
@@ -82,4 +85,24 @@ func Del(n string) error {
 // List repositories in configuration file
 func List() []*config.Directory {
 	return config.Get().Repositories
+}
+
+// Detect if remote repository is valid and configured
+func IsValid(path string) (string, error) {
+	if strings.Contains(path, ":") {
+		remote := strings.Split(path, ":")[0]
+		output, err := exec.Command("rclone", "listremotes").Output()
+		if err != nil {
+			return path, err
+		}
+
+		availableChoices := strings.Split(string(output), "\n")
+		if i := sort.SearchStrings(availableChoices, remote+":"); i < 0 {
+			return path, fmt.Errorf("rclone remote not available")
+		}
+
+		return path, nil
+	}
+
+	return filepath.Abs(path)
 }
