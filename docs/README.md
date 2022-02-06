@@ -19,15 +19,15 @@ Create un synchronized folder
 $ rcloud add <local_source> <local_destination>
 ```
 ## Local To Remote
-Create a remote provider with rclone: 
-```
-$ rclone config
-```
 Create un synchronized folder
 ```
 $ rcloud add <local_source> <remote_destination:path>
 ```
 ## Remote To Local
+Create a remote provider with rclone: 
+```
+$ rclone config
+```
 Create un synchronized folder
 ```
 $ rcloud add <remote_source:path> <local_destination>
