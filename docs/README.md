@@ -5,4 +5,9 @@
 
 # Rcloud
 
-**Rcloud*** is a command-line program to sync files and directories to and from different cloud storage providers in real time and based on **Rclone** 
+**Rcloud** is a command-line program to sync files and directories to and from different cloud storage providers in real time and it dependent on **Rclone**.
+
+## How to use
+
+First create a remote provider on rclone configuration:
+`rclone config`
