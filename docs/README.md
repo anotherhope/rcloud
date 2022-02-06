@@ -18,7 +18,6 @@ Create un synchronized folder
 ```
 $ rcloud add <local_source> <local_destination>
 ```
-Now check your folder is registered check this with
 ### Local To Remote
 Create a remote provider with rclone: 
 ```
@@ -28,13 +27,11 @@ Create un synchronized folder
 ```
 $ rcloud add <local_source> <remote_destination:path>
 ```
-Now check your folder is registered check this with
 ### Remote To Local
 Create un synchronized folder
 ```
 $ rcloud add <remote_source:path> <local_destination>
 ```
-Now check your folder is registered check this with
 ### Remote To Remote
 Create a remote provider with rclone: 
 ```
@@ -44,4 +41,3 @@ Create un synchronized folder
 ```
 $ rcloud add <remote_source:path> <remote_destination:path>
 ```
-Now check your folder is registered check this with
