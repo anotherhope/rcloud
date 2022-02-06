@@ -12,5 +12,5 @@
 First create a remote provider on rclone configuration:
 
 ```
-rclone config
+$ rclone config
 ```
