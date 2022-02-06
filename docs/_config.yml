@@ -25,6 +25,7 @@ baseurl: "/rcloud" # the subpath of your site, e.g. /blog
 url: "https://anotherhope.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
 github_username:  anotherhope
+show_downloads: true
 
 # Build settings
 #theme: jekyll-theme-cayman
