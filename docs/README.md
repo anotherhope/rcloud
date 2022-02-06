@@ -12,25 +12,18 @@
 ### Local To Local
 
 ### Local To Remote
-
-First create a remote provider on rclone with: 
-
+Create a remote provider with rclone: 
 ```
 $ rclone config
 ```
-
 Create un synchronized folder
-
 ```
 $ rcloud add <source_path> <remote_path>
 ```
-
 Now check your folder is registered check this with
-
 ```
 $ rcloud status
 ```
-
 ### Remote To Local
 
 ### Remote To Remote
