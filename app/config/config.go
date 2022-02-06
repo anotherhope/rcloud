@@ -7,10 +7,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Config is the struct of the config file for unmarshal
 type Config struct {
 	Repositories []*Directory
 }
 
+// Directory is the structure of syncronized folder
 type Directory struct {
 	Name        string        `mapstructure:"name"`
 	Source      string        `mapstructure:"source"`
@@ -18,19 +20,22 @@ type Directory struct {
 	Watch       time.Duration `mapstructure:"watch"`
 }
 
+var instance *Config = &Config{
+	Repositories: []*Directory{},
+}
+
+// Status() can display status for Directory
 func (d *Directory) Status() string {
 
 	return ""
 }
 
-var instance *Config = &Config{
-	Repositories: []*Directory{},
-}
-
+// Get configuration instance
 func Get() *Config {
 	return instance
 }
 
+// Set value in confuration file and save behind
 func Set(key string, value interface{}) {
 	viper.Set(key, value)
 	viper.WriteConfig()

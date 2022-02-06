@@ -43,6 +43,7 @@ func same(name string) bool {
 	return false
 }
 
+// Add repository in configuration file
 func Add(d *config.Directory) error {
 
 	if same(d.Destination) {
@@ -57,6 +58,7 @@ func Add(d *config.Directory) error {
 	return nil
 }
 
+// Del repository in configuration file
 func Del(n string) error {
 	repo := config.Get().Repositories
 
@@ -77,6 +79,7 @@ func Del(n string) error {
 	return fmt.Errorf("repository not exists")
 }
 
+// List repositories in configuration file
 func List() []*config.Directory {
 	return config.Get().Repositories
 }
