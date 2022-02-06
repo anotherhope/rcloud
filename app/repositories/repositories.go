@@ -87,7 +87,7 @@ func List() []*config.Directory {
 	return config.Get().Repositories
 }
 
-// Detect if remote repository is valid and configured
+// IsValid detect if remote repository is configured and valid
 func IsValid(path string) (string, error) {
 	if strings.Contains(path, ":") {
 		remote := strings.Split(path, ":")[0]

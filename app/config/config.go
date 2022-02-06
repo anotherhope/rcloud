@@ -24,7 +24,7 @@ var instance *Config = &Config{
 	Repositories: []*Directory{},
 }
 
-// Status() can display status for Directory
+// Status can display statement of a Directory
 func (d *Directory) Status() string {
 
 	return ""
