@@ -13,7 +13,7 @@
 
 ## Local To Remote
 
-First create a remote provider on rclone configuration: 
+First create a remote provider on rclone with: 
 
 ```
 $ rclone config
