@@ -9,9 +9,9 @@
 
 # How to use
 
-## Local To Local
+### Local To Local
 
-## Local To Remote
+### Local To Remote
 
 First create a remote provider on rclone with: 
 
@@ -31,6 +31,6 @@ Now check your folder is registered check this with
 $ rcloud status
 ```
 
-## Remote To Local
+### Remote To Local
 
-## Remote To Remote
+### Remote To Remote
