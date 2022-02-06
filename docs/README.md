@@ -9,7 +9,7 @@
 
 # How to use
 
-### Local To Local
+## Local To Local
 Create a remote provider with rclone: 
 ```
 $ rclone config
@@ -18,7 +18,7 @@ Create un synchronized folder
 ```
 $ rcloud add <local_source> <local_destination>
 ```
-### Local To Remote
+## Local To Remote
 Create a remote provider with rclone: 
 ```
 $ rclone config
@@ -27,12 +27,12 @@ Create un synchronized folder
 ```
 $ rcloud add <local_source> <remote_destination:path>
 ```
-### Remote To Local
+## Remote To Local
 Create un synchronized folder
 ```
 $ rcloud add <remote_source:path> <local_destination>
 ```
-### Remote To Remote
+## Remote To Remote
 Create a remote provider with rclone: 
 ```
 $ rclone config
