@@ -10,7 +10,18 @@
 # How to use
 
 ### Local To Local
-
+Create a remote provider with rclone: 
+```
+$ rclone config
+```
+Create un synchronized folder
+```
+$ rcloud add <local_source> <local_destination>
+```
+Now check your folder is registered check this with
+```
+$ rcloud status
+```
 ### Local To Remote
 Create a remote provider with rclone: 
 ```
@@ -18,12 +29,35 @@ $ rclone config
 ```
 Create un synchronized folder
 ```
-$ rcloud add <source_path> <remote_path>
+$ rcloud add <local_source> <remote_destination:path>
 ```
 Now check your folder is registered check this with
 ```
 $ rcloud status
 ```
 ### Remote To Local
-
+Create a remote provider with rclone: 
+```
+$ rclone config
+```
+Create un synchronized folder
+```
+$ rcloud add <remote_source:path> <local_destination>
+```
+Now check your folder is registered check this with
+```
+$ rcloud status
+```
 ### Remote To Remote
+Create a remote provider with rclone: 
+```
+$ rclone config
+```
+Create un synchronized folder
+```
+$ rcloud add <remote_source:path> <remote_destination:path>
+```
+Now check your folder is registered check this with
+```
+$ rcloud status
+```
