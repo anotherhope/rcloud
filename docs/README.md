@@ -9,7 +9,7 @@
 
 ![Windows](https://img.shields.io/badge/Windows-1c1c1c?logo=windows&logoColor=F0F0F0)
 ![Mac OS](https://img.shields.io/badge/OSX-1c1c1c?logo=apple&logoColor=F0F0F0)
-![Linux](https://img.shields.io/badge/Linux-1c1c1c?logo=linux&logoColor=black)
+![Linux](https://img.shields.io/badge/Linux-1c1c1c?logo=linux&logoColor=F0F0F0)
 
 # Rcloud
 
