@@ -7,9 +7,9 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/d5102bdf5504b9ce56ce/maintainability)](https://codeclimate.com/github/anotherhope/rcloud/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d5102bdf5504b9ce56ce/test_coverage)](https://codeclimate.com/github/anotherhope/rcloud/test_coverage)
 
-![Windows](https://img.shields.io/badge/Windows-1c1c1c?logo=windows&logoColor=F0F0F0)
-![Mac OS](https://img.shields.io/badge/OSX-1c1c1c?logo=apple&logoColor=F0F0F0)
-![Linux](https://img.shields.io/badge/Linux-1c1c1c?logo=linux&logoColor=F0F0F0)
+![Windows](https://img.shields.io/badge/Windows-595959?logo=windows&logoColor=F0F0F0)
+![Mac OS](https://img.shields.io/badge/OSX-595959?logo=apple&logoColor=F0F0F0)
+![Linux](https://img.shields.io/badge/Linux-595959?logo=linux&logoColor=F0F0F0)
 
 # Rcloud
 
