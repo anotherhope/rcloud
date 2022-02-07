@@ -39,7 +39,7 @@ jobs:
         name: Release
         owner: anotherhope
         tag: latest
-        body: Release for docker healthcheck
+        body: Release for Rcloud
         artifacts: ".build/*"
         allowUpdates: true
         replacesArtifacts: true
