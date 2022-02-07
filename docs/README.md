@@ -13,6 +13,8 @@ Platforms:
 ![Windows](https://img.shields.io/badge/Windows%20(x64%20%7C%20x86)-595959?logo=windows&logoColor=F0F0F0)
 ![OSX](https://img.shields.io/badge/OSX%20(x64%20%7C%20x86)-595959?logo=apple&logoColor=F0F0F0)
 ![Linux](https://img.shields.io/badge/Linux%20(x64%20%7C%20x86)-595959?logo=linux&logoColor=F0F0F0)
+![Linux](https://img.shields.io/badge/OpenBSD%20(x64%20%7C%20x86)-595959?logo=openbsd&logoColor=F0F0F0)
+
 # How to use
 
 ### Local To Local
