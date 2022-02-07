@@ -8,7 +8,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d5102bdf5504b9ce56ce/test_coverage)](https://codeclimate.com/github/anotherhope/rcloud/test_coverage)
 
 ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=F0F0F0)
-![Mac OS](https://img.shields.io/badge/OSX-000000?style=for-the-badge&logo=osx&logoColor=F0F0F0)
+![Mac OS](https://img.shields.io/badge/OSX-000000?style=for-the-badge&logo=apple&logoColor=F0F0F0)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 
 # Rcloud
