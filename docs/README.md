@@ -14,6 +14,8 @@ Platforms:
 ![OSX](https://img.shields.io/badge/OSX-595959?logo=apple&logoColor=F0F0F0)
 ![Linux](https://img.shields.io/badge/Linux-595959?logo=linux&logoColor=F0F0F0)
 
+![arm](https://img.shields.io/badge/Windows-595959?logo=arm&logoColor=F0F0F0)
+![amd](https://img.shields.io/badge/OSX-595959?logo=amd&logoColor=F0F0F0)
 # How to use
 
 ### Local To Local
