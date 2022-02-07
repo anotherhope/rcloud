@@ -13,7 +13,7 @@ Platforms:
 ![Windows](https://img.shields.io/badge/Windows-lightgrey?logo=windows&logoColor=F0F0F0)
 ![OSX](https://img.shields.io/badge/OSX-lightgrey?logo=apple&logoColor=F0F0F0)
 ![Linux](https://img.shields.io/badge/Linux-lightgrey?logo=linux&logoColor=F0F0F0)
-![Architecture](https://img.shields.io/badge/architecture-x64 | x86-lightgrey)
+![Architecture](https://img.shields.io/badge/architecture-x64%20%7C%20x86-lightgrey)
 # How to use
 
 ### Local To Local
