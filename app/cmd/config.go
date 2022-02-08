@@ -7,19 +7,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func init() {
-	cmd := &cobra.Command{
-		Use:   "config",
-		Short: "Enter an interactive configuration session.",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			sub := exec.Command("rclone", append([]string{"config"}, args[:]...)...)
-			sub.Stdout = os.Stdout
-			sub.Stdin = os.Stdin
-			sub.Stderr = os.Stderr
-			return sub.Run()
-		},
-		DisableFlagsInUseLine: true,
-	}
+var config_cmd = &cobra.Command{
+	Use:   "config",
+	Short: "Enter an interactive configuration session.",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		sub := exec.Command("rclone", append([]string{"config"}, args[:]...)...)
+		sub.Stdout = os.Stdout
+		sub.Stdin = os.Stdin
+		sub.Stderr = os.Stderr
+		return sub.Run()
+	},
+	DisableFlagsInUseLine: true,
+}
 
-	rootCmd.AddCommand(cmd)
+func init() {
+	rootCmd.AddCommand(config_cmd)
 }
