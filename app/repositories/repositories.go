@@ -11,7 +11,7 @@ import (
 )
 
 func parent(name string) bool {
-	repo := config.Get().Repositories
+	repo := List()
 
 	for _, d := range repo {
 		if strings.HasPrefix(d.Destination, name) {
@@ -23,7 +23,7 @@ func parent(name string) bool {
 }
 
 func sub(name string) bool {
-	repo := config.Get().Repositories
+	repo := List()
 
 	for _, d := range repo {
 		if strings.HasPrefix(name, d.Destination) {
@@ -35,7 +35,7 @@ func sub(name string) bool {
 }
 
 func same(name string) bool {
-	repo := config.Get().Repositories
+	repo := List()
 
 	for _, d := range repo {
 		if name == d.Destination {
@@ -48,7 +48,6 @@ func same(name string) bool {
 
 // Add repository in configuration file
 func Add(d *config.Directory) error {
-
 	if same(d.Destination) {
 		return fmt.Errorf("destination path already exist as a sync folder ")
 	} else if parent(d.Destination) {
@@ -57,24 +56,31 @@ func Add(d *config.Directory) error {
 		return fmt.Errorf("destination path is sub directory of a sync folder ")
 	}
 
-	config.Set("repositories", append(config.Get().Repositories, d))
+	config.Set("repositories",
+		append(List(), d),
+	)
+
 	return nil
 }
 
 // Del repository in configuration file
 func Del(n string) error {
-	repo := config.Get().Repositories
+	repo := List()
 
 	for k, v := range repo {
 		if v.Name == n {
-			config.Set("repositories", append(repo[:k], repo[k+1:]...))
+			config.Set("repositories",
+				append(repo[:k], repo[k+1:]...),
+			)
 			return nil
 		}
 	}
 
 	for k, v := range repo {
 		if strings.HasPrefix(v.Name, n) {
-			config.Set("repositories", append(repo[:k], repo[k+1:]...))
+			config.Set("repositories", append(
+				repo[:k], repo[k+1:]...),
+			)
 			return nil
 		}
 	}
@@ -84,7 +90,9 @@ func Del(n string) error {
 
 // List repositories in configuration file
 func List() []*config.Directory {
-	return config.Get().Repositories
+	repositories := []*config.Directory{}
+	config.Cast("repositories", &repositories)
+	return repositories
 }
 
 // IsValid detect if remote repository is configured and valid
