@@ -6,24 +6,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-/*
-// Config is the struct of the config file for unmarshal
-type Config struct {
-	Repositories []*Directory
-}
-
-/*
-var instance *Config = &Config{
-	Repositories: []*Directory{},
-}
-
-/*
-// Get configuration instance
-func Get() *Config {
-	return instance
-}
-*/
-
 //  Cast value from configuration file
 func Cast(k string, i interface{}) {
 	viper.UnmarshalKey(k, &i)
@@ -40,6 +22,7 @@ func Set(key string, value interface{}) {
 	Save()
 }
 
+// Save write configuration on file
 func Save() error {
 	return viper.WriteConfig()
 }
