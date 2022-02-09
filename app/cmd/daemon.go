@@ -2,7 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
 
+	"github.com/anotherhope/rcloud/app/rclone"
+	"github.com/anotherhope/rcloud/app/repositories"
 	"github.com/spf13/cobra"
 )
 
@@ -33,19 +37,29 @@ var daemon_remove = &cobra.Command{
 	},
 }
 
-var daemon_standalone = &cobra.Command{
+var daemon_start = &cobra.Command{
 	Args:  cobra.ExactArgs(0),
-	Use:   "standalone",
-	Short: "Run daemon in standalone mode",
+	Use:   "start",
+	Short: "Run daemon in start mode",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("standalone")
+		var exit = make(chan os.Signal, 1)
+		signal.Notify(exit, os.Interrupt)
+
+		for _, repository := range repositories.List() {
+			if rclone.Check(repository.Source, repository.Destination) {
+				rclone.Sync(repository.Source, repository.Destination)
+			}
+		}
+
+		<-exit
+		fmt.Println()
 		return nil
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(daemon_cmd)
 	daemon_cmd.AddCommand(daemon_install)
 	daemon_cmd.AddCommand(daemon_remove)
-	daemon_cmd.AddCommand(daemon_standalone)
+	daemon_cmd.AddCommand(daemon_start)
+	rootCmd.AddCommand(daemon_cmd)
 }

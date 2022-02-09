@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/anotherhope/rcloud/app/config"
 	"github.com/anotherhope/rcloud/app/repositories"
@@ -22,7 +23,7 @@ var rts_start = &cobra.Command{
 		count := 0
 		for k, repository := range repo {
 			if !repository.RTS {
-				if len(args) == 1 && repository.Name == args[0] || len(args) == 0 {
+				if len(args) == 1 && strings.HasPrefix(repository.Name, args[0]) || len(args) == 0 {
 					count++
 					if err := repository.Start(); err != nil {
 						return err
@@ -34,10 +35,7 @@ var rts_start = &cobra.Command{
 		}
 
 		config.Set("repositories", repo)
-
-		if count > 0 {
-			fmt.Printf("%v synchronization(s) are started\n", count)
-		}
+		fmt.Printf("%v synchronization(s) has been started\n", count)
 
 		return nil
 	},
@@ -52,7 +50,7 @@ var rts_stop = &cobra.Command{
 		count := 0
 		for k, repository := range repositories.List() {
 			if repository.RTS {
-				if len(args) == 1 && repository.Name == args[0] || len(args) == 0 {
+				if len(args) == 1 && strings.HasPrefix(repository.Name, args[0]) || len(args) == 0 {
 					count++
 					if err := repository.Stop(); err != nil {
 						return err
@@ -64,17 +62,14 @@ var rts_stop = &cobra.Command{
 		}
 
 		config.Set("repositories", repo)
-
-		if count > 0 {
-			fmt.Printf("%v synchronization(s) are stopped\n", count)
-		}
+		fmt.Printf("%v synchronization(s) has been stopped\n", count)
 
 		return nil
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(rts_cmd)
 	rts_cmd.AddCommand(rts_start)
 	rts_cmd.AddCommand(rts_stop)
+	rootCmd.AddCommand(rts_cmd)
 }

@@ -27,3 +27,7 @@ func (d *Directory) Stop() error {
 func (d *Directory) Status() string {
 	return ""
 }
+
+func (d *Directory) NeedSync() {
+
+}

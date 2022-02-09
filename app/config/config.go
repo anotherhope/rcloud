@@ -38,8 +38,6 @@ func init() {
 		}
 	}
 
-	//viper.Unmarshal(instance)
-
 	viper.SafeWriteConfig()
 	viper.WriteConfig()
 }
