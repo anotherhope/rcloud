@@ -6,12 +6,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-//  Cast value from configuration file
+// Cast value from configuration file
 func Cast(k string, i interface{}) {
 	viper.UnmarshalKey(k, &i)
 }
 
-//  Get value in configuration file
+// Get value in configuration file
 func Get(key string) interface{} {
 	return viper.Get(key)
 }
