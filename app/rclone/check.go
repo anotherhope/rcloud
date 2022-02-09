@@ -9,7 +9,7 @@ import (
 
 // Check execute Rclone check command to detect one change
 func Check(s string, d string) bool {
-	command := exec.Command("rclone", "check", s, d)
+	command := exec.Command("rclone", "check", s, d, "--transfers=1")
 	stderr, _ := command.StderrPipe()
 	stdout, _ := command.StdoutPipe()
 	combined := io.MultiReader(stderr, stdout)
