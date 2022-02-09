@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var status_cmd = &cobra.Command{
+var statusCmd = &cobra.Command{
 	Args:  cobra.ExactValidArgs(0),
 	Use:   "status",
 	Short: "Show status of synchronized folders",
@@ -58,5 +58,5 @@ var status_cmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(status_cmd)
+	rootCmd.AddCommand(statusCmd)
 }

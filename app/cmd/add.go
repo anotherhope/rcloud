@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var add_cmd = &cobra.Command{
+var addCmd = &cobra.Command{
 	Args:  cobra.ExactValidArgs(2),
 	Use:   "add <source> <destination>",
 	Short: "Add to synchronized folder (" + cwd + ")",
@@ -51,5 +51,5 @@ var add_cmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(add_cmd)
+	rootCmd.AddCommand(addCmd)
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var del_cmd = &cobra.Command{
+var delCmd = &cobra.Command{
 	Args:  cobra.ExactValidArgs(1),
 	Use:   "del <folder>",
 	Short: "Delete synchronized folder",
@@ -16,5 +16,5 @@ var del_cmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(del_cmd)
+	rootCmd.AddCommand(delCmd)
 }

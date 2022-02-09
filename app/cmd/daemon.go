@@ -10,12 +10,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var daemon_cmd = &cobra.Command{
+var daemonCmd = &cobra.Command{
 	Use:   "daemon",
 	Short: "Daemon management",
 }
 
-var daemon_install = &cobra.Command{
+var daemonInstall = &cobra.Command{
 	Args:  cobra.ExactArgs(0),
 	Use:   "install",
 	Short: "Install daemon",
@@ -26,7 +26,7 @@ var daemon_install = &cobra.Command{
 	},
 }
 
-var daemon_remove = &cobra.Command{
+var daemonRemove = &cobra.Command{
 	Args:  cobra.ExactArgs(0),
 	Use:   "remove",
 	Short: "Remove daemon",
@@ -37,7 +37,7 @@ var daemon_remove = &cobra.Command{
 	},
 }
 
-var daemon_start = &cobra.Command{
+var daemonStart = &cobra.Command{
 	Args:  cobra.ExactArgs(0),
 	Use:   "start",
 	Short: "Run daemon in start mode",
@@ -58,8 +58,8 @@ var daemon_start = &cobra.Command{
 }
 
 func init() {
-	daemon_cmd.AddCommand(daemon_install)
-	daemon_cmd.AddCommand(daemon_remove)
-	daemon_cmd.AddCommand(daemon_start)
-	rootCmd.AddCommand(daemon_cmd)
+	daemonCmd.AddCommand(daemonInstall)
+	daemonCmd.AddCommand(daemonRemove)
+	daemonCmd.AddCommand(daemonStart)
+	rootCmd.AddCommand(daemonCmd)
 }

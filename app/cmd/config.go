@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var config_cmd = &cobra.Command{
+var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Enter an interactive configuration session.",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -21,5 +21,5 @@ var config_cmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(config_cmd)
+	rootCmd.AddCommand(configCmd)
 }

@@ -9,12 +9,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rts_cmd = &cobra.Command{
+var rtsCmd = &cobra.Command{
 	Use:   "rts",
 	Short: "Real Time Synchronization",
 }
 
-var rts_start = &cobra.Command{
+var rtsStart = &cobra.Command{
 	Args:  cobra.MaximumNArgs(1),
 	Use:   "start",
 	Short: "Start real time synchronization",
@@ -41,7 +41,7 @@ var rts_start = &cobra.Command{
 	},
 }
 
-var rts_stop = &cobra.Command{
+var rtsStop = &cobra.Command{
 	Args:  cobra.MaximumNArgs(1),
 	Use:   "stop",
 	Short: "Stop real time synchronization",
@@ -69,7 +69,7 @@ var rts_stop = &cobra.Command{
 }
 
 func init() {
-	rts_cmd.AddCommand(rts_start)
-	rts_cmd.AddCommand(rts_stop)
-	rootCmd.AddCommand(rts_cmd)
+	rtsCmd.AddCommand(rtsStart)
+	rtsCmd.AddCommand(rtsStop)
+	rootCmd.AddCommand(rtsCmd)
 }
