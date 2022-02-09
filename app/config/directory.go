@@ -11,13 +11,13 @@ type Directory struct {
 	RTS         bool          `mapstructure:"rts"`
 }
 
-// Start syncronization for the current directory
+// Start synchronization for the current directory
 func (d *Directory) Start() error {
 	d.RTS = true
 	return Save()
 }
 
-// Stop syncronization for the current directory
+// Stop synchronization for the current directory
 func (d *Directory) Stop() error {
 	d.RTS = false
 	return Save()
