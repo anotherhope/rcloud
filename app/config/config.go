@@ -43,6 +43,9 @@ func init() {
 		}
 	}
 
+	viper.SetDefault("config", instance.Args)
+	viper.SetDefault("repositories", instance.Repositories)
+
 	viper.Unmarshal(instance)
 
 	viper.SafeWriteConfig()
