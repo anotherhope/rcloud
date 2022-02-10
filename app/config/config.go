@@ -6,14 +6,19 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Cast value from configuration file
-func Cast(k string, i interface{}) {
-	viper.UnmarshalKey(k, &i)
+type Config struct {
+	Args         []string
+	Repositories []*Directory
 }
 
-// Get value in configuration file
-func Get(key string) interface{} {
-	return viper.Get(key)
+var instance = &Config{
+	Args:         []string{"--fast-list"},
+	Repositories: []*Directory{},
+}
+
+// Load value in configuration file
+func Load() *Config {
+	return instance
 }
 
 // Set value in confuration file and save behind
@@ -37,6 +42,8 @@ func init() {
 			panic(fmt.Errorf("fatal error config file: %w", err))
 		}
 	}
+
+	viper.Unmarshal(instance)
 
 	viper.SafeWriteConfig()
 	viper.WriteConfig()

@@ -15,7 +15,6 @@ var addCmd = &cobra.Command{
 	Use:   "add <source> <destination>",
 	Short: "Add to synchronized folder (" + cwd + ")",
 	RunE: func(cmd *cobra.Command, args []string) error {
-
 		var err error
 		var source = args[0]
 		var destination = args[1]
@@ -37,15 +36,6 @@ var addCmd = &cobra.Command{
 			Destination: destination,
 			Watch:       100 * time.Millisecond,
 		})
-
-		//fmt.Println("rclone", "sync", source, destination, "--dry-run")
-		//output, err := exec.Command("rclone", "sync", args[0], args[1], "--dry-run").Output()
-		//command := exec.Command("rclone", "sync", source, destination, "--dry-run", "--progress")
-		//command.Stdout = os.Stdout
-		//command.Stderr = os.Stderr
-
-		//return //command.Run()
-		//return nil
 	},
 	DisableFlagsInUseLine: true,
 }

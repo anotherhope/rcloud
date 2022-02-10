@@ -9,6 +9,7 @@ type Directory struct {
 	Destination string        `mapstructure:"destination"`
 	Watch       time.Duration `mapstructure:"watch"`
 	RTS         bool          `mapstructure:"rts"`
+	Args        []string      `mapstructure:"args"`
 }
 
 // Start synchronization for the current directory
@@ -26,8 +27,4 @@ func (d *Directory) Stop() error {
 // Status can display statement of a Directory
 func (d *Directory) Status() string {
 	return ""
-}
-
-func (d *Directory) NeedSync() {
-
 }

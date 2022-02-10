@@ -5,8 +5,8 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/anotherhope/rcloud/app/config"
 	"github.com/anotherhope/rcloud/app/rclone"
-	"github.com/anotherhope/rcloud/app/repositories"
 	"github.com/spf13/cobra"
 )
 
@@ -45,9 +45,9 @@ var daemonStart = &cobra.Command{
 		var exit = make(chan os.Signal, 1)
 		signal.Notify(exit, os.Interrupt)
 
-		for _, repository := range repositories.List() {
-			if rclone.Check(repository.Source, repository.Destination) {
-				rclone.Sync(repository.Source, repository.Destination)
+		for _, repository := range config.Load().Repositories {
+			if rclone.Check(repository) {
+				rclone.Sync(repository)
 			}
 		}
 

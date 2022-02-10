@@ -11,9 +11,7 @@ import (
 )
 
 func parent(name string) bool {
-	repo := List()
-
-	for _, d := range repo {
+	for _, d := range config.Load().Repositories {
 		if strings.HasPrefix(d.Destination, name) {
 			return true
 		}
@@ -23,9 +21,7 @@ func parent(name string) bool {
 }
 
 func sub(name string) bool {
-	repo := List()
-
-	for _, d := range repo {
+	for _, d := range config.Load().Repositories {
 		if strings.HasPrefix(name, d.Destination) {
 			return true
 		}
@@ -35,10 +31,19 @@ func sub(name string) bool {
 }
 
 func same(name string) bool {
-	repo := List()
-
-	for _, d := range repo {
+	for _, d := range config.Load().Repositories {
 		if name == d.Destination {
+			return true
+		}
+	}
+
+	return false
+}
+
+// Exists test if repository exists in configuration file
+func Exists(d *config.Directory) bool {
+	for _, repository := range config.Load().Repositories {
+		if repository.Name == d.Name {
 			return true
 		}
 	}
@@ -56,8 +61,12 @@ func Add(d *config.Directory) error {
 		return fmt.Errorf("destination path is sub directory of a sync folder ")
 	}
 
+	if Exists(d) {
+		return fmt.Errorf("sorry repository already exists")
+	}
+
 	config.Set("repositories",
-		append(List(), d),
+		append(config.Load().Repositories, d),
 	)
 
 	return nil
@@ -65,22 +74,12 @@ func Add(d *config.Directory) error {
 
 // Del repository in configuration file
 func Del(n string) error {
-	repo := List()
-
-	for k, v := range repo {
-		if v.Name == n {
-			config.Set("repositories",
-				append(repo[:k], repo[k+1:]...),
-			)
-			return nil
-		}
-	}
-
-	for k, v := range repo {
+	for k, v := range config.Load().Repositories {
 		if strings.HasPrefix(v.Name, n) {
 			config.Set("repositories", append(
-				repo[:k], repo[k+1:]...),
-			)
+				config.Load().Repositories[:k],
+				config.Load().Repositories[k+1:]...,
+			))
 			return nil
 		}
 	}
@@ -90,9 +89,7 @@ func Del(n string) error {
 
 // List repositories in configuration file
 func List() []*config.Directory {
-	repositories := []*config.Directory{}
-	config.Cast("repositories", &repositories)
-	return repositories
+	return config.Load().Repositories
 }
 
 // IsValid detect if remote repository is configured and valid

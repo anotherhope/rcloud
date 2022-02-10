@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/anotherhope/rcloud/app/repositories"
+	"github.com/anotherhope/rcloud/app/config"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +16,7 @@ var statusCmd = &cobra.Command{
 		var output = [][]string{}
 		var max = []int{9, 6, 5, 6, 11}
 		output = append(output, []string{"RCLOUD ID", "ACTIVE", "STATUS", "SOURCE", "DESTINATION"})
-		for _, repository := range repositories.List() {
+		for _, repository := range config.Load().Repositories {
 			if max[0] < len(repository.Name[0:12]) {
 				max[0] = len(repository.Name[0:12])
 			}

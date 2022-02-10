@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/anotherhope/rcloud/app/config"
-	"github.com/anotherhope/rcloud/app/repositories"
 	"github.com/spf13/cobra"
 )
 
@@ -19,9 +18,8 @@ var rtsStart = &cobra.Command{
 	Use:   "start",
 	Short: "Start real time synchronization",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		repo := repositories.List()
 		count := 0
-		for k, repository := range repo {
+		for k, repository := range config.Load().Repositories {
 			if !repository.RTS {
 				if len(args) == 1 && strings.HasPrefix(repository.Name, args[0]) || len(args) == 0 {
 					count++
@@ -31,10 +29,10 @@ var rtsStart = &cobra.Command{
 				}
 			}
 
-			repo[k] = repository
+			config.Load().Repositories[k] = repository
 		}
 
-		config.Set("repositories", repo)
+		config.Set("repositories", config.Load().Repositories)
 		fmt.Printf("%v synchronization(s) has been started\n", count)
 
 		return nil
@@ -46,9 +44,8 @@ var rtsStop = &cobra.Command{
 	Use:   "stop",
 	Short: "Stop real time synchronization",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		repo := repositories.List()
 		count := 0
-		for k, repository := range repositories.List() {
+		for k, repository := range config.Load().Repositories {
 			if repository.RTS {
 				if len(args) == 1 && strings.HasPrefix(repository.Name, args[0]) || len(args) == 0 {
 					count++
@@ -58,10 +55,10 @@ var rtsStop = &cobra.Command{
 				}
 			}
 
-			repo[k] = repository
+			config.Load().Repositories[k] = repository
 		}
 
-		config.Set("repositories", repo)
+		config.Set("repositories", config.Load().Repositories)
 		fmt.Printf("%v synchronization(s) has been stopped\n", count)
 
 		return nil

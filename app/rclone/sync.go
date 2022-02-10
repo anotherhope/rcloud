@@ -4,16 +4,15 @@ import (
 	"bufio"
 	"io"
 	"os/exec"
-	"strings"
 
 	"github.com/anotherhope/rcloud/app/config"
 )
 
-// Check execute Rclone check command to detect one change
-func Check(d *config.Directory) bool {
+// Sync execute Rclone sync command run all change
+func Sync(d *config.Directory) {
 	command := exec.Command("rclone", append(
 		[]string{
-			"check",
+			"sync",
 			d.Source,
 			d.Destination,
 		}, d.Args...)...,
@@ -23,23 +22,11 @@ func Check(d *config.Directory) bool {
 	combined := io.MultiReader(stderr, stdout)
 	command.Start()
 	buf := bufio.NewReader(combined)
-	count := 0
 	for {
-		line, _, err := buf.ReadLine()
-		if strings.Contains(string(line), "ERROR") {
-			count++
-		}
-
+		_, _, err := buf.ReadLine()
 		if err == io.EOF {
 			command.Process.Kill()
 			break
 		}
-
-		if count > 1 {
-			command.Process.Kill()
-			return true
-		}
 	}
-
-	return false
 }
