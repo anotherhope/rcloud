@@ -41,7 +41,7 @@ func same(name string) bool {
 }
 
 // Exists test if repository exists in configuration file
-func Exists(d *config.Directory) bool {
+func exists(d *config.Directory) bool {
 	for _, repository := range config.Load().Repositories {
 		if repository.Name == d.Name {
 			return true
@@ -60,10 +60,12 @@ func Add(d *config.Directory) error {
 		exitMessage = fmt.Errorf("destination path is parent directory of a sync folder ")
 	} else if sub(d.Destination) {
 		exitMessage = fmt.Errorf("destination path is sub directory of a sync folder ")
+	} else if exists(d) {
+		exitMessage = fmt.Errorf("sorry repository already exists")
 	}
 
-	if Exists(d) {
-		exitMessage = fmt.Errorf("sorry repository already exists")
+	if exitMessage != nil {
+		return exitMessage
 	}
 
 	config.Set("repositories",
