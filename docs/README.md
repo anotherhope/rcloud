@@ -1,3 +1,6 @@
+# Rcloud [![Reference](https://pkg.go.dev/badge/github.com/anotherhope/rcloud.svg)](https://pkg.go.dev/github.com/anotherhope/rcloud) [![License](https://img.shields.io:/github/license/anotherhope/rcloud)](https://github.com/anotherhope/rcloud/blob/main/LICENSE.md)
+
+##### Build
 
 [![Workflow](https://img.shields.io:/github/workflow/status/anotherhope/rcloud/Go)](https://github.com/anotherhope/rcloud/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/anotherhope/rcloud)](https://goreportcard.com/report/github.com/anotherhope/rcloud)
@@ -8,9 +11,6 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
-
-# Rcloud [![Reference](https://pkg.go.dev/badge/github.com/anotherhope/rcloud.svg)](https://pkg.go.dev/github.com/anotherhope/rcloud) [![License](https://img.shields.io:/github/license/anotherhope/rcloud)](https://github.com/anotherhope/rcloud/blob/main/LICENSE.md)
-
 
 **Rcloud** is a command-line program to sync files and directories to and from different cloud storage providers in real time and it dependent on **Rclone**.
 
