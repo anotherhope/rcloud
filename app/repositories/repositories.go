@@ -53,23 +53,24 @@ func Exists(d *config.Directory) bool {
 
 // Add repository in configuration file
 func Add(d *config.Directory) error {
+	var exitMessage error = nil
 	if same(d.Destination) {
-		return fmt.Errorf("destination path already exist as a sync folder ")
+		exitMessage = fmt.Errorf("destination path already exist as a sync folder ")
 	} else if parent(d.Destination) {
-		return fmt.Errorf("destination path is parent directory of a sync folder ")
+		exitMessage = fmt.Errorf("destination path is parent directory of a sync folder ")
 	} else if sub(d.Destination) {
-		return fmt.Errorf("destination path is sub directory of a sync folder ")
+		exitMessage = fmt.Errorf("destination path is sub directory of a sync folder ")
 	}
 
 	if Exists(d) {
-		return fmt.Errorf("sorry repository already exists")
+		exitMessage = fmt.Errorf("sorry repository already exists")
 	}
 
 	config.Set("repositories",
 		append(config.Load().Repositories, d),
 	)
 
-	return nil
+	return exitMessage
 }
 
 // Del repository in configuration file
