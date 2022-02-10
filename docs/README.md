@@ -5,6 +5,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/d5102bdf5504b9ce56ce/maintainability)](https://codeclimate.com/github/anotherhope/rcloud/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d5102bdf5504b9ce56ce/test_coverage)](https://codeclimate.com/github/anotherhope/rcloud/test_coverage)
 
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=bugs)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
