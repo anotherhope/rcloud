@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Config structure for rcloud
 type Config struct {
 	Args         []string
 	Repositories []*Directory
