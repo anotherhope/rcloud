@@ -15,28 +15,6 @@ var daemonCmd = &cobra.Command{
 	Short: "Daemon management",
 }
 
-var daemonInstall = &cobra.Command{
-	Args:  cobra.ExactArgs(0),
-	Use:   "install",
-	Short: "Install daemon",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		// TODO
-		fmt.Println("install")
-		return nil
-	},
-}
-
-var daemonRemove = &cobra.Command{
-	Args:  cobra.ExactArgs(0),
-	Use:   "remove",
-	Short: "Remove daemon",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		// TODO
-		fmt.Println("remove")
-		return nil
-	},
-}
-
 var daemonStart = &cobra.Command{
 	Args:  cobra.ExactArgs(0),
 	Use:   "start",
@@ -58,8 +36,6 @@ var daemonStart = &cobra.Command{
 }
 
 func init() {
-	daemonCmd.AddCommand(daemonInstall)
-	daemonCmd.AddCommand(daemonRemove)
 	daemonCmd.AddCommand(daemonStart)
 	rootCmd.AddCommand(daemonCmd)
 }
