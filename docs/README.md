@@ -4,6 +4,12 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/anotherhope/rcloud)](https://goreportcard.com/report/github.com/anotherhope/rcloud)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d5102bdf5504b9ce56ce/maintainability)](https://codeclimate.com/github/anotherhope/rcloud/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d5102bdf5504b9ce56ce/test_coverage)](https://codeclimate.com/github/anotherhope/rcloud/test_coverage)
+
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=anotherhope_rcloud&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=anotherhope_rcloud)
+
 # Rcloud
 
 **Rcloud** is a command-line program to sync files and directories to and from different cloud storage providers in real time and it dependent on **Rclone**.
