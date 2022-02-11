@@ -11,31 +11,25 @@ import (
 )
 
 var daemonCmd = &cobra.Command{
+	Args:  cobra.ExactArgs(0),
 	Use:   "daemon",
 	Short: "Daemon management",
-}
-
-var daemonStart = &cobra.Command{
-	Args:  cobra.ExactArgs(0),
-	Use:   "start",
-	Short: "Run daemon in start mode",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var exit = make(chan os.Signal, 1)
 		signal.Notify(exit, os.Interrupt)
 
 		for _, repository := range config.Load().Repositories {
-			if rclone.Check(repository) {
-				rclone.Sync(repository)
-			}
+			go rclone.Daemon(repository)
 		}
 
 		<-exit
+		rclone.Kill()
 		fmt.Println()
 		return nil
 	},
+	DisableFlagsInUseLine: true,
 }
 
 func init() {
-	daemonCmd.AddCommand(daemonStart)
 	rootCmd.AddCommand(daemonCmd)
 }

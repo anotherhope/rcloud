@@ -40,7 +40,6 @@ func same(name string) bool {
 	return false
 }
 
-// Exists test if repository exists in configuration file
 func exists(d *config.Directory) bool {
 	for _, repository := range config.Load().Repositories {
 		if repository.Name == d.Name {

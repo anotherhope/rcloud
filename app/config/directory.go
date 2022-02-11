@@ -1,6 +1,8 @@
 package config
 
-import "time"
+import (
+	"time"
+)
 
 // Directory is the structure of syncronized folder
 type Directory struct {
@@ -26,5 +28,5 @@ func (d *Directory) Stop() error {
 
 // Status can display statement of a Directory
 func (d *Directory) Status() string {
-	return ""
+	return "import cycle" //rclone.GetStatus(d.Name)
 }
