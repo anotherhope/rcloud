@@ -4,7 +4,8 @@
 
 PROJECT_NAME = $(shell basename $(CURDIR))
 
-TARGET_OS = "windows" "linux" "darwin" "openbsd"
+#TARGET_OS = "windows" "linux" "darwin" "openbsd"
+TARGET_OS = "linux" "darwin" "openbsd"
 TARGET_ARCH = "amd64" "arm64" 
 
 ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
