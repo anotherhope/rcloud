@@ -1,6 +1,8 @@
 package rclone
 
 import (
+	"time"
+
 	"github.com/anotherhope/rcloud/app/config"
 )
 
@@ -9,5 +11,7 @@ func Daemon(d *config.Directory) {
 		if Check(d) {
 			Sync(d)
 		}
+
+		time.Sleep(1 * time.Second)
 	}
 }

@@ -14,7 +14,7 @@
 
 **Rcloud** is a command-line program to sync files and directories to and from different cloud storage providers in real time and it dependent on **Rclone**.
 
-![Windows](https://img.shields.io/badge/Windows%20(amd%7Carm)-595959?logo=windows&logoColor=F0F0F0)
+[//]:![Windows](https://img.shields.io/badge/Windows%20(amd%7Carm)-595959?logo=windows&logoColor=F0F0F0)
 ![OSX](https://img.shields.io/badge/OSX%20(amd%7Carm)-595959?logo=apple&logoColor=F0F0F0)
 ![Linux](https://img.shields.io/badge/Linux%20(amd%7Carm)-595959?logo=linux&logoColor=F0F0F0)
 ![OpenBSD](https://img.shields.io/badge/OpenBSD%20(amd%7Carm)-595959?logo=openbsd&logoColor=F0F0F0)

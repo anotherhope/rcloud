@@ -2,6 +2,7 @@ package rclone
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 
 	"github.com/anotherhope/rcloud/app/config"
@@ -9,6 +10,7 @@ import (
 
 // Sync execute Rclone sync command run all change
 func Sync(d *config.Directory) {
+	fmt.Println("Sync", d.Name)
 	process := CreateProcess(d.Name, append(
 		[]string{
 			"sync",

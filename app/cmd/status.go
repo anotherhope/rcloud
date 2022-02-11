@@ -22,6 +22,7 @@ var statusCmd = &cobra.Command{
 			}
 
 			status := repository.GetStatus()
+			fmt.Println(status)
 
 			if max[2] < len(status) {
 				max[2] = len(status)
