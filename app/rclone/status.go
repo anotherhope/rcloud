@@ -5,5 +5,5 @@ func GetStatus(s string) string {
 		return process.Type
 	}
 
-	return "IDLE"
+	return "idle"
 }

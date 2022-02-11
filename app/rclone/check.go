@@ -24,6 +24,7 @@ func Check(d *config.Directory) bool {
 	stdout, _ := process.Command.StdoutPipe()
 	combined := io.MultiReader(stderr, stdout)
 	process.Command.Start()
+	d.SetStatus("check")
 	buf := bufio.NewReader(combined)
 	count := 0
 	for {
@@ -34,11 +35,13 @@ func Check(d *config.Directory) bool {
 
 		if err == io.EOF {
 			process.Command.Process.Kill()
+			d.SetStatus("idle")
 			break
 		}
 
 		if count > 1 {
 			process.Command.Process.Kill()
+			d.SetStatus("idle")
 			return true
 		}
 	}

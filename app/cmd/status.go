@@ -21,8 +21,10 @@ var statusCmd = &cobra.Command{
 				max[0] = len(repository.Name[0:12])
 			}
 
-			if max[2] < len(repository.Status()) {
-				max[2] = len(repository.Status())
+			status := repository.GetStatus()
+
+			if max[2] < len(status) {
+				max[2] = len(status)
 			}
 
 			if max[3] < len(repository.Source) {
@@ -38,7 +40,7 @@ var statusCmd = &cobra.Command{
 				[]string{
 					repository.Name[0:12],
 					strconv.FormatBool(repository.RTS),
-					repository.Status(),
+					status,
 					repository.Source,
 					repository.Destination,
 				},

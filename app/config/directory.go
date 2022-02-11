@@ -12,6 +12,7 @@ type Directory struct {
 	Watch       time.Duration `mapstructure:"watch"`
 	RTS         bool          `mapstructure:"rts"`
 	Args        []string      `mapstructure:"args"`
+	status      string
 }
 
 // Start synchronization for the current directory
@@ -26,7 +27,12 @@ func (d *Directory) Stop() error {
 	return Save()
 }
 
-// Status can display statement of a Directory
-func (d *Directory) Status() string {
-	return "import cycle" //rclone.GetStatus(d.Name)
+// GetStatus is Getter for Status
+func (d *Directory) GetStatus() string {
+	return d.status
+}
+
+// SetStatus is Setter for Status
+func (d *Directory) SetStatus(s string) {
+	d.status = s
 }
