@@ -5,6 +5,8 @@ import (
 	"strconv"
 
 	"github.com/anotherhope/rcloud/app/config"
+	"github.com/anotherhope/rcloud/app/message"
+	"github.com/anotherhope/rcloud/app/socket"
 	"github.com/spf13/cobra"
 )
 
@@ -13,16 +15,30 @@ var statusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Show status of synchronized folders",
 	RunE: func(cmd *cobra.Command, args []string) error {
+
 		var output = [][]string{}
 		var max = []int{9, 6, 5, 6, 11}
 		output = append(output, []string{"RCLOUD ID", "ACTIVE", "STATUS", "SOURCE", "DESTINATION"})
+
 		for _, repository := range config.Load().Repositories {
 			if max[0] < len(repository.Name[0:12]) {
 				max[0] = len(repository.Name[0:12])
 			}
 
 			status := repository.GetStatus()
-			fmt.Println(status)
+
+			client := socket.Client()
+			if client != nil {
+
+				m := &message.Message{
+					Request:  message.ReqStatus(repository.Name),
+					Response: &message.Response{},
+				}
+
+				client.Send(m)
+				client.Close()
+				status = m.Response.ToString()
+			}
 
 			if max[2] < len(status) {
 				max[2] = len(status)

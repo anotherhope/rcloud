@@ -94,6 +94,17 @@ func List() []*config.Directory {
 	return config.Load().Repositories
 }
 
+// Get repository by name
+func Get(repositoryName string) *config.Directory {
+	for _, repository := range List() {
+		if repository.Name == repositoryName {
+			return repository
+		}
+	}
+
+	return nil
+}
+
 // IsValid detect if remote repository is configured and valid
 func IsValid(path string) (string, error) {
 	if strings.Contains(path, ":") {
