@@ -119,6 +119,8 @@ func IsValid(path string) (string, error) {
 			return path, fmt.Errorf("rclone remote not available")
 		}
 
+		fmt.Println("Warning: The source from cloud providers continuously consumes bandwidth and depend of your connexion")
+
 		return path, nil
 	}
 
