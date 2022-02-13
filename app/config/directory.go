@@ -42,50 +42,50 @@ func createCache(info os.FileInfo, cachePath string, original *os.File) {
 	}
 }
 
+func walker(pathOfContent string, info os.FileInfo, err error) error {
+	if err != nil {
+		return err
+	}
+
+	relative := pathOfContent[len(d.Source):]
+	cachePath := env.CachePath + "/" + d.Name + relative
+	cacheStats, _ := os.Stat(cachePath)
+
+	original, _ := os.Open(pathOfContent)
+	defer original.Close()
+
+	if cacheStats == nil {
+		createCache(info, cachePath, original)
+		return nil
+	}
+
+	if cacheStats.ModTime().Unix() < info.ModTime().Unix() {
+		os.Chtimes(
+			cachePath,
+			info.ModTime().Local(),
+			info.ModTime().Local(),
+		)
+
+		return nil
+	}
+
+	hash := sha256.New()
+	io.Copy(hash, original)
+	checksum := fmt.Sprintf("%x", hash.Sum(nil))
+
+	if dat, err := os.ReadFile(cachePath); err == nil && string(dat) != checksum {
+		cache, _ := os.Open(cachePath)
+		cache.WriteString(checksum)
+	}
+
+	return nil
+}
+
 // HasChange make a mirror of folder to optimize change detect and reduce bandwith comsumption
 func (d *Directory) HasChange(pathOfContent string) bool {
 	d.SetStatus("check")
-	err := filepath.Walk(pathOfContent, func(pathOfContent string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		relative := pathOfContent[len(d.Source):]
-		cachePath := env.CachePath + "/" + d.Name + relative
-		cacheStats, _ := os.Stat(cachePath)
-
-		original, _ := os.Open(pathOfContent)
-		defer original.Close()
-
-		if cacheStats == nil {
-			createCache(info, cachePath, original)
-			return nil
-		}
-
-		if cacheStats.ModTime().Unix() < info.ModTime().Unix() {
-			os.Chtimes(
-				cachePath,
-				info.ModTime().Local(),
-				info.ModTime().Local(),
-			)
-
-			return nil
-		}
-
-		hash := sha256.New()
-		io.Copy(hash, original)
-		checksum := fmt.Sprintf("%x", hash.Sum(nil))
-
-		if dat, err := os.ReadFile(cachePath); err == nil && string(dat) != checksum {
-			cache, _ := os.Open(cachePath)
-			cache.WriteString(checksum)
-		}
-
-		return nil
-	})
-
+	err := filepath.Walk(pathOfContent, walker)
 	d.SetStatus("idle")
-
 	return err != nil
 }
 
