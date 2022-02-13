@@ -10,6 +10,11 @@ import (
 
 // Check execute Rclone check process.Command to detect one change
 func Check(d *config.Directory) bool {
+
+	if d.IsLocal(d.Source) && !d.IsLocal(d.Destination) {
+		return d.HasChange(d.Source)
+	}
+
 	process := CreateProcess(d.Name, append(
 		[]string{
 			"check",
