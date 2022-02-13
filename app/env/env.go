@@ -6,8 +6,13 @@ import (
 	"path"
 )
 
+// SocketPath is the path of socket file
 var SocketPath string
+
+// CachePath is the path of cache folder
 var CachePath string
+
+// User is the current running user
 var User *user.User
 
 func init() {

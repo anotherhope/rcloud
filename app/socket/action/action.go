@@ -6,6 +6,7 @@ import (
 	"github.com/anotherhope/rcloud/app/repositories"
 )
 
+// Do Execute a command from socket
 func Do(query string) []byte {
 	queryParts := strings.Split(strings.TrimSuffix(query, "\n"), ":")
 	action := queryParts[0]
