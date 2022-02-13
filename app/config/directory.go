@@ -25,6 +25,7 @@ type Directory struct {
 
 // HasChange make a mirror of folder to optimize change detect and reduce bandwith comsumption
 func (d *Directory) HasChange(pathOfContent string) bool {
+	d.SetStatus("check")
 	err := filepath.Walk(pathOfContent, func(pathOfContent string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -32,38 +33,44 @@ func (d *Directory) HasChange(pathOfContent string) bool {
 
 		relative := pathOfContent[len(d.Source):]
 		cachePath := env.CachePath + "/" + d.Name + relative
-
-		if info.IsDir() {
-			os.MkdirAll(cachePath, 0700)
-			return nil
-		}
-
 		cacheStats, _ := os.Stat(cachePath)
+
 		original, _ := os.Open(pathOfContent)
 		defer original.Close()
 
-		hash := sha256.New()
-		io.Copy(hash, original)
-		checksum := fmt.Sprintf("%x", hash.Sum(nil))
-
 		if cacheStats == nil {
-			cache, _ := os.Create(cachePath)
-			defer cache.Close()
+			if info.IsDir() {
+				os.MkdirAll(cachePath, 0700)
+			} else {
+				cache, _ := os.Create(cachePath)
+				defer cache.Close()
 
-			cache.WriteString(checksum)
-			os.Chtimes(
-				cachePath,
-				info.ModTime().Local(),
-				info.ModTime().Local(),
-			)
-		} else {
-			if cacheStats.ModTime().Unix() < info.ModTime().Unix() && false {
+				hash := sha256.New()
+				io.Copy(hash, original)
+
+				cache.WriteString(fmt.Sprintf("%x", hash.Sum(nil)))
 				os.Chtimes(
 					cachePath,
 					info.ModTime().Local(),
 					info.ModTime().Local(),
 				)
-			} else if dat, err := os.ReadFile(cachePath); err == nil && string(dat) != checksum {
+			}
+		} else {
+			if cacheStats.ModTime().Unix() < info.ModTime().Unix() {
+				os.Chtimes(
+					cachePath,
+					info.ModTime().Local(),
+					info.ModTime().Local(),
+				)
+
+				return nil
+			}
+
+			hash := sha256.New()
+			io.Copy(hash, original)
+			checksum := fmt.Sprintf("%x", hash.Sum(nil))
+
+			if dat, err := os.ReadFile(cachePath); err == nil && string(dat) != checksum {
 				cache, _ := os.Open(cachePath)
 				cache.WriteString(checksum)
 			}
@@ -71,6 +78,8 @@ func (d *Directory) HasChange(pathOfContent string) bool {
 
 		return nil
 	})
+
+	d.SetStatus("idle")
 
 	return err != nil
 }

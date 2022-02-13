@@ -12,7 +12,9 @@ import (
 func Check(d *config.Directory) bool {
 
 	if d.IsLocal(d.Source) && !d.IsLocal(d.Destination) {
-		return d.HasChange(d.Source)
+		if d.HasChange(d.Source) {
+			return true
+		}
 	}
 
 	process := CreateProcess(d.Name, append(
