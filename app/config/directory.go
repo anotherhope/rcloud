@@ -23,6 +23,25 @@ type Directory struct {
 	status      string
 }
 
+func createCache(info os.FileInfo, cachePath string, original *os.File) {
+	if info.IsDir() {
+		os.MkdirAll(cachePath, 0700)
+	} else {
+		cache, _ := os.Create(cachePath)
+		defer cache.Close()
+
+		hash := sha256.New()
+		io.Copy(hash, original)
+
+		cache.WriteString(fmt.Sprintf("%x", hash.Sum(nil)))
+		os.Chtimes(
+			cachePath,
+			info.ModTime().Local(),
+			info.ModTime().Local(),
+		)
+	}
+}
+
 // HasChange make a mirror of folder to optimize change detect and reduce bandwith comsumption
 func (d *Directory) HasChange(pathOfContent string) bool {
 	d.SetStatus("check")
@@ -39,41 +58,27 @@ func (d *Directory) HasChange(pathOfContent string) bool {
 		defer original.Close()
 
 		if cacheStats == nil {
-			if info.IsDir() {
-				os.MkdirAll(cachePath, 0700)
-			} else {
-				cache, _ := os.Create(cachePath)
-				defer cache.Close()
+			createCache(info, cachePath, original)
+			return nil
+		}
 
-				hash := sha256.New()
-				io.Copy(hash, original)
+		if cacheStats.ModTime().Unix() < info.ModTime().Unix() {
+			os.Chtimes(
+				cachePath,
+				info.ModTime().Local(),
+				info.ModTime().Local(),
+			)
 
-				cache.WriteString(fmt.Sprintf("%x", hash.Sum(nil)))
-				os.Chtimes(
-					cachePath,
-					info.ModTime().Local(),
-					info.ModTime().Local(),
-				)
-			}
-		} else {
-			if cacheStats.ModTime().Unix() < info.ModTime().Unix() {
-				os.Chtimes(
-					cachePath,
-					info.ModTime().Local(),
-					info.ModTime().Local(),
-				)
+			return nil
+		}
 
-				return nil
-			}
+		hash := sha256.New()
+		io.Copy(hash, original)
+		checksum := fmt.Sprintf("%x", hash.Sum(nil))
 
-			hash := sha256.New()
-			io.Copy(hash, original)
-			checksum := fmt.Sprintf("%x", hash.Sum(nil))
-
-			if dat, err := os.ReadFile(cachePath); err == nil && string(dat) != checksum {
-				cache, _ := os.Open(cachePath)
-				cache.WriteString(checksum)
-			}
+		if dat, err := os.ReadFile(cachePath); err == nil && string(dat) != checksum {
+			cache, _ := os.Open(cachePath)
+			cache.WriteString(checksum)
 		}
 
 		return nil
