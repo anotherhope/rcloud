@@ -42,7 +42,7 @@ func createCache(info os.FileInfo, cachePath string, original *os.File) {
 	}
 }
 
-func walker(pathOfContent string, info os.FileInfo, err error) error {
+func walker(d *Directory, pathOfContent string, info os.FileInfo, err error) error {
 	if err != nil {
 		return err
 	}
@@ -84,8 +84,12 @@ func walker(pathOfContent string, info os.FileInfo, err error) error {
 // HasChange make a mirror of folder to optimize change detect and reduce bandwith comsumption
 func (d *Directory) HasChange(pathOfContent string) bool {
 	d.SetStatus("check")
-	err := filepath.Walk(pathOfContent, walker)
+	err := filepath.Walk(pathOfContent, func(pathOfContent string, info os.FileInfo, err error) error {
+		return walker(d, pathOfContent, info, err)
+	})
+
 	d.SetStatus("idle")
+
 	return err != nil
 }
 
