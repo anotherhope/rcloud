@@ -11,8 +11,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aligator/nogo"
 	"github.com/anotherhope/rcloud/app/env"
 	"github.com/fsnotify/fsnotify"
+	"github.com/rclone/rclone/fs/filter"
 )
 
 // Directory is the structure of syncronized folder
@@ -125,6 +127,10 @@ func handler(watcher *fsnotify.Watcher, action chan string) {
 	}
 }
 
+var (
+	Opt = filter.DefaultOpt
+)
+
 // CreateMirror make a mirror of directory to optimize change detect and reduce bandwith comsumption
 func (d *Directory) CreateMirror(pathOfContent string) chan string {
 	watcher, _ := fsnotify.NewWatcher()
@@ -132,9 +138,15 @@ func (d *Directory) CreateMirror(pathOfContent string) chan string {
 
 	go handler(watcher, action)
 
+	n := nogo.New(nogo.DotGitRule)
+	n.AddFromFS(os.DirFS(pathOfContent), ".gitignore")
+
 	filepath.Walk(pathOfContent, func(currentPath string, info os.FileInfo, err error) error {
-		watcher.Add(currentPath)
-		return walker(d, currentPath, info, err)
+		if !n.Match(currentPath, true) {
+			watcher.Add(currentPath)
+			return walker(d, currentPath, info, err)
+		}
+		return nil
 	})
 
 	return action

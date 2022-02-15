@@ -106,7 +106,7 @@ func Get(repositoryName string) *config.Directory {
 }
 
 // IsValid detect if remote repository is configured and valid
-func IsValid(path string) (string, error) {
+func IsValid(path string, isRemote bool) (string, error) {
 	if strings.Contains(path, ":") {
 		remote := strings.Split(path, ":")[0]
 		output, err := exec.Command("rclone", "listremotes").Output()
@@ -119,7 +119,9 @@ func IsValid(path string) (string, error) {
 			return path, fmt.Errorf("rclone remote not available")
 		}
 
-		fmt.Println("Warning: The source from cloud providers continuously consumes bandwidth and depend of your connexion")
+		if isRemote {
+			fmt.Println("Warning: The source from cloud providers continuously consumes bandwidth and depend of your connexion")
+		}
 
 		return path, nil
 	}

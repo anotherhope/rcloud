@@ -19,11 +19,11 @@ var addCmd = &cobra.Command{
 		var source = args[0]
 		var destination = args[1]
 
-		if source, err = repositories.IsValid(source); err != nil {
+		if source, err = repositories.IsValid(source, false); err != nil {
 			return err
 		}
 
-		if destination, err = repositories.IsValid(destination); err != nil {
+		if destination, err = repositories.IsValid(destination, true); err != nil {
 			return err
 		}
 

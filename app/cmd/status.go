@@ -1,10 +1,13 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/anotherhope/rcloud/app/config"
+	"github.com/anotherhope/rcloud/app/env"
 	"github.com/anotherhope/rcloud/app/message"
 	"github.com/anotherhope/rcloud/app/socket"
 	"github.com/spf13/cobra"
@@ -17,8 +20,8 @@ var statusCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		var output = [][]string{}
-		var max = []int{9, 6, 5, 6, 11}
-		output = append(output, []string{"RCLOUD ID", "ACTIVE", "STATUS", "SOURCE", "DESTINATION"})
+		var max = []int{9, 7, 5, 6, 11}
+		output = append(output, []string{"RCLOUD ID", "ENABLED", "STATUS", "SOURCE", "DESTINATION"})
 
 		for _, repository := range config.Load().Repositories {
 			if max[0] < len(repository.Name[0:12]) {
@@ -62,6 +65,12 @@ var statusCmd = &cobra.Command{
 					repository.Destination,
 				},
 			)
+		}
+
+		if _, err := os.Stat(env.SocketPath); errors.Is(err, os.ErrNotExist) {
+			fmt.Println("SERVICE: OFF")
+		} else {
+			fmt.Println("SERVICE: ON")
 		}
 
 		for _, line := range output {
