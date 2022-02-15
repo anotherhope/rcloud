@@ -9,12 +9,9 @@ import (
 )
 
 // Check execute Rclone check process.Command to detect one change
-func Check(d *config.Directory) bool {
-
+func Check(d *config.Directory) string {
 	if d.IsLocal(d.Source) && !d.IsLocal(d.Destination) {
-		if d.HasChange(d.Source) {
-			return true
-		}
+		return "idle"
 	}
 
 	process := CreateProcess(d.Name, append(
@@ -31,7 +28,7 @@ func Check(d *config.Directory) bool {
 	stdout, _ := process.Command.StdoutPipe()
 	combined := io.MultiReader(stderr, stdout)
 	process.Command.Start()
-	d.SetStatus("check")
+	d.SetStatus("check:remote")
 	buf := bufio.NewReader(combined)
 	count := 0
 	for {
@@ -49,9 +46,9 @@ func Check(d *config.Directory) bool {
 		if count > 1 {
 			process.Command.Process.Kill()
 			d.SetStatus("idle")
-			return true
+			return "sync"
 		}
 	}
 
-	return false
+	return "idle"
 }

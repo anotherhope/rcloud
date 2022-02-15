@@ -8,7 +8,7 @@ import (
 )
 
 // Sync execute Rclone sync command run all change
-func Sync(d *config.Directory) {
+func Sync(d *config.Directory) string {
 	process := CreateProcess(d.Name, append(
 		[]string{
 			"sync",
@@ -29,4 +29,6 @@ func Sync(d *config.Directory) {
 			break
 		}
 	}
+
+	return "idle"
 }

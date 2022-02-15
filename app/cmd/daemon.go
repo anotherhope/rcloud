@@ -20,7 +20,6 @@ var daemonCmd = &cobra.Command{
 		signal.Notify(exit, os.Interrupt)
 
 		go socket.Server()
-
 		for _, repository := range config.Load().Repositories {
 			go rclone.Daemon(repository)
 		}
