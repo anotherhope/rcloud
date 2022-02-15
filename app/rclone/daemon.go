@@ -36,7 +36,7 @@ func Daemon(d *config.Directory) {
 	if d.IsLocal(d.Source) && !d.IsLocal(d.Destination) {
 		go func() {
 			for action := range d.CreateMirror(d.Source) {
-				fmt.Println("===", action, !lock && d.SourceHasChange(action))
+				fmt.Println("===", action, d.SourceHasChange(action))
 				if !lock && d.SourceHasChange(action) {
 					queue <- "sync"
 				}

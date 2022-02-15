@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
@@ -25,23 +26,23 @@ type Directory struct {
 	status      string
 }
 
-func createCache(info os.FileInfo, cachePath string, original *os.File) {
-	if info.IsDir() {
-		os.MkdirAll(cachePath, 0700)
-	} else {
-		cache, _ := os.Create(cachePath)
-		defer cache.Close()
+func (d *Directory) makeCachePath(pathOfContent string) string {
+	relative := pathOfContent[len(d.Source):]
+	return env.CachePath + "/" + d.Name + relative
+}
 
-		hash := sha256.New()
-		io.Copy(hash, original)
+func updateTimes(pathOfCache string, info fs.FileInfo) {
+	os.Chtimes(
+		pathOfCache,
+		info.ModTime().Local(),
+		info.ModTime().Local(),
+	)
+}
 
-		cache.WriteString(fmt.Sprintf("%x", hash.Sum(nil)))
-		os.Chtimes(
-			cachePath,
-			info.ModTime().Local(),
-			info.ModTime().Local(),
-		)
-	}
+func makeHash(original io.Reader) string {
+	hash := sha256.New()
+	io.Copy(hash, original)
+	return fmt.Sprintf("%x", hash.Sum(nil))
 }
 
 func walker(d *Directory, pathOfContent string, info os.FileInfo, err error) error {
@@ -49,62 +50,40 @@ func walker(d *Directory, pathOfContent string, info os.FileInfo, err error) err
 		return err
 	}
 
-	relative := pathOfContent[len(d.Source):]
-	cachePath := env.CachePath + "/" + d.Name + relative
-	cacheStats, _ := os.Stat(cachePath)
+	cachePath := d.makeCachePath(pathOfContent)
+
+	if info.IsDir() {
+		os.MkdirAll(cachePath, 0700)
+		updateTimes(cachePath, info)
+		return nil
+	}
 
 	original, _ := os.Open(pathOfContent)
 	defer original.Close()
 
-	if cacheStats == nil {
-		createCache(info, cachePath, original)
-		return nil
-	}
-
-	hash := sha256.New()
-	io.Copy(hash, original)
-	checksum := fmt.Sprintf("%x", hash.Sum(nil))
-
-	if dat, err := os.ReadFile(cachePath); (info.ModTime().Unix() > cacheStats.ModTime().Unix()) ||
-		(err == nil && string(dat) != checksum) {
-		cache, _ := os.Open(cachePath)
-		cache.WriteString(checksum)
-		os.Chtimes(
-			cachePath,
-			info.ModTime().Local(),
-			info.ModTime().Local(),
-		)
-	}
+	cache, _ := os.OpenFile(cachePath, os.O_RDWR|os.O_CREATE, 0600)
+	defer cache.Close()
+	cache.WriteString(makeHash(original))
+	updateTimes(cachePath, info)
 
 	return nil
 }
 
 // SourceHasChange
 func (d *Directory) SourceHasChange(pathOfContent string) bool {
-	fmt.Println(pathOfContent, d.Destination)
 
-	relative := pathOfContent[len(d.Source):]
-	cachePath := env.CachePath + "/" + d.Name + relative
-	cacheStats, _ := os.Stat(cachePath)
-	originalStats, _ := os.Stat(pathOfContent)
-
+	cachePath := d.makeCachePath(pathOfContent)
 	original, _ := os.Open(pathOfContent)
 	defer original.Close()
 
-	hash := sha256.New()
-	io.Copy(hash, original)
-	checksum := fmt.Sprintf("%x", hash.Sum(nil))
-
-	if dat, err := os.ReadFile(cachePath); (originalStats.ModTime().Unix() > cacheStats.ModTime().Unix()) ||
-		(err == nil && string(dat) != checksum) {
-		cache, _ := os.Open(cachePath)
+	checksum := makeHash(original)
+	if dat, err := os.ReadFile(cachePath); err == nil && string(dat) != checksum {
+		os.Truncate(cachePath, 0)
+		cache, _ := os.OpenFile(cachePath, os.O_WRONLY, 0700)
+		defer cache.Close()
 		cache.WriteString(checksum)
-		os.Chtimes(
-			cachePath,
-			originalStats.ModTime().Local(),
-			originalStats.ModTime().Local(),
-		)
-
+		originalStats, _ := original.Stat()
+		updateTimes(cache.Name(), originalStats)
 		return true
 	}
 
@@ -157,16 +136,6 @@ func (d *Directory) CreateMirror(pathOfContent string) chan string {
 	})
 
 	return action
-}
-
-// HasChange make a mirror of directory to optimize change detect and reduce bandwith comsumption
-func (d *Directory) HasChange(pathOfContent string) bool {
-	d.SetStatus("check:local")
-	err := filepath.Walk(pathOfContent, func(pathOfContent string, info os.FileInfo, err error) error {
-		return walker(d, pathOfContent, info, err)
-	})
-	d.SetStatus("idle")
-	return err != nil
 }
 
 // IsLocal return if path is a local path
