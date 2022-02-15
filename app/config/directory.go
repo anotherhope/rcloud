@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -92,34 +91,23 @@ func (d *Directory) SourceHasChange(pathOfContent string) bool {
 }
 
 func handler(watcher *fsnotify.Watcher, action chan string) {
-	for {
-		select {
-		case event, ok := <-watcher.Events:
-			if !ok {
-				return
-			}
 
-			if event.Op&fsnotify.Write == fsnotify.Write {
-				action <- event.Name
-			}
+	for event := range watcher.Events {
+		if event.Op&fsnotify.Write == fsnotify.Write {
+			action <- event.Name
+		}
 
-			if event.Op&fsnotify.Create == fsnotify.Create {
-				watcher.Add(event.Name)
-				action <- event.Name
-			}
+		if event.Op&fsnotify.Create == fsnotify.Create {
+			watcher.Add(event.Name)
+			action <- event.Name
+		}
 
-			if event.Op&fsnotify.Remove == fsnotify.Remove {
-				watcher.Remove(event.Name)
-				action <- event.Name
-			}
-
-		case err, ok := <-watcher.Errors:
-			if !ok {
-				return
-			}
-			log.Println("error:", err)
+		if event.Op&fsnotify.Remove == fsnotify.Remove {
+			watcher.Remove(event.Name)
+			action <- event.Name
 		}
 	}
+
 }
 
 // CreateMirror make a mirror of directory to optimize change detect and reduce bandwith comsumption
