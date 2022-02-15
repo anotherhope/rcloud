@@ -1,7 +1,6 @@
 package rclone
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/anotherhope/rcloud/app/config"
@@ -34,21 +33,26 @@ func Daemon(d *config.Directory) {
 	}()
 
 	if d.IsLocal(d.Source) && !d.IsLocal(d.Destination) {
-		go func() {
-			for action := range d.CreateMirror(d.Source) {
-				fmt.Println("===", action, d.SourceHasChange(action))
-				if !lock && d.SourceHasChange(action) {
-					queue <- "sync"
-				}
-			}
-		}()
+		go runLocalChange(d, lock, queue)
 	} else {
-		for {
-			if !lock {
-				queue <- "check"
-			}
-			time.Sleep(5 * time.Second)
-		}
+		go runRemoteChange(lock, queue)
 	}
 
+}
+
+func runRemoteChange(lock bool, queue chan string) {
+	for {
+		if !lock {
+			queue <- "check"
+		}
+		time.Sleep(5 * time.Second)
+	}
+}
+
+func runLocalChange(d *config.Directory, lock bool, queue chan string) {
+	for action := range d.CreateMirror(d.Source) {
+		if !lock && d.SourceHasChange(action) {
+			queue <- "sync"
+		}
+	}
 }
