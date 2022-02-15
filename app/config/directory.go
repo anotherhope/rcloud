@@ -14,7 +14,6 @@ import (
 	"github.com/aligator/nogo"
 	"github.com/anotherhope/rcloud/app/env"
 	"github.com/fsnotify/fsnotify"
-	"github.com/rclone/rclone/fs/filter"
 )
 
 // Directory is the structure of syncronized folder
@@ -71,7 +70,7 @@ func walker(d *Directory, pathOfContent string, info os.FileInfo, err error) err
 	return nil
 }
 
-// SourceHasChange
+// SourceHasChange detect if any change occurs in local directory
 func (d *Directory) SourceHasChange(pathOfContent string) bool {
 
 	cachePath := d.makeCachePath(pathOfContent)
@@ -114,10 +113,6 @@ func handler(watcher *fsnotify.Watcher, action chan string) {
 				action <- event.Name
 			}
 
-			if event.Op&fsnotify.Rename == fsnotify.Rename {
-				action <- event.Name
-			}
-
 		case err, ok := <-watcher.Errors:
 			if !ok {
 				return
@@ -126,10 +121,6 @@ func handler(watcher *fsnotify.Watcher, action chan string) {
 		}
 	}
 }
-
-var (
-	Opt = filter.DefaultOpt
-)
 
 // CreateMirror make a mirror of directory to optimize change detect and reduce bandwith comsumption
 func (d *Directory) CreateMirror(pathOfContent string) chan string {
