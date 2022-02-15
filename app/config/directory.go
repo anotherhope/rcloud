@@ -90,45 +90,47 @@ func (d *Directory) SourceHasChange(pathOfContent string) bool {
 	return false
 }
 
+func handler(watcher *fsnotify.Watcher, action chan string) {
+	for {
+		select {
+		case event, ok := <-watcher.Events:
+			if !ok {
+				return
+			}
+
+			if event.Op&fsnotify.Write == fsnotify.Write {
+				action <- event.Name
+			}
+
+			if event.Op&fsnotify.Create == fsnotify.Create {
+				watcher.Add(event.Name)
+				action <- event.Name
+			}
+
+			if event.Op&fsnotify.Remove == fsnotify.Remove {
+				watcher.Remove(event.Name)
+				action <- event.Name
+			}
+
+			if event.Op&fsnotify.Rename == fsnotify.Rename {
+				action <- event.Name
+			}
+
+		case err, ok := <-watcher.Errors:
+			if !ok {
+				return
+			}
+			log.Println("error:", err)
+		}
+	}
+}
+
 // CreateMirror make a mirror of directory to optimize change detect and reduce bandwith comsumption
 func (d *Directory) CreateMirror(pathOfContent string) chan string {
 	watcher, _ := fsnotify.NewWatcher()
 	var action chan string = make(chan string)
 
-	go func() {
-		for {
-			select {
-			case event, ok := <-watcher.Events:
-				if !ok {
-					return
-				}
-
-				if event.Op&fsnotify.Write == fsnotify.Write {
-					action <- event.Name
-				}
-
-				if event.Op&fsnotify.Create == fsnotify.Create {
-					watcher.Add(event.Name)
-					action <- event.Name
-				}
-
-				if event.Op&fsnotify.Remove == fsnotify.Remove {
-					watcher.Remove(event.Name)
-					action <- event.Name
-				}
-
-				if event.Op&fsnotify.Rename == fsnotify.Rename {
-					action <- event.Name
-				}
-
-			case err, ok := <-watcher.Errors:
-				if !ok {
-					return
-				}
-				log.Println("error:", err)
-			}
-		}
-	}()
+	go handler(watcher, action)
 
 	filepath.Walk(pathOfContent, func(currentPath string, info os.FileInfo, err error) error {
 		watcher.Add(currentPath)
