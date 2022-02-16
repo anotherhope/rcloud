@@ -5,11 +5,11 @@ import (
 	"io"
 	"strings"
 
-	"github.com/anotherhope/rcloud/app/interfaces"
+	"github.com/anotherhope/rcloud/app/internal"
 )
 
 // Check execute Rclone check process.Command to detect one change
-func Check(d *interfaces.Directory) string {
+func Check(d *internal.Directory) string {
 	if d.IsLocal(d.Source) && !d.IsLocal(d.Destination) {
 		return "idle"
 	}

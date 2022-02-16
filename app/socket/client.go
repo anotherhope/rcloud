@@ -5,7 +5,7 @@ import (
 	"net"
 
 	"github.com/anotherhope/rcloud/app/env"
-	"github.com/anotherhope/rcloud/app/message"
+	"github.com/anotherhope/rcloud/app/socket/message"
 )
 
 // Dial implement connection and feature around socket communication

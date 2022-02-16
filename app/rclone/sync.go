@@ -4,11 +4,11 @@ import (
 	"bufio"
 	"io"
 
-	"github.com/anotherhope/rcloud/app/interfaces"
+	"github.com/anotherhope/rcloud/app/internal"
 )
 
 // Sync execute Rclone sync command run all change
-func Sync(d *interfaces.Directory) string {
+func Sync(d *internal.Directory) string {
 	process := CreateProcess(d.Name, append(
 		[]string{
 			"sync",

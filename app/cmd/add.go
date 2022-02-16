@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/anotherhope/rcloud/app/interfaces"
+	"github.com/anotherhope/rcloud/app/internal"
 	"github.com/spf13/cobra"
 )
 
@@ -18,18 +18,18 @@ var addCmd = &cobra.Command{
 		var source = args[0]
 		var destination = args[1]
 
-		if source, err = interfaces.IsValid(source, false); err != nil {
+		if source, err = internal.IsValid(source, false); err != nil {
 			return err
 		}
 
-		if destination, err = interfaces.IsValid(destination, true); err != nil {
+		if destination, err = internal.IsValid(destination, true); err != nil {
 			return err
 		}
 
 		h := sha1.New()
 		h.Write([]byte(source + destination))
 
-		return interfaces.Add(&interfaces.Directory{
+		return internal.Add(&internal.Directory{
 			Name:        fmt.Sprintf("%x", h.Sum(nil)),
 			Source:      source,
 			Destination: destination,

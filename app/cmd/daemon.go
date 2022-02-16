@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/anotherhope/rcloud/app/interfaces"
+	"github.com/anotherhope/rcloud/app/internal"
 	"github.com/anotherhope/rcloud/app/rclone"
 	"github.com/anotherhope/rcloud/app/socket"
 	"github.com/spf13/cobra"
@@ -20,7 +20,7 @@ var daemonCmd = &cobra.Command{
 		signal.Notify(exit, os.Interrupt)
 
 		go socket.Server()
-		for _, repository := range interfaces.App.Repositories {
+		for _, repository := range internal.App.Repositories {
 			go rclone.Daemon(repository)
 		}
 

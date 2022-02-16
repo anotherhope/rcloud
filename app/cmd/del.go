@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/anotherhope/rcloud/app/interfaces"
+	"github.com/anotherhope/rcloud/app/internal"
 	"github.com/spf13/cobra"
 )
 
@@ -10,7 +10,7 @@ var delCmd = &cobra.Command{
 	Use:   "del <folder>",
 	Short: "Delete synchronized folder",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return interfaces.Del(args[0])
+		return internal.Del(args[0])
 	},
 	DisableFlagsInUseLine: true,
 }

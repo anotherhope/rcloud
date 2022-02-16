@@ -3,7 +3,7 @@ package action
 import (
 	"strings"
 
-	"github.com/anotherhope/rcloud/app/interfaces"
+	"github.com/anotherhope/rcloud/app/internal"
 )
 
 // Do Execute a command from socket
@@ -14,7 +14,7 @@ func Do(query string) []byte {
 
 	switch action {
 	case "getStatus":
-		if repository := interfaces.Get(arguments[0]); repository != nil {
+		if repository := internal.Get(arguments[0]); repository != nil {
 			return []byte(repository.GetStatus())
 		}
 	}
