@@ -1,4 +1,4 @@
-package interfaces
+package internal
 
 import (
 	"crypto/sha256"
@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/aligator/nogo"
-	"github.com/anotherhope/rcloud/app/env"
 	"github.com/fsnotify/fsnotify"
 )
 
@@ -28,7 +27,7 @@ type Directory struct {
 
 func (d *Directory) makeCachePath(pathOfContent string) string {
 	relative := pathOfContent[len(d.Source):]
-	return env.CachePath + "/" + d.Name + relative
+	return CachePath + "/" + d.Name + relative
 }
 
 func updateTimes(pathOfCache string, info fs.FileInfo) {
