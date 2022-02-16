@@ -7,8 +7,8 @@ import (
 	"strconv"
 
 	"github.com/anotherhope/rcloud/app/internal"
-	"github.com/anotherhope/rcloud/app/message"
 	"github.com/anotherhope/rcloud/app/socket"
+	"github.com/anotherhope/rcloud/app/socket/message"
 	"github.com/spf13/cobra"
 )
 
@@ -66,7 +66,7 @@ var statusCmd = &cobra.Command{
 			)
 		}
 
-		if _, err := os.Stat(env.SocketPath); errors.Is(err, os.ErrNotExist) {
+		if _, err := os.Stat(internal.SocketPath); errors.Is(err, os.ErrNotExist) {
 			fmt.Println("SERVICE: OFF")
 		} else {
 			fmt.Println("SERVICE: ON")

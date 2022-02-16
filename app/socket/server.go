@@ -4,13 +4,13 @@ import (
 	"bufio"
 	"net"
 
-	"github.com/anotherhope/rcloud/app/env"
+	"github.com/anotherhope/rcloud/app/internal"
 	"github.com/anotherhope/rcloud/app/socket/action"
 )
 
 // Client create a socket server
 func Server() error {
-	ln, err := net.Listen("unix", env.SocketPath)
+	ln, err := net.Listen("unix", internal.SocketPath)
 
 	if err != nil {
 		return err

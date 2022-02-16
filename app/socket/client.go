@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"net"
 
-	"github.com/anotherhope/rcloud/app/env"
+	"github.com/anotherhope/rcloud/app/internal"
 	"github.com/anotherhope/rcloud/app/socket/message"
 )
 
@@ -38,7 +38,7 @@ func (d *Dial) Send(m *message.Message) {
 
 // Client create a socket client
 func Client() *Dial {
-	conn, err := net.Dial("unix", env.SocketPath)
+	conn, err := net.Dial("unix", internal.SocketPath)
 	if err != nil {
 		return nil
 	}
