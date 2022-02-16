@@ -10,7 +10,7 @@ var cwd, _ = os.Getwd()
 
 var rootCmd = &cobra.Command{
 	Use:   "rcloud",
-	Short: "Rcloud is a backup real time backup system",
+	Short: "Rcloud is a real time backup system",
 	CompletionOptions: cobra.CompletionOptions{
 		HiddenDefaultCmd: true,
 	},
