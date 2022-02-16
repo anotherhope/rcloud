@@ -23,6 +23,7 @@ type Directory struct {
 	RTS         bool          `mapstructure:"rts"`
 	Args        []string      `mapstructure:"args"`
 	status      string
+	channel     chan string
 }
 
 func (d *Directory) makeCachePath(pathOfContent string) string {
@@ -160,4 +161,14 @@ func (d *Directory) GetStatus() string {
 // SetStatus is Setter for Status
 func (d *Directory) SetStatus(s string) {
 	d.status = s
+}
+
+// GetChannel is Getter for Channel
+func (d *Directory) GetChannel() chan string {
+	return d.channel
+}
+
+// SetChannel is Setter for Status
+func (d *Directory) SetChannel(c chan string) {
+	d.channel = c
 }

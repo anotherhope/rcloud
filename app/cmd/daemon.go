@@ -7,8 +7,11 @@ import (
 
 	"github.com/anotherhope/rcloud/app/internal"
 	"github.com/anotherhope/rcloud/app/rclone"
+	"github.com/anotherhope/rcloud/app/rcloud"
 	"github.com/anotherhope/rcloud/app/socket"
+	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var daemonCmd = &cobra.Command{
@@ -21,8 +24,18 @@ var daemonCmd = &cobra.Command{
 
 		go socket.Server()
 		for _, repository := range internal.App.Repositories {
-			go rclone.Daemon(repository)
+			rcloud.Listen(repository)
 		}
+
+		viper.OnConfigChange(func(e fsnotify.Event) {
+			for _, repository := range internal.App.Repositories {
+				rcloud.Close(repository)
+			}
+			internal.Load()
+			for _, repository := range internal.App.Repositories {
+				rcloud.Listen(repository)
+			}
+		})
 
 		<-exit
 		rclone.Kill()
