@@ -1,4 +1,4 @@
-package config
+package interfaces
 
 import (
 	"crypto/sha256"
@@ -144,13 +144,13 @@ func (d *Directory) IsRemote(path string) bool {
 // Start synchronization for the current directory
 func (d *Directory) Start() error {
 	d.RTS = true
-	return Save()
+	return App.Save()
 }
 
 // Stop synchronization for the current directory
 func (d *Directory) Stop() error {
 	d.RTS = false
-	return Save()
+	return App.Save()
 }
 
 // GetStatus is Getter for Status

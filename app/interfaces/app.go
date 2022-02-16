@@ -1,4 +1,4 @@
-package config
+package interfaces
 
 import (
 	"fmt"
@@ -7,29 +7,23 @@ import (
 )
 
 // Config structure for rcloud
-type Config struct {
+type Rcloud struct {
 	Args         []string
 	Repositories []*Directory
 }
 
-var instance = &Config{
-	Args:         []string{"--fast-list"},
+var App *Rcloud = &Rcloud{
+	Args:         []string{},
 	Repositories: []*Directory{},
 }
 
-// Load value in configuration file
-func Load() *Config {
-	return instance
-}
-
-// Set value in confuration file and save behind
-func Set(key string, value interface{}) {
+func (r *Rcloud) Set(key string, value interface{}) {
 	viper.Set(key, value)
-	Save()
+	r.Save()
 }
 
 // Save write configuration on file
-func Save() error {
+func (r *Rcloud) Save() error {
 	return viper.WriteConfig()
 }
 
@@ -44,10 +38,10 @@ func init() {
 		}
 	}
 
-	viper.SetDefault("config", instance.Args)
-	viper.SetDefault("repositories", instance.Repositories)
+	viper.SetDefault("config", App.Args)
+	viper.SetDefault("repositories", App.Repositories)
 
-	viper.Unmarshal(instance)
+	viper.Unmarshal(App)
 
 	viper.SafeWriteConfig()
 	viper.WriteConfig()

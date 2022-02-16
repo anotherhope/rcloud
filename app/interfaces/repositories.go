@@ -1,4 +1,4 @@
-package repositories
+package interfaces
 
 import (
 	"fmt"
@@ -6,12 +6,10 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
-
-	"github.com/anotherhope/rcloud/app/config"
 )
 
 func parent(name string) bool {
-	for _, d := range config.Load().Repositories {
+	for _, d := range App.Repositories {
 		if strings.HasPrefix(d.Destination, name) {
 			return true
 		}
@@ -21,7 +19,7 @@ func parent(name string) bool {
 }
 
 func sub(name string) bool {
-	for _, d := range config.Load().Repositories {
+	for _, d := range App.Repositories {
 		if strings.HasPrefix(name, d.Destination) {
 			return true
 		}
@@ -31,7 +29,7 @@ func sub(name string) bool {
 }
 
 func same(name string) bool {
-	for _, d := range config.Load().Repositories {
+	for _, d := range App.Repositories {
 		if name == d.Destination {
 			return true
 		}
@@ -40,8 +38,8 @@ func same(name string) bool {
 	return false
 }
 
-func exists(d *config.Directory) bool {
-	for _, repository := range config.Load().Repositories {
+func exists(d *Directory) bool {
+	for _, repository := range App.Repositories {
 		if repository.Name == d.Name {
 			return true
 		}
@@ -51,7 +49,7 @@ func exists(d *config.Directory) bool {
 }
 
 // Add repository in configuration file
-func Add(d *config.Directory) error {
+func Add(d *Directory) error {
 	var exitMessage error = nil
 	if same(d.Destination) {
 		exitMessage = fmt.Errorf("destination path already exist as a sync folder ")
@@ -67,8 +65,8 @@ func Add(d *config.Directory) error {
 		return exitMessage
 	}
 
-	config.Set("repositories",
-		append(config.Load().Repositories, d),
+	App.Set("repositories",
+		append(App.Repositories, d),
 	)
 
 	return exitMessage
@@ -76,11 +74,11 @@ func Add(d *config.Directory) error {
 
 // Del repository in configuration file
 func Del(n string) error {
-	for k, v := range config.Load().Repositories {
+	for k, v := range App.Repositories {
 		if strings.HasPrefix(v.Name, n) {
-			config.Set("repositories", append(
-				config.Load().Repositories[:k],
-				config.Load().Repositories[k+1:]...,
+			App.Set("repositories", append(
+				App.Repositories[:k],
+				App.Repositories[k+1:]...,
 			))
 			return nil
 		}
@@ -90,12 +88,12 @@ func Del(n string) error {
 }
 
 // List repositories in configuration file
-func List() []*config.Directory {
-	return config.Load().Repositories
+func List() []*Directory {
+	return App.Repositories
 }
 
 // Get repository by name
-func Get(repositoryName string) *config.Directory {
+func Get(repositoryName string) *Directory {
 	for _, repository := range List() {
 		if repository.Name == repositoryName {
 			return repository

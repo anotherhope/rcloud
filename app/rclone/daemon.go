@@ -3,11 +3,11 @@ package rclone
 import (
 	"time"
 
-	"github.com/anotherhope/rcloud/app/config"
+	"github.com/anotherhope/rcloud/app/interfaces"
 )
 
 // Daemon contains the algo for sync
-func Daemon(d *config.Directory) {
+func Daemon(d *interfaces.Directory) {
 	var queue chan string = make(chan string)
 	var lock bool = false
 
@@ -49,7 +49,7 @@ func runRemoteChange(lock bool, queue chan string) {
 	}
 }
 
-func runLocalChange(d *config.Directory, lock bool, queue chan string) {
+func runLocalChange(d *interfaces.Directory, lock bool, queue chan string) {
 	d.SetStatus("idle")
 	for action := range d.CreateMirror(d.Source) {
 		if !lock && d.SourceHasChange(action) {
