@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -24,6 +25,7 @@ type Directory struct {
 	Args        []string      `mapstructure:"args"`
 	status      string
 	channel     chan string
+	ignore      *nogo.NoGo
 	watcher     *fsnotify.Watcher
 }
 
@@ -72,20 +74,37 @@ func walker(d *Directory, pathOfContent string, info os.FileInfo, err error) err
 
 // SourceHasChange detect if any change occurs in local directory
 func (d *Directory) SourceHasChange(pathOfContent string) bool {
-	cachePath := d.MakeCachePath(pathOfContent)
-	original, _ := os.Open(pathOfContent)
-	defer original.Close()
-
-	checksum := makeHash(original)
-	if dat, err := os.ReadFile(cachePath); err == nil && string(dat) != checksum {
-		os.Truncate(cachePath, 0)
-		cache, _ := os.OpenFile(cachePath, os.O_WRONLY, 0700)
-		defer cache.Close()
-		cache.WriteString(checksum)
-		originalStats, _ := original.Stat()
-		updateTimes(cache.Name(), originalStats)
-		return true
+	if path.Base(pathOfContent) == ".gitignore" {
+		dirname := path.Dir(pathOfContent)
+		ignore := nogo.New(nogo.DotGitRule)
+		ignore.AddFromFS(os.DirFS(dirname), ".gitignore")
+		d.SetIgnore(ignore)
 	}
+
+	fmt.Println("change detected:", pathOfContent)
+	if !d.ignore.Match(pathOfContent, true) {
+		fmt.Println("match")
+
+		cachePath := d.MakeCachePath(pathOfContent)
+		original, _ := os.Open(pathOfContent)
+		defer original.Close()
+
+		checksum := makeHash(original)
+		if dat, err := os.ReadFile(cachePath); err == nil && string(dat) != checksum {
+			os.Truncate(cachePath, 0)
+			cache, _ := os.OpenFile(cachePath, os.O_WRONLY, 0700)
+			defer cache.Close()
+			cache.WriteString(checksum)
+			originalStats, _ := original.Stat()
+			updateTimes(cache.Name(), originalStats)
+			return true
+		}
+
+	} else {
+		fmt.Println("not match")
+	}
+
+	//
 
 	return false
 }
@@ -116,11 +135,13 @@ func (d *Directory) CreateMirror(pathOfContent string) chan string {
 
 	go handler(watcher, action)
 
-	n := nogo.New(nogo.DotGitRule)
-	n.AddFromFS(os.DirFS(pathOfContent), ".gitignore")
+	if d.ignore == nil {
+		d.ignore = nogo.New(nogo.DotGitRule)
+		d.ignore.AddFromFS(os.DirFS(pathOfContent), ".gitignore")
+	}
 
 	filepath.Walk(pathOfContent, func(currentPath string, info os.FileInfo, err error) error {
-		if !n.Match(currentPath, true) {
+		if !d.ignore.Match(currentPath, true) {
 			watcher.Add(currentPath)
 			return walker(d, currentPath, info, err)
 		}
@@ -180,4 +201,14 @@ func (d *Directory) GetWatcher() *fsnotify.Watcher {
 // SetWatcher is Setter for Status
 func (d *Directory) SetWatcher(c *fsnotify.Watcher) {
 	d.watcher = c
+}
+
+// GetIgnore is Getter for Channel
+func (d *Directory) GetIgnore() *nogo.NoGo {
+	return d.ignore
+}
+
+// SetIgnore is Setter for Status
+func (d *Directory) SetIgnore(c *nogo.NoGo) {
+	d.ignore = c
 }

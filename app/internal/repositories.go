@@ -77,8 +77,11 @@ func Del(n string) error {
 	for k, v := range App.Repositories {
 		if strings.HasPrefix(v.Name, n) {
 			if watcher := v.GetWatcher(); watcher != nil {
-				v.GetWatcher().Close()
+				watcher.Close()
 			}
+
+			v.SetIgnore(nil)
+
 			App.Set("repositories", append(
 				App.Repositories[:k],
 				App.Repositories[k+1:]...,
