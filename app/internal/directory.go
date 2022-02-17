@@ -27,7 +27,7 @@ type Directory struct {
 	watcher     *fsnotify.Watcher
 }
 
-func (d *Directory) makeCachePath(pathOfContent string) string {
+func (d *Directory) MakeCachePath(pathOfContent string) string {
 	relative := pathOfContent[len(d.Source):]
 	return CachePath + "/" + d.Name + relative
 }
@@ -51,7 +51,7 @@ func walker(d *Directory, pathOfContent string, info os.FileInfo, err error) err
 		return err
 	}
 
-	cachePath := d.makeCachePath(pathOfContent)
+	cachePath := d.MakeCachePath(pathOfContent)
 
 	if info.IsDir() {
 		os.MkdirAll(cachePath, 0700)
@@ -73,7 +73,7 @@ func walker(d *Directory, pathOfContent string, info os.FileInfo, err error) err
 // SourceHasChange detect if any change occurs in local directory
 func (d *Directory) SourceHasChange(pathOfContent string) bool {
 
-	cachePath := d.makeCachePath(pathOfContent)
+	cachePath := d.MakeCachePath(pathOfContent)
 	original, _ := os.Open(pathOfContent)
 	defer original.Close()
 

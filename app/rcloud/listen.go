@@ -1,6 +1,7 @@
 package rcloud
 
 import (
+	"os"
 	"time"
 
 	"github.com/anotherhope/rcloud/app/internal"
@@ -16,26 +17,29 @@ func Listen(d *internal.Directory) {
 		go func() {
 		runtime:
 			for action := range queue {
-				lock = true
-				switch action {
-				case "check":
-					d.SetStatus("check")
-					go func() {
-						queue <- rclone.Check(d)
-					}()
-				case "sync":
-					d.SetStatus("sync")
-					go func() {
-						queue <- rclone.Sync(d)
-					}()
-				case "exit":
-					d.SetStatus("exit")
-					d.SetChannel(nil)
-					break runtime
-				case "idle":
-					d.SetStatus("idle")
+				if d.RTS {
+					lock = true
+					switch action {
+					case "check":
+						d.SetStatus("check")
+						go func() {
+							queue <- rclone.Check(d)
+						}()
+					case "sync":
+						d.SetStatus("sync")
+						go func() {
+							queue <- rclone.Sync(d)
+						}()
+					case "exit":
+						d.SetStatus("exit")
+						d.SetChannel(nil)
+						os.RemoveAll(d.MakeCachePath(d.Source))
+						break runtime
+					case "idle":
+						d.SetStatus("idle")
+					}
+					lock = false
 				}
-				lock = false
 			}
 		}()
 
@@ -59,7 +63,6 @@ func runRemoteChange(lock bool, queue chan string) {
 }
 
 func runLocalChange(d *internal.Directory, lock bool, queue chan string) {
-	d.SetStatus("idle")
 	queue <- "sync"
 	for action := range d.CreateMirror(d.Source) {
 		if !lock && d.SourceHasChange(action) {

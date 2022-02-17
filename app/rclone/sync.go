@@ -9,13 +9,12 @@ import (
 
 // Sync execute Rclone sync command run all change
 func Sync(d *internal.Directory) string {
-	process := CreateProcess(d.Name, append(
-		[]string{
-			"sync",
-			d.Source,
-			d.Destination,
-		}, d.Args...)...,
-	)
+
+	cmd := []string{"sync", d.Source, d.Destination}
+	cmd = append(cmd, d.Args...)
+	cmd = append(cmd, gitIgnore(d)...)
+
+	process := CreateProcess(d.Name, cmd...)
 
 	stderr, _ := process.Command.StderrPipe()
 	stdout, _ := process.Command.StdoutPipe()

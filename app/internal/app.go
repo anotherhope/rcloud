@@ -38,18 +38,6 @@ func (r *Rcloud) Save() error {
 	return viper.WriteConfig()
 }
 
-// Reload the application if config change durint running
-/*
-func (r *Rcloud) Reload() {
-	for _, repository := range App.Repositories {
-		fmt.Println(repository.Destination)
-		if rc := repository.GetChannel(); rc != nil {
-			rc <- "exit"
-		}
-	}
-}
-*/
-
 func Load() {
 	viper.ReadInConfig()
 
