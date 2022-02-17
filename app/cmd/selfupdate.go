@@ -34,10 +34,6 @@ var selfUpdate = &cobra.Command{
 		}
 
 		sub := exec.Command("rclone", "selfupdate")
-		sub.Stdout = os.Stdout
-		sub.Stdin = os.Stdin
-		sub.Stderr = os.Stderr
-
 		err := sub.Start()
 		if err != nil {
 			return err
