@@ -37,7 +37,13 @@ var selfUpdate = &cobra.Command{
 		sub.Stdout = os.Stdout
 		sub.Stdin = os.Stdin
 		sub.Stderr = os.Stderr
-		return nil
+
+		err := sub.Start()
+		if err != nil {
+			return err
+		}
+
+		return sub.Wait()
 	},
 	DisableFlagsInUseLine: true,
 }
