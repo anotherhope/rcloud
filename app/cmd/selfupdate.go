@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -25,29 +26,27 @@ var selfUpdate = &cobra.Command{
 			io.Copy(hash, file)
 			hashLocal := fmt.Sprintf("%x", hash.Sum(nil))
 			if hashRemote != hashLocal {
+				log.Println("NOTICE: rcloud download latest release")
 				update.DownloadFile(
 					binPath,
 					"https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-"+runtime.GOOS+"-"+runtime.GOARCH,
 				)
+			} else {
+				log.Println("NOTICE: rcloud is up to date")
 			}
 		}
 
-		fmt.Println("rclone")
 		sub := exec.Command("rclone", "selfupdate")
 		sub.Stdout = os.Stdout
 		sub.Stdin = os.Stdin
 		sub.Stderr = os.Stderr
 
-		fmt.Println("rclone:start")
 		err := sub.Start()
 		if err != nil {
 			return err
 		}
 
-		fmt.Println("rclone:wait")
-		fmt.Println(sub.Wait())
-
-		return nil
+		return sub.Wait()
 	},
 	DisableFlagsInUseLine: true,
 }
