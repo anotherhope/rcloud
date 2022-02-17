@@ -13,13 +13,12 @@ import (
 func gitIgnore(d *internal.Directory) []string {
 	ignores := make([]string, 0)
 	if d.IsLocal(d.Source) {
-		if file, err := os.Open(d.Source + "/.gitignore"); err != nil {
+		if file, err := os.Open(d.Source + "/.gitignore"); err == nil {
 			scanner := bufio.NewScanner(file)
 			for scanner.Scan() {
 				line := scanner.Text()
-				fmt.Println(line)
-				if !strings.HasPrefix(line, "#") {
-					ignores = append(ignores, scanner.Text())
+				if !strings.HasPrefix(line, "#") && len(line) > 0 {
+					ignores = append(ignores, fmt.Sprintf("--exclude=\"%s\"", line))
 				}
 			}
 
@@ -27,7 +26,7 @@ func gitIgnore(d *internal.Directory) []string {
 				log.Fatal(err)
 			}
 
-			return make([]string, 0)
+			return ignores
 		}
 	}
 

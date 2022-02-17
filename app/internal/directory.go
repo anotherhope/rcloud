@@ -72,7 +72,6 @@ func walker(d *Directory, pathOfContent string, info os.FileInfo, err error) err
 
 // SourceHasChange detect if any change occurs in local directory
 func (d *Directory) SourceHasChange(pathOfContent string) bool {
-
 	cachePath := d.MakeCachePath(pathOfContent)
 	original, _ := os.Open(pathOfContent)
 	defer original.Close()

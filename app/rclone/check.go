@@ -14,15 +14,11 @@ func Check(d *internal.Directory) string {
 		return "idle"
 	}
 
-	process := CreateProcess(d.Name, append(
-		[]string{
-			"check",
-			d.Source,
-			d.Destination,
-			"--fast-list",
-			"--checkers=1",
-		}, d.Args...)...,
-	)
+	cmd := []string{"check", d.Source, d.Destination, "--fast-list", "--checkers=1"}
+	cmd = append(cmd, d.Args...)
+	cmd = append(cmd, gitIgnore(d)...)
+
+	process := CreateProcess(d.Name, cmd...)
 
 	stderr, _ := process.Command.StderrPipe()
 	stdout, _ := process.Command.StdoutPipe()
