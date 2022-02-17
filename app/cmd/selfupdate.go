@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"crypto/md5"
+	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"runtime"
@@ -19,6 +22,10 @@ var selfUpdate = &cobra.Command{
 		}
 
 		binPath, _ := os.Executable()
+		file, _ := os.Open(binPath)
+		hash := md5.New()
+		io.Copy(hash, file)
+		fmt.Printf("%x", hash.Sum(nil))
 		update.DownloadFile(
 			binPath,
 			"https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-"+runtime.GOOS+"-"+runtime.GOARCH,
