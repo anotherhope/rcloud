@@ -21,15 +21,22 @@ var selfUpdate = &cobra.Command{
 			return err
 		}
 
-		binPath, _ := os.Executable()
-		file, _ := os.Open(binPath)
-		hash := md5.New()
-		io.Copy(hash, file)
-		fmt.Printf("%x", hash.Sum(nil))
-		update.DownloadFile(
-			binPath,
-			"https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-"+runtime.GOOS+"-"+runtime.GOARCH,
-		)
+		binaryUrl := "https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-" + runtime.GOOS + "-" + runtime.GOARCH
+		hashUrl := binaryUrl + ".md5"
+		if hashRemote, err := update.ReadRemote(hashUrl); err == nil {
+			binPath, _ := os.Executable()
+			file, _ := os.Open(binPath)
+			hash := md5.New()
+			io.Copy(hash, file)
+			hashLocal := fmt.Sprintf("%x", hash.Sum(nil))
+			if hashRemote != hashLocal {
+				fmt.Println("Download in progress")
+				update.DownloadFile(
+					binPath,
+					"https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-"+runtime.GOOS+"-"+runtime.GOARCH,
+				)
+			}
+		}
 
 		return nil
 	},
