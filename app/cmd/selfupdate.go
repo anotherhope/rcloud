@@ -16,24 +16,20 @@ var selfUpdate = &cobra.Command{
 	Use:   "selfupdate",
 	Short: "Update Rcloud and Rclone if needed",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("selfupdate")
 		binaryUrl := "https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-" + runtime.GOOS + "-" + runtime.GOARCH
 		hashUrl := binaryUrl + ".md5"
-		fmt.Println("hash:analyse")
 		if hashRemote, err := update.Read(hashUrl); err == nil {
 			binPath, _ := os.Executable()
 			file, _ := os.Open(binPath)
 			hash := md5.New()
 			io.Copy(hash, file)
 			hashLocal := fmt.Sprintf("%x", hash.Sum(nil))
-			fmt.Println("hash:change", hashRemote != hashLocal)
-			//if hashRemote != hashLocal {
-			fmt.Println("Download in progress")
-			update.DownloadFile(
-				binPath+"-remote",
-				"https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-"+runtime.GOOS+"-"+runtime.GOARCH,
-			)
-			//}
+			if hashRemote != hashLocal {
+				update.DownloadFile(
+					binPath,
+					"https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-"+runtime.GOOS+"-"+runtime.GOARCH,
+				)
+			}
 		}
 
 		fmt.Println("rclone")

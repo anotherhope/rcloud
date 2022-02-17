@@ -15,8 +15,10 @@ func DownloadFile(filepath string, url string) error {
 	}
 	defer resp.Body.Close()
 
+	os.Remove(filepath)
+
 	// Create the file
-	out, err := os.Create(filepath)
+	out, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE, 0700)
 	if err != nil {
 		return err
 	}
