@@ -22,7 +22,7 @@ cross-build: clean vendor  ## Build project for all supported platform
 		done;                                                                                           \
 	done;
 
-build: clean vendor ## Build project for local
+build: vendor ## Build project for local
 	go build -o $(CURDIR)/.build/rcloud ./app/main.go
 
 run: ## Run without build project

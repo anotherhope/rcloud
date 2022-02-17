@@ -22,7 +22,7 @@ var User *user.User
 // App Instance of Rcloud
 var App *Rcloud
 
-// Config structure for Rcloud
+// Rcloud structure is configuration file for Rcloud
 type Rcloud struct {
 	Args         []string
 	Repositories []*Directory
