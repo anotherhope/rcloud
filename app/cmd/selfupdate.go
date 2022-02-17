@@ -14,9 +14,6 @@ var selfUpdate = &cobra.Command{
 	Short: "Update Rcloud and Rclone if needed",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		sub := exec.Command("rclone", "selfupdate")
-		sub.Stdout = os.Stdout
-		sub.Stdin = os.Stdin
-		sub.Stderr = os.Stderr
 		if err := sub.Run(); err != nil {
 			return err
 		}
