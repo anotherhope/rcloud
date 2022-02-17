@@ -41,7 +41,7 @@ var selfUpdate = &cobra.Command{
 		err := sub.Start()
 		if err != nil {
 			return err
-		}
+		} //
 
 		return sub.Wait()
 	},
