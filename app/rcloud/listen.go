@@ -10,47 +10,39 @@ import (
 
 // Listen contains the algo for sync
 func Listen(d *internal.Directory) {
-	if d.GetChannel() == nil {
-		var queue chan string = make(chan string)
-		var lock bool = false
+	var queue chan string = make(chan string)
+	var lock bool = false
 
-		go func() {
-		runtime:
-			for action := range queue {
-				if d.RTS {
-					lock = true
-					switch action {
-					case "check":
-						d.SetStatus("check")
-						go func() {
-							queue <- rclone.Check(d)
-						}()
-					case "sync":
-						d.SetStatus("sync")
-						go func() {
-							queue <- rclone.Sync(d)
-						}()
-					case "exit":
-						d.SetStatus("exit")
-						d.SetChannel(nil)
-						os.RemoveAll(d.MakeCachePath(d.Source))
-						break runtime
-					case "idle":
-						d.SetStatus("idle")
-					}
-					lock = false
+	go func() {
+	runtime:
+		for action := range queue {
+			if d.RTS {
+				lock = true
+				switch action {
+				case "check":
+					go func() { queue <- rclone.Check(d) }()
+				case "sync":
+					go func() { queue <- rclone.Sync(d) }()
+				case "exit":
+					d.SetStatus("exit")
+					d.SetChannel(nil)
+					os.RemoveAll(d.MakeCachePath(d.Source))
+					break runtime
+				case "idle":
+					d.SetStatus("idle")
 				}
+				lock = false
 			}
-		}()
-
-		if d.IsLocal(d.Source) && !d.IsLocal(d.Destination) {
-			go runLocalChange(d, lock, queue)
-		} else {
-			go runRemoteChange(lock, queue)
 		}
+	}()
 
-		d.SetChannel(queue)
+	if d.IsLocal(d.Source) && !d.IsLocal(d.Destination) {
+		go runLocalChange(d, lock, queue)
+	} else {
+		go runRemoteChange(lock, queue)
 	}
+
+	d.SetChannel(queue)
 }
 
 func runRemoteChange(lock bool, queue chan string) {

@@ -10,6 +10,7 @@ import (
 
 // Check execute Rclone check process.Command to detect one change
 func Check(d *internal.Directory) string {
+	d.SetStatus("check")
 	if d.IsLocal(d.Source) && !d.IsLocal(d.Destination) {
 		return "idle"
 	}

@@ -48,6 +48,8 @@ func makeHash(original io.Reader) string {
 	return fmt.Sprintf("%x", hash.Sum(nil))
 }
 
+const gitignore string = ".gitignore"
+
 func walker(d *Directory, pathOfContent string, info os.FileInfo, err error) error {
 	if err != nil {
 		return err
@@ -74,10 +76,10 @@ func walker(d *Directory, pathOfContent string, info os.FileInfo, err error) err
 
 // SourceHasChange detect if any change occurs in local directory
 func (d *Directory) SourceHasChange(pathOfContent string) bool {
-	if path.Base(pathOfContent) == ".gitignore" {
+	if path.Base(pathOfContent) == gitignore {
 		dirname := path.Dir(pathOfContent)
 		ignore := nogo.New(nogo.DotGitRule)
-		ignore.AddFromFS(os.DirFS(dirname), ".gitignore")
+		ignore.AddFromFS(os.DirFS(dirname), gitignore)
 		d.SetIgnore(ignore)
 	}
 
@@ -103,8 +105,6 @@ func (d *Directory) SourceHasChange(pathOfContent string) bool {
 	} else {
 		fmt.Println("not match")
 	}
-
-	//
 
 	return false
 }
@@ -137,7 +137,7 @@ func (d *Directory) CreateMirror(pathOfContent string) chan string {
 
 	if d.ignore == nil {
 		d.ignore = nogo.New(nogo.DotGitRule)
-		d.ignore.AddFromFS(os.DirFS(pathOfContent), ".gitignore")
+		d.ignore.AddFromFS(os.DirFS(pathOfContent), gitignore)
 	}
 
 	filepath.Walk(pathOfContent, func(currentPath string, info os.FileInfo, err error) error {

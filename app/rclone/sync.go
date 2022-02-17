@@ -9,7 +9,7 @@ import (
 
 // Sync execute Rclone sync command run all change
 func Sync(d *internal.Directory) string {
-
+	d.SetStatus("sync")
 	cmd := []string{"sync", d.Source, d.Destination}
 	cmd = append(cmd, d.Args...)
 	cmd = append(cmd, gitIgnore(d)...)
