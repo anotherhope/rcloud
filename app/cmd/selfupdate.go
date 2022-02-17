@@ -16,11 +16,6 @@ var selfUpdate = &cobra.Command{
 	Use:   "selfupdate",
 	Short: "Update Rcloud and Rclone if needed",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		sub := exec.Command("rclone", "selfupdate")
-		if err := sub.Run(); err != nil {
-			return err
-		}
-
 		binaryUrl := "https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-" + runtime.GOOS + "-" + runtime.GOARCH
 		hashUrl := binaryUrl + ".md5"
 		if hashRemote, err := update.ReadRemote(hashUrl); err == nil {
@@ -38,7 +33,11 @@ var selfUpdate = &cobra.Command{
 			}
 		}
 
-		return nil
+		sub := exec.Command("rclone", "selfupdate")
+		sub.Stdout = os.Stdout
+		sub.Stdin = os.Stdin
+		sub.Stderr = os.Stderr
+		return sub.Run()
 	},
 	DisableFlagsInUseLine: true,
 }
