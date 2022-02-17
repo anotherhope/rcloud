@@ -1,26 +1,10 @@
 package update
 
 import (
-	"bytes"
 	"io"
 	"net/http"
 	"os"
-	"strings"
 )
-
-func ReadRemote(url string) (string, error) {
-	// Get the data
-	response, err := http.Get(url)
-	if err != nil {
-		return "", err
-	}
-	defer response.Body.Close()
-
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(response.Body)
-
-	return strings.TrimSpace(buf.String()), nil
-}
 
 func DownloadFile(filepath string, url string) error {
 

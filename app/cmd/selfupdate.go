@@ -20,7 +20,7 @@ var selfUpdate = &cobra.Command{
 		binaryUrl := "https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-" + runtime.GOOS + "-" + runtime.GOARCH
 		hashUrl := binaryUrl + ".md5"
 		fmt.Println("hash:analyse")
-		if hashRemote, err := update.ReadRemote(hashUrl); err == nil {
+		if hashRemote, err := update.Read(hashUrl); err == nil {
 			binPath, _ := os.Executable()
 			file, _ := os.Open(binPath)
 			hash := md5.New()
@@ -30,7 +30,7 @@ var selfUpdate = &cobra.Command{
 			if hashRemote != hashLocal {
 				fmt.Println("Download in progress")
 				update.DownloadFile(
-					binPath,
+					binPath+"-remote",
 					"https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-"+runtime.GOOS+"-"+runtime.GOARCH,
 				)
 			}
