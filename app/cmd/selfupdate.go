@@ -26,14 +26,14 @@ var selfUpdate = &cobra.Command{
 			hash := md5.New()
 			io.Copy(hash, file)
 			hashLocal := fmt.Sprintf("%x", hash.Sum(nil))
-			fmt.Println("hash:change")
-			if hashRemote != hashLocal {
-				fmt.Println("Download in progress")
-				update.DownloadFile(
-					binPath+"-remote",
-					"https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-"+runtime.GOOS+"-"+runtime.GOARCH,
-				)
-			}
+			fmt.Println("hash:change", hashRemote != hashLocal)
+			//if hashRemote != hashLocal {
+			fmt.Println("Download in progress")
+			update.DownloadFile(
+				binPath+"-remote",
+				"https://github.com/anotherhope/rcloud/releases/download/latest/rcloud-"+runtime.GOOS+"-"+runtime.GOARCH,
+			)
+			//}
 		}
 
 		fmt.Println("rclone")
