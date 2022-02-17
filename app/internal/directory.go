@@ -24,6 +24,7 @@ type Directory struct {
 	Args        []string      `mapstructure:"args"`
 	status      string
 	channel     chan string
+	watcher     *fsnotify.Watcher
 }
 
 func (d *Directory) makeCachePath(pathOfContent string) string {
@@ -91,7 +92,6 @@ func (d *Directory) SourceHasChange(pathOfContent string) bool {
 }
 
 func handler(watcher *fsnotify.Watcher, action chan string) {
-
 	for event := range watcher.Events {
 		if event.Op&fsnotify.Write == fsnotify.Write {
 			action <- event.Name
@@ -107,13 +107,13 @@ func handler(watcher *fsnotify.Watcher, action chan string) {
 			action <- event.Name
 		}
 	}
-
 }
 
 // CreateMirror make a mirror of directory to optimize change detect and reduce bandwith comsumption
 func (d *Directory) CreateMirror(pathOfContent string) chan string {
 	watcher, _ := fsnotify.NewWatcher()
 	var action chan string = make(chan string)
+	d.SetWatcher(watcher)
 
 	go handler(watcher, action)
 
@@ -171,4 +171,14 @@ func (d *Directory) GetChannel() chan string {
 // SetChannel is Setter for Status
 func (d *Directory) SetChannel(c chan string) {
 	d.channel = c
+}
+
+// GetWatcher is Getter for Channel
+func (d *Directory) GetWatcher() *fsnotify.Watcher {
+	return d.watcher
+}
+
+// SetWatcher is Setter for Status
+func (d *Directory) SetWatcher(c *fsnotify.Watcher) {
+	d.watcher = c
 }

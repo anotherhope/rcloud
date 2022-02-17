@@ -19,16 +19,13 @@ var CachePath string
 // User is the current running user
 var User *user.User
 
+// App Instance of Rcloud
+var App *Rcloud
+
 // Config structure for Rcloud
 type Rcloud struct {
 	Args         []string
 	Repositories []*Directory
-}
-
-// App Instance of Rcloud
-var App *Rcloud = &Rcloud{
-	Args:         []string{},
-	Repositories: []*Directory{},
 }
 
 func (r *Rcloud) Set(key string, value interface{}) {
@@ -54,6 +51,13 @@ func (r *Rcloud) Reload() {
 */
 
 func Load() {
+	viper.ReadInConfig()
+
+	App = &Rcloud{
+		Args:         []string{},
+		Repositories: []*Directory{},
+	}
+
 	viper.Unmarshal(App)
 }
 
@@ -73,6 +77,8 @@ func init() {
 	viper.SetConfigName("rcloud")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("$HOME/.config/rcloud")
+
+	Load()
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {

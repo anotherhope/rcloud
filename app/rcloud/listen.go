@@ -60,6 +60,7 @@ func runRemoteChange(lock bool, queue chan string) {
 
 func runLocalChange(d *internal.Directory, lock bool, queue chan string) {
 	d.SetStatus("idle")
+	queue <- "sync"
 	for action := range d.CreateMirror(d.Source) {
 		if !lock && d.SourceHasChange(action) {
 			queue <- "sync"

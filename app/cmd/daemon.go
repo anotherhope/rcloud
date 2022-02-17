@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"time"
 
 	"github.com/anotherhope/rcloud/app/internal"
 	"github.com/anotherhope/rcloud/app/rclone"
@@ -23,6 +24,8 @@ var daemonCmd = &cobra.Command{
 		signal.Notify(exit, os.Interrupt)
 
 		go socket.Server()
+
+		os.RemoveAll(internal.CachePath)
 		for _, repository := range internal.App.Repositories {
 			rcloud.Listen(repository)
 		}
@@ -31,6 +34,8 @@ var daemonCmd = &cobra.Command{
 			for _, repository := range internal.App.Repositories {
 				rcloud.Close(repository)
 			}
+			os.RemoveAll(internal.CachePath)
+			time.Sleep(1000 * time.Millisecond) // fix for cleaning cache
 			internal.Load()
 			for _, repository := range internal.App.Repositories {
 				rcloud.Listen(repository)

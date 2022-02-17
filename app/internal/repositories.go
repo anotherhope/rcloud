@@ -76,6 +76,7 @@ func Add(d *Directory) error {
 func Del(n string) error {
 	for k, v := range App.Repositories {
 		if strings.HasPrefix(v.Name, n) {
+			v.watcher.Close()
 			App.Set("repositories", append(
 				App.Repositories[:k],
 				App.Repositories[k+1:]...,
