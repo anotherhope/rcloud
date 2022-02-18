@@ -1,2 +1,2 @@
 # Config
-Enter in interactive configuration session. (alias: `$ rclone config`)
+Enter in rclone interactive configuration (alias: `$ rclone config`)
