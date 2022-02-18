@@ -3,8 +3,8 @@
 Create un synchronized local folder
 
 ### Use case:
-	- a
-	- b
+- a
+- b
 
 ```
 $ rcloud add <local_source> <local_destination>
