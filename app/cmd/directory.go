@@ -17,7 +17,7 @@ var directoryCmd = &cobra.Command{
 var directoryStart = &cobra.Command{
 	Args:  cobra.ExactValidArgs(2),
 	Use:   "add <source> <destination>",
-	Short: "Add to synchronized folder (" + cwd + ")",
+	Short: "Add synchronized directory",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
 		var source = args[0]
@@ -46,8 +46,8 @@ var directoryStart = &cobra.Command{
 
 var directoryStop = &cobra.Command{
 	Args:  cobra.ExactValidArgs(1),
-	Use:   "del <folder>",
-	Short: "Delete synchronized folder",
+	Use:   "del <directory>",
+	Short: "Delete synchronized directory",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return internal.Del(args[0])
 	},

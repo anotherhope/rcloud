@@ -1,2 +1,2 @@
 # Config
-This command is a simple alias of `rclone config`
+Enter in interactive configuration session. (alias: `$ rclone config`)
