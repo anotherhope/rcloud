@@ -6,8 +6,4 @@ title: Rcloud
 layout: default
 ---
 
-### Local To Local
-Create un synchronized folder
-```
-$ rcloud add <local_source> <local_destination>
-```
+{% include_relative local-to-local/README.md %}
