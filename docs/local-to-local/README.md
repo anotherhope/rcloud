@@ -1,7 +1,7 @@
-## Local To Local
+# Local To Local
 Create un synchronized local folder
 
-### Use case:
+## Use case:
 - Sync on mounted volume (SMB, AFP, NFS)
 - Sync folder in other cloud tools (Synologie Drive, iCloud, ...)
 
@@ -9,11 +9,11 @@ Create un synchronized local folder
 $ rcloud add /path/to/source /path/to/destination
 ```
 
-### To Do:
+## To Do:
 
-#### Feature: 
+### Feature: 
 - [x] Feature: Use fsnotify to detect real time change and make a sync
 - [ ] Feature: 
 
-#### Optimization: 
+### Optimization: 
 - [ ] Optimization: Use only Sync at start, and copyto Only on file change
