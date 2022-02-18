@@ -32,9 +32,10 @@ It is above all a personal tool, but if you wish to participate in the improveme
 # How to use
 
 Usage:
-  rcloud [command]
+	rcloud [command]
 
 Available Commands:
+
   [config]()      Enter in interactive configuration session. (alias: rclone config)
   [daemon]()      Start Daemon service
   [directory]()   Manage directory
