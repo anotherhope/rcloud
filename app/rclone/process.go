@@ -1,6 +1,7 @@
 package rclone
 
 import (
+	"fmt"
 	"os/exec"
 	"sync"
 )
@@ -16,6 +17,7 @@ var multiton = map[string]*Process{}
 
 // CreateProcess can create a new process for rclone
 func CreateProcess(directoryName string, args ...string) *Process {
+	fmt.Println(args[0])
 	mu.Lock()
 	defer mu.Unlock()
 

@@ -2,6 +2,7 @@ package rclone
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 
 	"github.com/anotherhope/rcloud/app/internal"
@@ -14,6 +15,7 @@ func Sync(d *internal.Directory) string {
 	cmd = append(cmd, d.Args...)
 	cmd = append(cmd, gitIgnore(d)...)
 
+	fmt.Println(d.Name, cmd) //
 	process := CreateProcess(d.Name, cmd...)
 
 	stderr, _ := process.Command.StderrPipe()

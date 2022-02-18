@@ -20,9 +20,11 @@ func Listen(d *internal.Directory) {
 				lock = true
 				switch action {
 				case "check":
-					go func() { queue <- rclone.Check(d) }()
+					message := rclone.Check(d)
+					go func() { queue <- message }()
 				case "sync":
-					go func() { queue <- rclone.Sync(d) }()
+					message := rclone.Sync(d)
+					go func() { queue <- message }()
 				case "exit":
 					d.SetStatus("exit")
 					d.SetChannel(nil)
@@ -48,6 +50,7 @@ func Listen(d *internal.Directory) {
 func runRemoteChange(lock bool, queue chan string) {
 	for {
 		if !lock {
+			//lock = true
 			queue <- "check"
 		}
 		time.Sleep(5 * time.Second)
