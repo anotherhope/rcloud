@@ -22,7 +22,15 @@ This project is currently in progress don't use this for the moment
 ![Linux](https://img.shields.io/badge/Linux%20(amd%7Carm)-595959?logo=linux&logoColor=F0F0F0)
 ![OpenBSD](https://img.shields.io/badge/OpenBSD%20(amd%7Carm)-595959?logo=openbsd&logoColor=F0F0F0)
 
+# Why Rcloud exists ?
+I initiated this project because I wanted to be able to synchronize on my NAS (or other cloud providers), my different projects in a secure way in real time with a wide choice of protocols and features.
+
+this project wrap Rclone to add the real-time management layer that it lacks by trying as best as possible to respond to the different problems.
+
+It is above all a personal tool, but if you wish to participate in the improvement, do not hesitate
+
 # How to use
+### [Local To Local](https://duckduckgo.com "Documentation: Rcloud Local To Local").
 
 ### Local To Local
 Create un synchronized folder
