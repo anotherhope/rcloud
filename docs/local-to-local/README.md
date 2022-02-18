@@ -10,6 +10,6 @@ $ rcloud add /path/to/source /path/to/destination
 ```
 
 ###### To Do:
-[x] Feature: Use fsnotify to detect real time change and make a sync
-[] Optimisation: Use only Sync at start, and copyto Only on file change
-[] Feature: 
+- [x] Feature: Use fsnotify to detect real time change and make a sync
+- [] Optimisation: Use only Sync at start, and copyto Only on file change
+- [] Feature: 
