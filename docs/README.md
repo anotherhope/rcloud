@@ -30,7 +30,7 @@ this project wrap Rclone to add the real-time management layer that it lacks by 
 It is above all a personal tool, but if you wish to participate in the improvement, do not hesitate
 
 # How to use
-### [Local To Local](pages/ltl "Documentation: Rcloud Local To Local")
+### [Local To Local](local-to-local "Documentation: Rcloud Local To Local")
 
 ### Local To Local
 Create un synchronized folder
