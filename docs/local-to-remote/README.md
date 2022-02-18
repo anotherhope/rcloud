@@ -1,11 +1,5 @@
 ### Local To Local
-
-Create un synchronized local folder
-
-### Use case:
-	- a
-	- b
-
+Create un synchronized folder
 ```
 $ rcloud add <local_source> <local_destination>
 ```
