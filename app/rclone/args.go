@@ -1,7 +1,6 @@
 package rclone
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 
@@ -20,7 +19,6 @@ func gitIgnore(d *internal.Directory) []string {
 	if d.IsRemote(d.Source) {
 		cmd := exec.Command("rclone", "copyto", d.Source+"/.gitignore", d.Destination+"/.gitignore")
 		if err := cmd.Wait(); err == nil {
-			fmt.Println("ok")
 			ignores = append(ignores, "--exclude=\""+d.Destination+"/.gitignore"+"\"")
 		}
 	}
