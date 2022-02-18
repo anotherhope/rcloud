@@ -83,10 +83,7 @@ func (d *Directory) SourceHasChange(pathOfContent string) bool {
 		d.SetIgnore(ignore)
 	}
 
-	fmt.Println("change detected:", pathOfContent)
 	if !d.ignore.Match(pathOfContent, true) {
-		fmt.Println("match")
-
 		cachePath := d.MakeCachePath(pathOfContent)
 		original, _ := os.Open(pathOfContent)
 		defer original.Close()
