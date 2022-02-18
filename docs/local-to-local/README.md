@@ -9,14 +9,3 @@ Create un synchronized local folder
 $ rcloud add /path/to/source /path/to/destination
 rcloud add /path/to/source /path/to/destination
 ```
-
-```sh
-$ rcloud add /path/to/source /path/to/destination
-rcloud add /path/to/source /path/to/destination
-```
-
-
-```zsh
-$ rcloud add /path/to/source /path/to/destination
-rcloud add /path/to/source /path/to/destination
-```
