@@ -30,10 +30,10 @@ this project wrap Rclone to add the real-time management layer that it lacks by 
 It is above all a personal tool, but if you wish to participate in the improvement, do not hesitate
 
 # How to use
-#### [Local To Local](pages/local-to-local.md "Documentation: Rcloud Local To Local")
-#### [Local To Remote](pages/local-to-remote.md "Documentation: Rcloud Local To Remote")
-#### [Remote To Local](pages/remote-to-local.md "Documentation: Rcloud Remote To Local")
-#### [Remote To Remote](pages/remote-to-remote.md "Documentation: Rcloud Remote To Remote")
+#### [Local To Local](local-to-local "Documentation: Rcloud Local To Local")
+#### [Local To Remote](local-to-remote "Documentation: Rcloud Local To Remote")
+#### [Remote To Local](remote-to-local "Documentation: Rcloud Remote To Local")
+#### [Remote To Remote](remote-to-remote "Documentation: Rcloud Remote To Remote")
 ### Local To Remote
 Create a remote provider with rclone: 
 ```
