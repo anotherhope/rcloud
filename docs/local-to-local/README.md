@@ -9,7 +9,11 @@ Create un synchronized local folder
 $ rcloud add /path/to/source /path/to/destination
 ```
 
-##### To Do:
+### To Do:
+
+#### Feature: 
 - [x] Feature: Use fsnotify to detect real time change and make a sync
-- [ ] Optimisation: Use only Sync at start, and copyto Only on file change
 - [ ] Feature: 
+
+#### Optimization: 
+- [ ] Optimization: Use only Sync at start, and copyto Only on file change
