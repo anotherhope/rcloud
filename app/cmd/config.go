@@ -9,7 +9,7 @@ import (
 
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Enter an interactive configuration session.",
+	Short: "Enter in interactive configuration session. (alias: rclone config)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		sub := exec.Command("rclone", append([]string{"config"}, args[:]...)...)
 		sub.Stdout = os.Stdout

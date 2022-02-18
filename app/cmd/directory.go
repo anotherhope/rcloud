@@ -9,7 +9,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var addCmd = &cobra.Command{
+var directoryCmd = &cobra.Command{
+	Use:   "directory",
+	Short: "Manage directory",
+}
+
+var directoryStart = &cobra.Command{
 	Args:  cobra.ExactValidArgs(2),
 	Use:   "add <source> <destination>",
 	Short: "Add to synchronized folder (" + cwd + ")",
@@ -39,6 +44,18 @@ var addCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 }
 
+var directoryStop = &cobra.Command{
+	Args:  cobra.ExactValidArgs(1),
+	Use:   "del <folder>",
+	Short: "Delete synchronized folder",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return internal.Del(args[0])
+	},
+	DisableFlagsInUseLine: true,
+}
+
 func init() {
-	rootCmd.AddCommand(addCmd)
+	directoryCmd.AddCommand(directoryStart)
+	directoryCmd.AddCommand(directoryStop)
+	rootCmd.AddCommand(directoryCmd)
 }
