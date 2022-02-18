@@ -38,4 +38,8 @@ help: #Pour générer automatiquement l'aide ## Display all commands available
 	$(eval PADDING=$(shell grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk '{ print length($$1)-1 }' | sort -n | tail -n 1))
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-$(PADDING)s\033[0m %s\n", $$1, $$2}'
 
+serve:  ## Serve Markdown for preview
+	npm install
+	npm start
+
 #  /opt/homebrew/Library/Taps/homebrew/homebrew-core/

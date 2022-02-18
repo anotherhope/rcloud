@@ -1,0 +1,25 @@
+{
+  "name": "rcloud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node ./node_modules/markserv/lib/cli.js ./docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anotherhope/rcloud.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anotherhope/rcloud/issues"
+  },
+  "homepage": "https://github.com/anotherhope/rcloud#readme",
+  "dependencies": {
+    "markserv": "github:markserv/markserv"
+  }
+}
