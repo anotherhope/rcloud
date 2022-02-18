@@ -6,5 +6,17 @@ Create un synchronized local folder
 - Sync folder in other cloud tools (Synologie Drive, iCloud, ...)
 
 ```bash
-$ rcloud add <local_source> <local_destination>
+$ rcloud add /path/to/source /path/to/destination
+rcloud add /path/to/source /path/to/destination
+```
+
+```sh
+$ rcloud add /path/to/source /path/to/destination
+rcloud add /path/to/source /path/to/destination
+```
+
+
+```zsh
+$ rcloud add /path/to/source /path/to/destination
+rcloud add /path/to/source /path/to/destination
 ```
