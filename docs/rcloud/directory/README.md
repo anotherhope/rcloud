@@ -6,7 +6,7 @@ Available Commands:
 - [DEL](del)
 
 
-[ADD](add)
+`[ADD](add)`
 [DEL](del)
 
 
