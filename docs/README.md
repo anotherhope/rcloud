@@ -28,8 +28,8 @@ I initiated this project because I wanted to be able to synchronize on my NAS (o
 this project wrap Rclone to add the real-time management layer that it lacks by trying as best as possible to respond to the different problems.
 
 It is above all a personal tool, but if you wish to participate in the improvement, do not hesitate
-## Command
-### [rcloud](rcloud)
+### Command
+#### [rcloud](rcloud)
 
 #### [Local To Local](local-to-local "Documentation: Rcloud Local To Local")
 #### [Local To Remote](local-to-remote "Documentation: Rcloud Local To Remote")
