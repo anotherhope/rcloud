@@ -3,7 +3,7 @@ This command is the root command
 
 Available Sub Commands:
 - [config](config) Rclone interactive configuration (alias: `$ rclone config`)
-- [daemon](daemon) Delete synchronized directory
+- [daemon](daemon) Start a daemon
 - [directory](directory) Manage syncronized directory
 - [rts](rts) Enable/Disable syncronization on directory
 - [selfupdate](selfupdate) Update Rcloud and Rclone
