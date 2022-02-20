@@ -40,3 +40,16 @@ It is above all a personal tool, but if you wish to participate in the improveme
 		- [stop](rts/stop "rcloud rts stop")
 	- [selfupdate](selfupdate "rcloud selfupdate")
 	- [status](status "rcloud status")
+
+
+[rcloud](rcloud "rcloud")
+[    config](config "rcloud config")
+[    daemon](daemon "rcloud daemon")
+[    directory](directory "rcloud directory")
+[        add](directory/add "rcloud directory add")
+[        del](directory/del "rcloud directory del")
+[    rts](rts "rcloud rts")
+[        start](rts/start "rcloud rts start")
+[        stop](rts/stop "rcloud rts stop")
+[    selfupdate](selfupdate "rcloud selfupdate")
+[    status](status "rcloud status")
