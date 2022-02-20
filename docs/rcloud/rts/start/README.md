@@ -1,10 +1,6 @@
-# Directory
-This command is used to manage syncronized folder
+# Real Time Syncronization Start
+This command is used to start syncronization on directory
+If no args are used, this start all syncronization
 
-Available Sub Commands:
-- [add](add) Add synchronized directory
-- [del](del) Delete synchronized directory
-- [edit](#todo) #TODO
-
-### To Do:
-- [ ] Add the possibility to EDIT with nano/vi $EDITOR or $VISUAL 
+### Command:
+`$ rcloud rts start <optional_id_directory>`

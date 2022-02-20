@@ -1,4 +1,4 @@
-# Directory
+# Directory Add
 This command is used to manage syncronized folder
 
 Available Sub Commands:
