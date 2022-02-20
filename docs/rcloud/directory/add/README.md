@@ -3,20 +3,16 @@ This command is used to manage syncronized directory
 
 ## Command:
 
+### create remote if needed `$ rcloud config`
+
 ### Local to Local
-`$ rcloud directory add <local_path> <local_path>` Add directory to sync
+`$ rcloud directory add <local_path> <local_path>`
 
 ### Local to Remote
-`$ rcloud config` Create a remote folder
-
-`$ rcloud directory add <local_path> <remote_path>` Add directory to sync
+`$ rcloud directory add <local_path> <remote_path>`
 
 ### Remote to Local
-`$ rcloud config` Create a remote folder
-
-`$ rcloud directory add <remote_path> <local_path>` Add directory to sync
+`$ rcloud directory add <remote_path> <local_path>`
 
 ### Remote to Remote
-`$ rcloud config` Create a remote folder
-
-`$ rcloud directory add <remote_path> <remote_path>` Add directory to sync
+`$ rcloud directory add <remote_path> <remote_path>`

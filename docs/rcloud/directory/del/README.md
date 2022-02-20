@@ -4,6 +4,6 @@ This command is used to manage syncronized directory
 ## Command:
 
 ### Local to Local
-`$ rcloud status` Get **RCLOUD ID** you want delete
+`$ rcloud status`
 
-`$ rcloud directory del <rcloud_id>` Remove directory from sync
+`$ rcloud directory del <rcloud_id>`
