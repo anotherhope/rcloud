@@ -7,4 +7,4 @@ title: Rcloud
 layout: default
 ---
 
-Hello World
+{% include_relative README.md %}
