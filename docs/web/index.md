@@ -5,5 +5,3 @@
 title: Rcloud
 layout: default
 ---
-
-{% include_relative ../README.md %}
