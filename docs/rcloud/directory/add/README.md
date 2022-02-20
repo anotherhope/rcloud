@@ -6,10 +6,6 @@ This command is used to manage syncronized directory
 ### Local to Local
 `$ rcloud directory add /path/to/local /path/to/local` Add to sync
 ### Local to remote
-Create a remote folder
+`$ rcloud config` Create a remote folder
 
-`$ rcloud config`
-
-Add to sync
-
-`$ rcloud directory add /path/to/local remote:/path/on/remote` 
+`$ rcloud directory add /path/to/local remote:/path/on/remote` Add to sync
