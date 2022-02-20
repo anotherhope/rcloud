@@ -7,19 +7,21 @@ import (
 	"github.com/anotherhope/rcloud/app/internal"
 )
 
+const ignore = "/.gitignore"
+
 func gitIgnore(d *internal.Directory) []string {
 	ignores := make([]string, 0)
 
 	if d.IsLocal(d.Source) {
-		if _, err := os.Stat(d.Source + "/.gitignore"); err != nil {
-			ignores = append(ignores, "--exclude=\""+d.Source+"/.gitignore"+"\"")
+		if _, err := os.Stat(d.Source + ignore); err != nil {
+			ignores = append(ignores, "--exclude=\""+d.Source+ignore+"\"")
 		}
 	}
 
 	if d.IsRemote(d.Source) {
-		cmd := exec.Command("rclone", "copyto", d.Source+"/.gitignore", d.Destination+"/.gitignore")
+		cmd := exec.Command("rclone", "copyto", d.Source+ignore, d.Destination+ignore)
 		if err := cmd.Wait(); err == nil {
-			ignores = append(ignores, "--exclude=\""+d.Destination+"/.gitignore"+"\"")
+			ignores = append(ignores, "--exclude=\""+d.Destination+ignore+"\"")
 		}
 	}
 
