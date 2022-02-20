@@ -3,7 +3,8 @@ This command is used to manage syncronized directory
 
 ## Command:
 
-### create remote if needed `$ rcloud config`
+### Create remote if needed
+`$ rcloud config`
 
 ### Local to Local
 `$ rcloud directory add <local_path> <local_path>`
