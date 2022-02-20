@@ -1,5 +1,5 @@
 # WARNING
-This project is currently in progress don't use this for the moment
+This project and the Documentation are currently in progress don't use this for the moment
 
 # Rcloud [![Reference](https://pkg.go.dev/badge/github.com/anotherhope/rcloud.svg)](https://pkg.go.dev/github.com/anotherhope/rcloud) [![License](https://img.shields.io:/github/license/anotherhope/rcloud)](https://github.com/anotherhope/rcloud/blob/main/LICENSE.md)
 
@@ -29,7 +29,13 @@ this project wrap Rclone to add the real-time management layer that it lacks by 
 
 It is above all a personal tool, but if you wish to participate in the improvement, do not hesitate
 ### Command
-### [rcloud](rcloud "Command: rcloud")
+- [rcloud](rcloud "Command: rcloud")
+	- config
+	- daemon
+	- directory
+	- rts
+	- selfupdate
+	- status
 
 #### [Local To Local](local-to-local "Documentation: Rcloud Local To Local")
 #### [Local To Remote](local-to-remote "Documentation: Rcloud Local To Remote")
