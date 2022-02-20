@@ -9,6 +9,5 @@ Available Sub Commands:
 - [selfupdate](selfupdate) Update Rcloud and Rclone
 - [status](status) Display status of all directory
 
-
 ## Command:
 `$ rcloud`
