@@ -1,7 +1,7 @@
 # Directory Add
 This command is used to manage syncronized directory
 
-### Command:
+## Command:
 
-###### Local to Local
+##### Local to Local
 `$ rcloud directory add /path/to/local /path/to/local`
