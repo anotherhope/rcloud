@@ -4,6 +4,7 @@ If no args are used, this start all syncronization
 
 ## Command:
 `$ rcloud status` Get **RCLOUD ID** you want start
+
 `$ rcloud rts start <optional_id_directory>`
 
 Or
