@@ -11,4 +11,4 @@ Available Sub Commands:
 
 
 ### Command:
-`$ rcloud directory`
+`$ rcloud`
