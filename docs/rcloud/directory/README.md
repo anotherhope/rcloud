@@ -1,5 +1,5 @@
 # Directory
-This command is used to manage syncronized folder
+This command is used to manage syncronized directory
 
 Available Sub Commands:
 - [add](add) Add synchronized directory
