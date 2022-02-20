@@ -29,21 +29,22 @@ this project wrap Rclone to add the real-time management layer that it lacks by 
 
 It is above all a personal tool, but if you wish to participate in the improvement, do not hesitate
 ### Command
-- [rcloud](rcloud "Command: rcloud")
-	- config
-	- daemon
-	- directory
-	- rts
-	- selfupdate
-	- status
+- [rcloud](rcloud "rcloud")
+	- [config](config "rcloud config")
+	- [daemon](daemon "rcloud daemon")
+	- [directory](directory "rcloud directory")
+		- [add](directory/add "rcloud directory add")
+		- [del](directory/del "rcloud directory del")
+	- [rts](rts "rcloud rts")
+		- [start](rts/start "rcloud rts start")
+		- [stop](rts/stop "rcloud rts stop")
+	- [selfupdate](selfupdate "rcloud selfupdate")
+	- [status](status "rcloud status")
 
 #### [Local To Local](local-to-local "Documentation: Rcloud Local To Local")
 #### [Local To Remote](local-to-remote "Documentation: Rcloud Local To Remote")
 #### [Remote To Local](remote-to-local "Documentation: Rcloud Remote To Local")
 #### [Remote To Remote](remote-to-remote "Documentation: Rcloud Remote To Remote")
-
-### To Do
-
 
 ### Local To Remote
 Create a remote provider with rclone: 
