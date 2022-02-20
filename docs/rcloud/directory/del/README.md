@@ -1,5 +1,5 @@
 # Directory Del
 This command is used to manage syncronized directory
 
-### Command:
+## Command:
 `$ rcloud directory del`

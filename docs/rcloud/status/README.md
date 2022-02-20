@@ -1,5 +1,5 @@
 # Status
 This command is used to display status of all directory
 
-### Command:
+## Command:
 `$ rcloud status`

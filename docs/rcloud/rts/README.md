@@ -1,7 +1,7 @@
 # Real Time Syncronization
 This command is used to enable/disable syncronization on directory
 
-### Command:
+## Command:
 `$ rcloud rts <subcommand>`
 
 Available Sub Commands:

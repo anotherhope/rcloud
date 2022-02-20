@@ -10,5 +10,5 @@ Available Sub Commands:
 - [status](status) Display status of all directory
 
 
-### Command:
+## Command:
 `$ rcloud`

@@ -2,5 +2,5 @@
 This command is used to stop syncronization on directory
 If no args are used, this stop all syncronization
 
-### Command:
+## Command:
 `$ rcloud rts stop <optional_id_directory>`

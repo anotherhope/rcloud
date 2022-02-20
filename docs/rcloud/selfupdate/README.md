@@ -1,5 +1,5 @@
 # Selfupdate
 This command update Rcloud and Rclone
 
-### Command:
+## Command:
 `$ rcloud selfupdate`

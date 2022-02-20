@@ -5,5 +5,5 @@ Available Sub Commands:
 - [add](add) Add synchronized directory
 - [del](del) Delete synchronized directory
 
-### Command:
+## Command:
 `$ rcloud directory`
