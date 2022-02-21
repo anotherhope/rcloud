@@ -1,7 +1,7 @@
 # WARNING
 This project and the Documentation are currently in progress don't use this for the moment
 
-# Rcloud [![Reference](https://pkg.go.dev/badge/github.com/anotherhope/rcloud.svg)](https://pkg.go.dev/github.com/anotherhope/rcloud) [![License](https://img.shields.io:/github/license/anotherhope/rcloud)](https://github.com/anotherhope/rcloud/blob/main/LICENSE.md)
+# [Rcloud](https://anotherhope.github.io/rcloud/) [![Reference](https://pkg.go.dev/badge/github.com/anotherhope/rcloud.svg)](https://pkg.go.dev/github.com/anotherhope/rcloud) [![License](https://img.shields.io:/github/license/anotherhope/rcloud)](https://github.com/anotherhope/rcloud/blob/main/LICENSE.md)
 
 [![Workflow](https://img.shields.io:/github/workflow/status/anotherhope/rcloud/Go)](https://github.com/anotherhope/rcloud/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/anotherhope/rcloud)](https://goreportcard.com/report/github.com/anotherhope/rcloud)
