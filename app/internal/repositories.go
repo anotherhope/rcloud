@@ -38,7 +38,7 @@ func same(name string) bool {
 	return false
 }
 
-func exists(d *Directory) bool {
+func exists(d *Repository) bool {
 	for _, repository := range App.Repositories {
 		if repository.Name == d.Name {
 			return true
@@ -49,14 +49,14 @@ func exists(d *Directory) bool {
 }
 
 // Add repository in configuration file
-func Add(d *Directory) error {
+func Add(d *Repository) error {
 	var exitMessage error = nil
 	if same(d.Destination) {
 		exitMessage = fmt.Errorf("destination path already exist as a sync folder ")
 	} else if parent(d.Destination) {
-		exitMessage = fmt.Errorf("destination path is parent directory of a sync folder ")
+		exitMessage = fmt.Errorf("destination path is parent repository of a sync folder ")
 	} else if sub(d.Destination) {
-		exitMessage = fmt.Errorf("destination path is sub directory of a sync folder ")
+		exitMessage = fmt.Errorf("destination path is sub repository of a sync folder ")
 	} else if exists(d) {
 		exitMessage = fmt.Errorf("sorry repository already exists")
 	}
@@ -76,12 +76,6 @@ func Add(d *Directory) error {
 func Del(n string) error {
 	for k, v := range App.Repositories {
 		if strings.HasPrefix(v.Name, n) {
-			if watcher := v.GetWatcher(); watcher != nil {
-				watcher.Close()
-			}
-
-			v.SetIgnore(nil)
-
 			App.Set("repositories", append(
 				App.Repositories[:k],
 				App.Repositories[k+1:]...,
@@ -94,12 +88,12 @@ func Del(n string) error {
 }
 
 // List repositories in configuration file
-func List() []*Directory {
+func List() []*Repository {
 	return App.Repositories
 }
 
 // Get repository by name
-func Get(repositoryName string) *Directory {
+func Get(repositoryName string) *Repository {
 	for _, repository := range List() {
 		if repository.Name == repositoryName {
 			return repository

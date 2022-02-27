@@ -7,8 +7,8 @@ import (
 	"strconv"
 
 	"github.com/anotherhope/rcloud/app/internal"
-	"github.com/anotherhope/rcloud/app/socket"
-	"github.com/anotherhope/rcloud/app/socket/message"
+	"github.com/anotherhope/rcloud/app/internal/socket"
+	"github.com/anotherhope/rcloud/app/internal/socket/message"
 	"github.com/spf13/cobra"
 )
 
@@ -31,7 +31,6 @@ var statusCmd = &cobra.Command{
 
 			client := socket.Client()
 			if client != nil {
-
 				m := &message.Message{
 					Request:  message.ReqStatus(repository.Name),
 					Response: &message.Response{},
@@ -66,7 +65,7 @@ var statusCmd = &cobra.Command{
 			)
 		}
 
-		if _, err := os.Stat(internal.SocketPath); errors.Is(err, os.ErrNotExist) {
+		if _, err := os.Stat(socket.SocketPath); errors.Is(err, os.ErrNotExist) {
 			fmt.Println("SERVICE: OFF")
 		} else {
 			fmt.Println("SERVICE: ON")

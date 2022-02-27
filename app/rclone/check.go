@@ -8,12 +8,13 @@ import (
 	"github.com/anotherhope/rcloud/app/internal"
 )
 
-// Check execute Rclone check process.Command to detect one change
-func Check(d *internal.Directory) string {
-	d.SetStatus("check")
-	if d.IsLocal(d.Source) && !d.IsLocal(d.Destination) {
+// Check execute Rclone check cmd to detect one change
+func Check(d *internal.Repository) string {
+	if d.IsLocal(d.Source) {
 		return "idle"
 	}
+
+	d.SetStatus("check")
 
 	cmd := []string{"check", d.Source, d.Destination, "--fast-list", "--checkers=1"}
 	cmd = append(cmd, d.Args...)

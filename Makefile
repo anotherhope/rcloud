@@ -30,13 +30,18 @@ build: vendor ## Build project for local
 run: ## Run without build project
 	go run ./app/main.go
 
-vendor:
-	go mod vendor
+vendor: update-go-deps
 	go mod tidy
+	go mod vendor
 
 help: #Pour générer automatiquement l'aide ## Display all commands available
 	$(eval PADDING=$(shell grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk '{ print length($$1)-1 }' | sort -n | tail -n 1))
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-$(PADDING)s\033[0m %s\n", $$1, $$2}'
+
+update-go-deps:
+	@for m in $$(go list -mod=readonly -m -f '{{ if and (not .Indirect) (not .Main)}}{{.Path}}{{end}}' all); do \
+		go get $$m; \
+	done
 
 serve:  ## Serve Markdown for preview
 	npm install

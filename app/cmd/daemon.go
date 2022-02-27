@@ -6,9 +6,9 @@ import (
 	"os/signal"
 
 	"github.com/anotherhope/rcloud/app/internal"
+	"github.com/anotherhope/rcloud/app/internal/cache"
+	"github.com/anotherhope/rcloud/app/internal/socket"
 	"github.com/anotherhope/rcloud/app/rclone"
-	"github.com/anotherhope/rcloud/app/rcloud"
-	"github.com/anotherhope/rcloud/app/socket"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -22,21 +22,13 @@ var daemonCmd = &cobra.Command{
 		var exit = make(chan os.Signal, 1)
 		signal.Notify(exit, os.Interrupt)
 
-		go socket.Server()
+		os.RemoveAll(cache.CachePath)
 
-		os.RemoveAll(internal.CachePath)
-		for _, repository := range internal.App.Repositories {
-			rcloud.Listen(repository)
-		}
+		go socket.Server()
+		go internal.App.Load()
 
 		viper.OnConfigChange(func(e fsnotify.Event) {
-			for _, repository := range internal.App.Repositories {
-				rcloud.Close(repository)
-			}
-			internal.Load()
-			for _, repository := range internal.App.Repositories {
-				rcloud.Listen(repository)
-			}
+			go internal.App.Load()
 		})
 
 		<-exit

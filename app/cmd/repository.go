@@ -3,21 +3,20 @@ package cmd
 import (
 	"crypto/sha1"
 	"fmt"
-	"time"
 
 	"github.com/anotherhope/rcloud/app/internal"
 	"github.com/spf13/cobra"
 )
 
-var directoryCmd = &cobra.Command{
-	Use:   "directory",
-	Short: "Manage directory",
+var repositoryCmd = &cobra.Command{
+	Use:   "repository",
+	Short: "Manage repository",
 }
 
-var directoryStart = &cobra.Command{
+var repositoryStart = &cobra.Command{
 	Args:  cobra.ExactValidArgs(2),
 	Use:   "add <source> <destination>",
-	Short: "Add synchronized directory",
+	Short: "Add synchronized repository",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
 		var source = args[0]
@@ -34,20 +33,19 @@ var directoryStart = &cobra.Command{
 		h := sha1.New()
 		h.Write([]byte(source + destination))
 
-		return internal.Add(&internal.Directory{
+		return internal.Add(&internal.Repository{
 			Name:        fmt.Sprintf("%x", h.Sum(nil)),
 			Source:      source,
 			Destination: destination,
-			Watch:       100 * time.Millisecond,
 		})
 	},
 	DisableFlagsInUseLine: true,
 }
 
-var directoryStop = &cobra.Command{
+var repositoryStop = &cobra.Command{
 	Args:  cobra.ExactValidArgs(1),
-	Use:   "del <directory>",
-	Short: "Delete synchronized directory",
+	Use:   "del <repository>",
+	Short: "Delete synchronized repository",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return internal.Del(args[0])
 	},
@@ -55,7 +53,7 @@ var directoryStop = &cobra.Command{
 }
 
 func init() {
-	directoryCmd.AddCommand(directoryStart)
-	directoryCmd.AddCommand(directoryStop)
-	rootCmd.AddCommand(directoryCmd)
+	repositoryCmd.AddCommand(repositoryStart)
+	repositoryCmd.AddCommand(repositoryStop)
+	rootCmd.AddCommand(repositoryCmd)
 }

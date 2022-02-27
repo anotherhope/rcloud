@@ -1,9 +1,9 @@
-# Directory
-This command is used to manage syncronized directory
+# repository
+This command is used to manage syncronized repository
 
 Available Sub Commands:
-- [add](add) Add synchronized directory
-- [del](del) Delete synchronized directory
+- [add](add) Add synchronized repository
+- [del](del) Delete synchronized repository
 
 ## Command:
-`$ rcloud directory`
+`$ rcloud repository`

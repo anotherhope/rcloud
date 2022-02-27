@@ -2,20 +2,18 @@ package rclone
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 
 	"github.com/anotherhope/rcloud/app/internal"
 )
 
 // Sync execute Rclone sync command run all change
-func Sync(d *internal.Directory) string {
+func Sync(d *internal.Repository) string {
 	d.SetStatus("sync")
 	cmd := []string{"sync", d.Source, d.Destination}
 	cmd = append(cmd, d.Args...)
 	cmd = append(cmd, gitIgnore(d)...)
 
-	fmt.Println(d.Name, cmd) //
 	process := CreateProcess(d.Name, cmd...)
 
 	stderr, _ := process.Command.StderrPipe()

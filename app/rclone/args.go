@@ -9,7 +9,7 @@ import (
 
 const ignore = "/.gitignore"
 
-func gitIgnore(d *internal.Directory) []string {
+func gitIgnore(d *internal.Repository) []string {
 	ignores := make([]string, 0)
 
 	if d.IsLocal(d.Source) {
