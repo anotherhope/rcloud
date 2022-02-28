@@ -20,7 +20,7 @@ func (w *Worker) Execute() bool {
 		select {
 		// if context was canceled.
 		case <-w.Queue.ctx.Done():
-			log.Printf("Work done in queue %s: %s!", w.Queue.name, w.Queue.ctx.Err())
+			log.Printf("Work done in queue: %s!", w.Queue.ctx.Err())
 			return true
 		// if job received.
 		case job := <-w.Queue.actions:

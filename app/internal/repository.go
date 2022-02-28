@@ -7,8 +7,6 @@ import (
 	"github.com/anotherhope/rcloud/app/internal/watcher"
 )
 
-const gitignore string = ".gitignore"
-
 // Repository is the structure of syncronized folder
 type Repository struct {
 	Name        string   `mapstructure:"name"`
@@ -23,7 +21,29 @@ type Repository struct {
 func (d *Repository) Listen() {
 	if d.IsLocal(d.Source) {
 		d.SetStatus("idle")
+		d.watcher, _ = watcher.Register(d.Name, d.Source)
+		d.watcher.Handle()
 
+		/*
+			go func() {
+				var q *queue.Queue
+				var pool []fsnotify.Event
+
+				for {
+					select {
+					case event := <-d.watcher.Change:
+						if q == nil {
+							q = queue.NewQueue(d.Name)
+						} else {
+							pool = append(pool, event)
+						}
+					case <-time.After(1 * time.Second):
+						fmt.Println("RUN:", pool)
+					}
+				}
+
+			}()
+		*/
 		/*
 			d.watcher, d.cache, d.queue = watcher.Register(d.Name, d.Source)
 			// New queue initialization.
@@ -43,7 +63,9 @@ func (d *Repository) Listen() {
 }
 
 func (d *Repository) Destroy() {
-	d.watcher.Destroy()
+	if d.watcher != nil {
+		d.watcher.Destroy()
+	}
 }
 
 // IsLocal return if path is a local path

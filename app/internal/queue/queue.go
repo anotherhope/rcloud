@@ -8,7 +8,6 @@ import (
 
 // Queue holds name, list of actions and context with cancel.
 type Queue struct {
-	name    string
 	actions chan Action
 	ctx     context.Context
 	cancel  context.CancelFunc
@@ -36,16 +35,15 @@ func (q *Queue) Addactions(actions []Action) {
 // AddAction sends Action to the channel.
 func (q *Queue) AddAction(Action Action) {
 	q.actions <- Action
-	log.Printf("New Action %s added to %s queue", Action.Name, q.name)
+	log.Println("action:", Action)
 }
 
 // NewQueue instantiates new queue.
-func NewQueue(name string) *Queue {
+func NewQueue() *Queue {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	return &Queue{
 		actions: make(chan Action),
-		name:    name,
 		ctx:     ctx,
 		cancel:  cancel,
 	}

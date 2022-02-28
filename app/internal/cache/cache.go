@@ -96,7 +96,7 @@ func (c *Cache) MakeCachePath(sourcePath string) string {
 	return cachePath
 }
 
-func Make(Id string, Base string) *Cache {
+func NewCache(Id string, Base string) *Cache {
 	return &Cache{
 		Id:   Id,
 		Base: Base,
