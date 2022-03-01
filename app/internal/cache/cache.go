@@ -36,10 +36,7 @@ func getCacheCheksum(cache io.Reader) string {
 
 func (c *Cache) DetectChange(sourcePath string) bool {
 	cachePath := c.MakeCachePath(sourcePath)
-	original, _ := os.OpenFile(sourcePath, os.O_RDONLY, 0700)
-	originalStat, _ := original.Stat()
-	defer original.Close()
-
+	originalStat, _ := os.Stat(sourcePath)
 	if originalStat.IsDir() {
 		if _, err := os.Stat(cachePath); os.IsNotExist(err) {
 			os.MkdirAll(cachePath, 0700)
@@ -52,6 +49,9 @@ func (c *Cache) DetectChange(sourcePath string) bool {
 		)
 		return true
 	}
+
+	original, _ := os.OpenFile(sourcePath, os.O_RDONLY, 0700)
+	defer original.Close()
 
 	cache, err := os.OpenFile(cachePath, os.O_CREATE|os.O_RDWR, 0700)
 	if err != nil {

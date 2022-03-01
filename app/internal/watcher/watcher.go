@@ -19,7 +19,7 @@ type Watcher struct {
 	change chan fsnotify.Event
 }
 
-func (w *Watcher) Handle() {
+func (w *Watcher) Queue() {
 
 	var canceled = make(chan bool)
 	var gotChange bool
@@ -53,41 +53,6 @@ func (w *Watcher) Handle() {
 			}
 		}(event)
 	}
-
-	/*
-		go func() {
-			var canceled = make(chan bool)
-			var gotChange bool
-			var q *queue.Queue
-			var events []*fsnotify.Event
-
-			for event := range d.watcher.Handle() {
-				if !gotChange {
-					gotChange = true
-					q = queue.NewQueue()
-				} else {
-					pool = append(pool, &queue.Action{
-						Name: "",
-						Action: func() error {
-							return nil
-						},
-					})
-
-					canceled <- true
-				}
-
-				go func(event fsnotify.Event) {
-					select {
-					case <-time.After(5 * time.Second):
-						fmt.Println("do it", event)
-						gotChange = false
-					case <-canceled:
-						fmt.Println("abort", event)
-					}
-				}(event)
-			}
-		}()
-	*/
 }
 
 func (w *Watcher) Destroy() {
@@ -140,7 +105,9 @@ func Register(idOfRepository string, pathOfDirectory string) (*Watcher, error) {
 
 	go func() {
 		for event := range w.notify.Events {
-			if event.Op&fsnotify.Remove == fsnotify.Remove {
+			if event.Op&fsnotify.Chmod == fsnotify.Chmod {
+				continue
+			} else if event.Op&fsnotify.Remove == fsnotify.Remove {
 				if path.Base(event.Name) == gitIgnore {
 					w.cache.Remove(event.Name)
 					e = nil
@@ -168,5 +135,9 @@ func Register(idOfRepository string, pathOfDirectory string) (*Watcher, error) {
 		}
 	}()
 
+	go w.Queue()
+
 	return w, nil
 }
+
+//
