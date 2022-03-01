@@ -47,7 +47,6 @@ func (w *Watcher) Handle() {
 				w := queue.NewWorker(q)
 				w.Execute()
 				pools = make([]queue.Action, 0)
-
 				gotChange = false
 			case <-canceled:
 				fmt.Println("abort", event)

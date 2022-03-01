@@ -53,7 +53,10 @@ func (c *Cache) DetectChange(sourcePath string) bool {
 		return true
 	}
 
-	cache, _ := os.OpenFile(cachePath, os.O_CREATE|os.O_RDWR, 0700)
+	cache, err := os.OpenFile(cachePath, os.O_CREATE|os.O_RDWR, 0700)
+	if err != nil {
+		return false
+	}
 	defer cache.Close()
 
 	sourceChecksum := calculateChecksum(original)
@@ -90,6 +93,11 @@ func (c *Cache) Remove(sourcePaths ...string) {
 }
 
 func (c *Cache) MakeCachePath(sourcePath string) string {
+	if len(c.Base) <= len(sourcePath) {
+		//fmt.Println(sourcePath, len(c.Base), c.Base)
+		return c.Base
+	}
+
 	relative := sourcePath[len(c.Base):]
 	cachePath := CachePath + "/" + c.Id + relative
 
