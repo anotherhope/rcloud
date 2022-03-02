@@ -34,6 +34,7 @@ func (w *Watcher) Queue() {
 			q = queue.NewQueue()
 		} else {
 			pools = append(pools, queue.Action{
+				Event: event,
 				Action: func() error {
 					return nil
 				},
