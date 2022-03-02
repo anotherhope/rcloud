@@ -106,7 +106,7 @@ func (c *Cache) Sign(sourcePath string, cachePath string) error {
 
 func (c *Cache) MakeCachePath(sourcePath string) string {
 	if len(sourcePath) <= len(c.Base) {
-		return c.Base
+		return CachePath
 	}
 
 	relative := sourcePath[len(c.Base):]
