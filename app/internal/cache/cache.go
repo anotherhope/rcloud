@@ -38,46 +38,19 @@ func (c *Cache) DetectChange(sourcePath string) bool {
 	cachePath := c.MakeCachePath(sourcePath)
 	originalStat, _ := os.Stat(sourcePath)
 	if originalStat.IsDir() {
-		if _, err := os.Stat(cachePath); os.IsNotExist(err) {
-			os.MkdirAll(cachePath, 0700)
-		}
-
-		os.Chtimes(
-			cachePath,
-			originalStat.ModTime().Local(),
-			originalStat.ModTime().Local(),
-		)
-		return true
+		return false
 	}
 
 	original, _ := os.OpenFile(sourcePath, os.O_RDONLY, 0700)
 	defer original.Close()
 
-	cache, err := os.OpenFile(cachePath, os.O_CREATE|os.O_RDWR, 0700)
-	if err != nil {
-		return false
-	}
+	cache, _ := os.OpenFile(cachePath, os.O_CREATE|os.O_RDWR, 0700)
 	defer cache.Close()
 
 	sourceChecksum := calculateChecksum(original)
 	cacheChecksum := getCacheCheksum(cache)
 
-	if sourceChecksum != cacheChecksum {
-
-		cache.Truncate(0)
-		cache.Seek(0, 0)
-		cache.WriteString(sourceChecksum)
-
-		os.Chtimes(
-			cache.Name(),
-			originalStat.ModTime().Local(),
-			originalStat.ModTime().Local(),
-		)
-
-		return true
-	}
-
-	return false
+	return sourceChecksum != cacheChecksum
 }
 
 func (c *Cache) Remove(sourcePaths ...string) {
@@ -92,9 +65,47 @@ func (c *Cache) Remove(sourcePaths ...string) {
 	}
 }
 
+func (c *Cache) Add(sourcePath string) {
+	c.Sign(sourcePath, c.MakeCachePath(sourcePath))
+}
+
+func (c *Cache) Update(sourcePath string) {
+	c.Add(sourcePath)
+}
+
+func (c *Cache) Sign(sourcePath string, cachePath string) error {
+	sourceInfo, err := os.Stat(sourcePath)
+	if err != nil {
+		return err
+	}
+
+	if sourceInfo.IsDir() {
+		return os.MkdirAll(cachePath, 0700)
+	}
+
+	source, err := os.Open(sourcePath)
+	if err != nil {
+		return err
+	}
+	defer source.Close()
+
+	cache, err := os.OpenFile(cachePath, os.O_CREATE|os.O_RDWR, 0600)
+	if err != nil {
+		return err
+	}
+	defer cache.Close()
+
+	cache.Truncate(0)
+	cache.Seek(0, 0)
+	cache.WriteString(
+		calculateChecksum(source),
+	)
+
+	return nil
+}
+
 func (c *Cache) MakeCachePath(sourcePath string) string {
-	if len(c.Base) <= len(sourcePath) {
-		//fmt.Println(sourcePath, len(c.Base), c.Base)
+	if len(sourcePath) <= len(c.Base) {
 		return c.Base
 	}
 

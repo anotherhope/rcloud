@@ -22,7 +22,6 @@ func (w *Worker) Execute() bool {
 		case <-w.Queue.ctx.Done():
 			log.Printf("Work done in queue: %s!", w.Queue.ctx.Err())
 			return true
-		// if job received.
 		case job := <-w.Queue.actions:
 			err := job.Run()
 			if err != nil {

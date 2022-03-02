@@ -22,7 +22,6 @@ func (d *Repository) Listen() {
 	if d.IsLocal(d.Source) {
 		d.SetStatus("idle")
 		d.watcher, _ = watcher.Register(d.Name, d.Source)
-		go d.watcher.Handle()
 	} else {
 		fmt.Println("Todo")
 	}

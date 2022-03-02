@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/aligator/nogo"
@@ -13,6 +14,8 @@ import (
 	"github.com/fsnotify/fsnotify"
 )
 
+const gitIgnore string = ".gitignore"
+
 type Watcher struct {
 	notify *fsnotify.Watcher
 	cache  *cache.Cache
@@ -20,7 +23,6 @@ type Watcher struct {
 }
 
 func (w *Watcher) Queue() {
-
 	var canceled = make(chan bool)
 	var gotChange bool
 	var pools = make([]queue.Action, 0)
@@ -41,7 +43,7 @@ func (w *Watcher) Queue() {
 
 		go func(event fsnotify.Event) {
 			select {
-			case <-time.After(5 * time.Second):
+			case <-time.After(100 * time.Millisecond):
 				fmt.Println("do it", event)
 				q.Addactions(pools)
 				w := queue.NewWorker(q)
@@ -67,8 +69,6 @@ func (w *Watcher) Destroy() {
 	}
 }
 
-const gitIgnore string = ".gitignore"
-
 func exclude(pathOfDirectory string) *nogo.NoGo {
 	ignore := nogo.New(nogo.DotGitRule)
 	ignore.AddFromFS(os.DirFS(pathOfDirectory), gitIgnore)
@@ -89,15 +89,14 @@ func Register(idOfRepository string, pathOfDirectory string) (*Watcher, error) {
 	}
 
 	e := exclude(pathOfDirectory)
-
 	filepath.Walk(pathOfDirectory, func(currentPath string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 
 		if !e.Match(currentPath, true) {
-			w.cache.DetectChange(currentPath)
 			w.notify.Add(currentPath)
+			w.cache.Add(currentPath)
 		}
 
 		return nil
@@ -105,33 +104,42 @@ func Register(idOfRepository string, pathOfDirectory string) (*Watcher, error) {
 
 	go func() {
 		for event := range w.notify.Events {
-			if event.Op&fsnotify.Chmod == fsnotify.Chmod {
-				continue
-			} else if event.Op&fsnotify.Remove == fsnotify.Remove {
-				if path.Base(event.Name) == gitIgnore {
-					w.cache.Remove(event.Name)
-					e = nil
-				}
+			if path.Base(event.Name) == gitIgnore {
+				e = exclude(pathOfDirectory)
+			}
 
-				if !e.Match(event.Name, true) {
+			if !e.Match(event.Name, true) {
+				if event.Op&fsnotify.Remove == fsnotify.Remove {
 					w.notify.Remove(event.Name)
+					w.cache.Remove(event.Name)
 					w.change <- event
-				}
-			} else {
-				if path.Base(event.Name) == gitIgnore {
-					e = exclude(pathOfDirectory)
-				}
+				} else if event.Op&fsnotify.Create == fsnotify.Create {
+					sourceInfo, _ := os.Stat(event.Name)
+					if sourceInfo.IsDir() {
+						sourceParentDirectory := path.Dir(event.Name)
 
-				if !e.Match(event.Name, true) {
-					if event.Op&fsnotify.Create == fsnotify.Create {
-						w.notify.Add(event.Name)
+						for strings.Contains(sourceParentDirectory, pathOfDirectory) {
+							cacheParentDirectory := w.cache.MakeCachePath(sourceParentDirectory)
+							if _, err := os.Stat(sourceParentDirectory); os.IsNotExist(err) {
+								os.MkdirAll(cacheParentDirectory, 0700)
+							}
+
+							w.notify.Add(sourceParentDirectory)
+							sourceParentDirectory = path.Dir(sourceParentDirectory)
+						}
 					}
 
+					w.notify.Add(event.Name)
+					w.cache.Add(event.Name)
+					w.change <- event
+				} else if event.Op&fsnotify.Write == fsnotify.Write {
 					if w.cache.DetectChange(event.Name) {
+						w.cache.Update(event.Name)
 						w.change <- event
 					}
 				}
 			}
+
 		}
 	}()
 
@@ -139,5 +147,3 @@ func Register(idOfRepository string, pathOfDirectory string) (*Watcher, error) {
 
 	return w, nil
 }
-
-//
