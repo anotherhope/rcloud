@@ -2,7 +2,6 @@ package queue
 
 import (
 	"context"
-	"log"
 	"sync"
 )
 
@@ -14,7 +13,7 @@ type Queue struct {
 }
 
 // Addactions adds actions to the queue and cancels channel.
-func (q *Queue) Addactions(actions []Action) {
+func (q *Queue) Addactions(actions map[string]Action) {
 	var wg sync.WaitGroup
 	wg.Add(len(actions))
 
@@ -35,7 +34,6 @@ func (q *Queue) Addactions(actions []Action) {
 // AddAction sends Action to the channel.
 func (q *Queue) AddAction(Action Action) {
 	q.actions <- Action
-	log.Println("action:", Action)
 }
 
 // NewQueue instantiates new queue.

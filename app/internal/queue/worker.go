@@ -18,9 +18,7 @@ func NewWorker(queue *Queue) *Worker {
 func (w *Worker) Execute() bool {
 	for {
 		select {
-		// if context was canceled.
 		case <-w.Queue.ctx.Done():
-			log.Printf("Work done in queue: %s!", w.Queue.ctx.Err())
 			return true
 		case job := <-w.Queue.actions:
 			err := job.Run()

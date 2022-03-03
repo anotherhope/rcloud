@@ -1,7 +1,6 @@
 package watcher
 
 import (
-	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -25,7 +24,7 @@ type Watcher struct {
 func (w *Watcher) Queue() {
 	var canceled = make(chan bool)
 	var gotChange bool
-	var pools = make([]queue.Action, 0)
+	var pools = make(map[string]queue.Action)
 	var q *queue.Queue
 
 	for event := range w.change {
@@ -33,26 +32,28 @@ func (w *Watcher) Queue() {
 			gotChange = true
 			q = queue.NewQueue()
 		} else {
-			pools = append(pools, queue.Action{
-				Event: event,
-				Action: func() error {
-					return nil
-				},
-			})
-			canceled <- true
+			if _, ok := pools[event.Name]; !ok {
+				pools[event.Name] = queue.Action{
+					Event: event,
+					Action: func() error {
+						return nil
+					},
+				}
+				canceled <- true
+			}
 		}
 
 		go func(event fsnotify.Event) {
 			select {
 			case <-time.After(100 * time.Millisecond):
-				fmt.Println("do it", event)
+				//fmt.Println("do it", event)
 				q.Addactions(pools)
 				w := queue.NewWorker(q)
 				w.Execute()
-				pools = make([]queue.Action, 0)
+				pools = make(map[string]queue.Action)
 				gotChange = false
 			case <-canceled:
-				fmt.Println("abort", event)
+				//fmt.Println("abort", event)
 			}
 		}(event)
 	}
