@@ -1,7 +1,5 @@
 package queue
 
-import "log"
-
 // Worker responsible for queue serving.
 type Worker struct {
 	Queue *Queue
@@ -14,18 +12,14 @@ func NewWorker(queue *Queue) *Worker {
 	}
 }
 
-// Execute processes jobs from the queue (jobs channel).
+// Execute processes actions from the queue (actions channel).
 func (w *Worker) Execute() bool {
 	for {
 		select {
 		case <-w.Queue.ctx.Done():
 			return true
-		case job := <-w.Queue.actions:
-			err := job.Run()
-			if err != nil {
-				log.Print(err)
-				continue
-			}
+		case action := <-w.Queue.actions:
+			action.Execute()
 		}
 	}
 }

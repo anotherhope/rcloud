@@ -1,18 +1,17 @@
 package queue
 
-import "github.com/fsnotify/fsnotify"
+import (
+	"fmt"
+
+	"github.com/fsnotify/fsnotify"
+)
 
 // Action - holds logic to perform some operations during queue execution.
 type Action struct {
-	Event  fsnotify.Event
-	Action func() error // A function that should be executed when the action is running.
+	Rid   string
+	Event fsnotify.Event
 }
 
-func (a Action) Run() error {
-	err := a.Action()
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (a Action) Execute() {
+	fmt.Println(a)
 }

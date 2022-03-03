@@ -92,8 +92,8 @@ func List() []*Repository {
 	return App.Repositories
 }
 
-// Get repository by name
-func Get(repositoryName string) *Repository {
+// GetRepository repository by name
+func GetRepository(repositoryName string) *Repository {
 	for _, repository := range List() {
 		if repository.Name == repositoryName {
 			return repository

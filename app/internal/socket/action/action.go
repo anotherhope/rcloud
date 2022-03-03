@@ -14,7 +14,7 @@ func Do(query string) []byte {
 
 	switch action {
 	case "getStatus":
-		if repository := internal.Get(arguments[0]); repository != nil {
+		if repository := internal.GetRepository(arguments[0]); repository != nil {
 			return []byte(repository.GetStatus())
 		}
 	}

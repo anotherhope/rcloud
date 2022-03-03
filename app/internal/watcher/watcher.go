@@ -16,46 +16,43 @@ import (
 const gitIgnore string = ".gitignore"
 
 type Watcher struct {
+	rid    string
 	notify *fsnotify.Watcher
 	cache  *cache.Cache
 	change chan fsnotify.Event
 }
 
 func (w *Watcher) Queue() {
-	var canceled = make(chan bool)
-	var gotChange bool
-	var pools = make(map[string]queue.Action)
+	var c bool
+	var n = make(chan bool)
+	var p = make(map[string]queue.Action)
 	var q *queue.Queue
 
 	for event := range w.change {
-		if !gotChange {
-			gotChange = true
+		if !c {
+			c = true
+			p = make(map[string]queue.Action)
 			q = queue.NewQueue()
 		} else {
-			if _, ok := pools[event.Name]; !ok {
-				pools[event.Name] = queue.Action{
-					Event: event,
-					Action: func() error {
-						return nil
-					},
-				}
-				canceled <- true
+			if _, ok := p[event.Name]; !ok {
+				n <- true
 			}
 		}
 
-		go func(event fsnotify.Event) {
+		p[event.Name] = queue.Action{
+			Rid:   w.rid,
+			Event: event,
+		}
+
+		go func(p map[string]queue.Action) {
 			select {
 			case <-time.After(100 * time.Millisecond):
-				//fmt.Println("do it", event)
-				q.Addactions(pools)
-				w := queue.NewWorker(q)
-				w.Execute()
-				pools = make(map[string]queue.Action)
-				gotChange = false
-			case <-canceled:
-				//fmt.Println("abort", event)
+				q.Addactions(p)
+				queue.NewWorker(q).Execute()
+				c = false
+			case <-n:
 			}
-		}(event)
+		}(p)
 	}
 }
 
@@ -77,7 +74,7 @@ func exclude(pathOfDirectory string) *nogo.NoGo {
 	return ignore
 }
 
-func Register(idOfRepository string, pathOfDirectory string) (*Watcher, error) {
+func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 	notify, err := fsnotify.NewWatcher()
 
 	if err != nil {
@@ -85,8 +82,9 @@ func Register(idOfRepository string, pathOfDirectory string) (*Watcher, error) {
 	}
 
 	w := &Watcher{
+		rid:    rid,
 		notify: notify,
-		cache:  cache.NewCache(idOfRepository, pathOfDirectory),
+		cache:  cache.NewCache(rid, pathOfDirectory),
 		change: make(chan fsnotify.Event),
 	}
 
