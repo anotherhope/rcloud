@@ -20,7 +20,6 @@ type Watcher struct {
 	notify *fsnotify.Watcher
 	cache  *cache.Cache
 	change chan fsnotify.Event
-	status chan string
 }
 
 func (w *Watcher) Queue() {
@@ -34,7 +33,6 @@ func (w *Watcher) Queue() {
 			c = true
 			p = make(map[string]func())
 			q = queue.NewQueue()
-			w.status <- "sync"
 		} else {
 			if _, ok := p[event.Name]; !ok {
 				n <- true
@@ -49,7 +47,6 @@ func (w *Watcher) Queue() {
 				q.Addactions(p)
 				queue.NewWorker(q).Execute()
 				c = false
-				w.status <- "idle"
 			case <-n:
 			}
 		}(p)
@@ -74,13 +71,6 @@ func exclude(pathOfDirectory string) *nogo.NoGo {
 	return ignore
 }
 
-func (w *Watcher) Status(r *repositories.Repository) {
-	r.SetStatus("idle")
-	for status := range w.status {
-		r.SetStatus(status)
-	}
-}
-
 func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 	notify, err := fsnotify.NewWatcher()
 
@@ -93,7 +83,6 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 		notify: notify,
 		cache:  cache.NewCache(rid, pathOfDirectory),
 		change: make(chan fsnotify.Event),
-		status: make(chan string),
 	}
 
 	e := exclude(pathOfDirectory)

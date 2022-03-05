@@ -12,6 +12,7 @@ type Timer struct {
 }
 
 func (t *Timer) Tick() {
+	rclone.Sync(t.rid)
 	var lock bool = false
 	for range t.ticker.C {
 		if !lock {
@@ -27,8 +28,12 @@ func (t *Timer) Destroy() {
 }
 
 func Register(rid string, d time.Duration) *Timer {
-	return &Timer{
+	t := &Timer{
 		ticker: time.NewTicker(d),
 		rid:    rid,
 	}
+
+	go t.Tick()
+
+	return t
 }

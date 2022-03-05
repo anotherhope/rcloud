@@ -32,10 +32,8 @@ func (r *Rcloud) Load() {
 	for _, r := range repositories.Repositories {
 		if r.IsSourceLocal() {
 			App.Watcher[r.Name], _ = watcher.Register(r.Name, r.Source)
-			go App.Watcher[r.Name].Status(r)
 		} else {
 			App.Timer[r.Name] = timer.Register(r.Name, 1*time.Minute)
-			go App.Timer[r.Name].Tick()
 		}
 	}
 }

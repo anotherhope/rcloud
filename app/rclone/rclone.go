@@ -12,8 +12,8 @@ import (
 func Make(rid string, event fsnotify.Event) func() {
 	return func() {
 		r := repositories.GetRepository(rid)
+		r.SetStatus("sync")
 		relative := event.Name[len(r.Source):]
-
 		cmd := []string{}
 		cmd = append(cmd, r.Args...)
 		if event.Op&fsnotify.Remove == fsnotify.Remove || event.Op&fsnotify.Rename == fsnotify.Rename {
@@ -38,6 +38,7 @@ func Make(rid string, event fsnotify.Event) func() {
 			if err == io.EOF {
 				process.Command.Process.Kill()
 				process.Command.Process.Wait()
+				r.SetStatus("idle")
 				break
 			}
 		}
