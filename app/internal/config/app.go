@@ -34,7 +34,7 @@ func (r *Rcloud) Load() {
 			App.Watcher[r.Name], _ = watcher.Register(r.Name, r.Source)
 			go App.Watcher[r.Name].Status(r)
 		} else {
-			App.Timer[r.Name] = timer.Register(5 * time.Second)
+			App.Timer[r.Name] = timer.Register(r.Name, 5*time.Second)
 			go App.Timer[r.Name].Tick()
 		}
 	}
@@ -56,6 +56,7 @@ func UpdateConfig() {
 	App = &Rcloud{
 		Repositories: &repositories.Repositories,
 		Watcher:      map[string]*watcher.Watcher{},
+		Timer:        map[string]*timer.Timer{},
 	}
 
 	viper.Unmarshal(App.Repositories)

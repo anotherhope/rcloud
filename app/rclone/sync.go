@@ -2,11 +2,22 @@ package rclone
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"path"
 
 	"github.com/anotherhope/rcloud/app/internal/repositories"
 )
+
+func deleteEmpty(s []string) []string {
+	var r []string
+	for _, str := range s {
+		if str != "" {
+			r = append(r, str)
+		}
+	}
+	return r
+}
 
 func Sync(rid string) {
 	r := repositories.GetRepository(rid)
@@ -17,6 +28,8 @@ func Sync(rid string) {
 	cmd = append(cmd, ignore(r))
 	cmd = append(cmd, path.Join(r.Source))
 	cmd = append(cmd, path.Join(r.Destination))
+
+	cmd = deleteEmpty(cmd)
 
 	process := CreateProcess(r.Name, cmd...)
 
@@ -30,7 +43,12 @@ func Sync(rid string) {
 		_, _, err := buf.ReadLine()
 		if err == io.EOF {
 			process.Command.Process.Kill()
+			if ps, exitErr := process.Command.Process.Wait(); ps.ExitCode() > 0 {
+				fmt.Println("bbb", exitErr, err)
+			}
 			break
+		} else if err != nil {
+			fmt.Println("aaa", err)
 		}
 	}
 }
