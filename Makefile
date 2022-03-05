@@ -48,9 +48,9 @@ serve:  ## Serve Markdown for preview
 	npm start
 
 test:
-	rm -rf bench
-	mkdir -p bench
-	number=1 ; while [[ $$number -le 100000 ]] ; do \
-        echo $$number > bench/file-$$number.txt; \
+	rm -rf ../bench
+	mkdir -p ../bench
+	number=1 ; while [[ $$number -le 200000 ]] ; do \
+        echo $$number > ../bench/file-$$number.txt; \
         ((number = number + 1)) ; \
     done

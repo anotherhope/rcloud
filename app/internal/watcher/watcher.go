@@ -1,6 +1,7 @@
 package watcher
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -43,7 +44,7 @@ func (w *Watcher) Queue() {
 
 		go func(p map[string]func()) {
 			select {
-			case <-time.After(100 * time.Millisecond):
+			case <-time.After(250 * time.Millisecond):
 				q.Addactions(p)
 				queue.NewWorker(q).Execute()
 				c = false
@@ -67,7 +68,10 @@ func (w *Watcher) Destroy() {
 
 func exclude(pathOfDirectory string) *nogo.NoGo {
 	ignore := nogo.New(nogo.DotGitRule)
-	ignore.AddFromFS(os.DirFS(pathOfDirectory), repositories.GitIgnore)
+	fmt.Println(ignore, pathOfDirectory, repositories.GitIgnore)
+	if _, err := os.Stat(path.Join(pathOfDirectory, repositories.GitIgnore)); err == nil {
+		ignore.AddFromFS(os.DirFS(pathOfDirectory), repositories.GitIgnore)
+	}
 	return ignore
 }
 
