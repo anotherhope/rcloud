@@ -37,6 +37,7 @@ func Make(rid string, event fsnotify.Event) func() {
 			_, _, err := buf.ReadLine()
 			if err == io.EOF {
 				process.Command.Process.Kill()
+				process.Command.Process.Wait()
 				break
 			}
 		}

@@ -34,7 +34,7 @@ func (r *Rcloud) Load() {
 			App.Watcher[r.Name], _ = watcher.Register(r.Name, r.Source)
 			go App.Watcher[r.Name].Status(r)
 		} else {
-			App.Timer[r.Name] = timer.Register(r.Name, 5*time.Second)
+			App.Timer[r.Name] = timer.Register(r.Name, 1*time.Minute)
 			go App.Timer[r.Name].Tick()
 		}
 	}

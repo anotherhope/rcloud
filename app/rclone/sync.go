@@ -20,6 +20,7 @@ func deleteEmpty(s []string) []string {
 
 func Sync(rid string) {
 	r := repositories.GetRepository(rid)
+	r.SetStatus("sync")
 
 	cmd := []string{}
 	cmd = append(cmd, r.Args...)
@@ -41,6 +42,7 @@ func Sync(rid string) {
 	for {
 		_, _, err := buf.ReadLine()
 		if err == io.EOF {
+			r.SetStatus("idle")
 			process.Command.Process.Kill()
 			process.Command.Process.Wait()
 			break
