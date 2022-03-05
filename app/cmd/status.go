@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/anotherhope/rcloud/app/internal"
+	"github.com/anotherhope/rcloud/app/internal/repositories"
 	"github.com/anotherhope/rcloud/app/internal/socket"
 	"github.com/anotherhope/rcloud/app/internal/socket/message"
 	"github.com/spf13/cobra"
@@ -22,7 +22,7 @@ var statusCmd = &cobra.Command{
 		var max = []int{9, 7, 5, 6, 11}
 		output = append(output, []string{"RCLOUD ID", "ENABLED", "STATUS", "SOURCE", "DESTINATION"})
 
-		for _, repository := range internal.App.Repositories {
+		for _, repository := range repositories.Repositories {
 			if max[0] < len(repository.Name[0:12]) {
 				max[0] = len(repository.Name[0:12])
 			}

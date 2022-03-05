@@ -31,6 +31,7 @@ run: ## Run without build project
 	go run ./app/main.go
 
 vendor: update-go-deps
+	clear
 	go mod tidy
 	go mod vendor
 

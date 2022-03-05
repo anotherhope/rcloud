@@ -10,46 +10,48 @@ import (
 	"github.com/aligator/nogo"
 	"github.com/anotherhope/rcloud/app/internal/cache"
 	"github.com/anotherhope/rcloud/app/internal/queue"
+	"github.com/anotherhope/rcloud/app/internal/repositories"
+	"github.com/anotherhope/rcloud/app/rclone"
 	"github.com/fsnotify/fsnotify"
 )
-
-const gitIgnore string = ".gitignore"
 
 type Watcher struct {
 	rid    string
 	notify *fsnotify.Watcher
 	cache  *cache.Cache
 	change chan fsnotify.Event
+	status chan string
 }
 
 func (w *Watcher) Queue() {
 	var c bool
 	var n = make(chan bool)
-	var p = make(map[string]queue.Action)
+	//var p = make(map[string]queue.Action)
+	var p = make(map[string]func())
 	var q *queue.Queue
 
 	for event := range w.change {
 		if !c {
 			c = true
-			p = make(map[string]queue.Action)
+			//p = make(map[string]queue.Action)
+			p = make(map[string]func())
 			q = queue.NewQueue()
+			w.status <- "sync"
 		} else {
 			if _, ok := p[event.Name]; !ok {
 				n <- true
 			}
 		}
 
-		p[event.Name] = queue.Action{
-			Rid:   w.rid,
-			Event: event,
-		}
+		p[event.Name] = rclone.Make(w.rid, event)
 
-		go func(p map[string]queue.Action) {
+		go func(p map[string]func()) {
 			select {
 			case <-time.After(100 * time.Millisecond):
 				q.Addactions(p)
 				queue.NewWorker(q).Execute()
 				c = false
+				w.status <- "idle"
 			case <-n:
 			}
 		}(p)
@@ -70,8 +72,15 @@ func (w *Watcher) Destroy() {
 
 func exclude(pathOfDirectory string) *nogo.NoGo {
 	ignore := nogo.New(nogo.DotGitRule)
-	ignore.AddFromFS(os.DirFS(pathOfDirectory), gitIgnore)
+	ignore.AddFromFS(os.DirFS(pathOfDirectory), repositories.GitIgnore)
 	return ignore
+}
+
+func (w *Watcher) Status(r *repositories.Repository) {
+	r.SetStatus("idle")
+	for status := range w.status {
+		r.SetStatus(status)
+	}
 }
 
 func Register(rid string, pathOfDirectory string) (*Watcher, error) {
@@ -86,6 +95,7 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 		notify: notify,
 		cache:  cache.NewCache(rid, pathOfDirectory),
 		change: make(chan fsnotify.Event),
+		status: make(chan string),
 	}
 
 	e := exclude(pathOfDirectory)
@@ -104,12 +114,12 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 
 	go func() {
 		for event := range w.notify.Events {
-			if path.Base(event.Name) == gitIgnore {
+			if path.Base(event.Name) == repositories.GitIgnore {
 				e = exclude(pathOfDirectory)
 			}
 
 			if !e.Match(event.Name, true) {
-				if event.Op&fsnotify.Remove == fsnotify.Remove {
+				if event.Op&fsnotify.Remove == fsnotify.Remove || event.Op&fsnotify.Rename == fsnotify.Rename {
 					w.notify.Remove(event.Name)
 					w.cache.Remove(event.Name)
 					w.change <- event
@@ -139,7 +149,6 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 					}
 				}
 			}
-
 		}
 	}()
 

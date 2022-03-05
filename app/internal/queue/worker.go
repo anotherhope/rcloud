@@ -19,7 +19,7 @@ func (w *Worker) Execute() bool {
 		case <-w.Queue.ctx.Done():
 			return true
 		case action := <-w.Queue.actions:
-			action.Execute()
+			action()
 		}
 	}
 }

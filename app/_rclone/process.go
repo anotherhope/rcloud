@@ -1,7 +1,6 @@
-package rclone
+package _rclone
 
 import (
-	"fmt"
 	"os/exec"
 	"sync"
 )
@@ -19,8 +18,6 @@ var multiton = map[string]*Process{}
 func CreateProcess(repositoryName string, args ...string) *Process {
 	mu.Lock()
 	defer mu.Unlock()
-
-	fmt.Println("rclone", args)
 
 	multiton[repositoryName] = &Process{
 		Command: exec.Command("rclone", args...),

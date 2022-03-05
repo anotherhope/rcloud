@@ -1,8 +1,8 @@
-package rclone
+package _rclone
 
 import "github.com/anotherhope/rcloud/app/internal"
 
-func Delete(d *internal.Repository) string {
+func Copy(d *internal.Repository) string {
 
 	//
 

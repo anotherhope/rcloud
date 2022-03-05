@@ -5,10 +5,9 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/anotherhope/rcloud/app/internal"
 	"github.com/anotherhope/rcloud/app/internal/cache"
+	"github.com/anotherhope/rcloud/app/internal/config"
 	"github.com/anotherhope/rcloud/app/internal/socket"
-	"github.com/anotherhope/rcloud/app/rclone"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -25,14 +24,14 @@ var daemonCmd = &cobra.Command{
 		os.RemoveAll(cache.CachePath)
 
 		go socket.Server()
-		go internal.App.Load()
+		go config.App.Load()
 
 		viper.OnConfigChange(func(e fsnotify.Event) {
-			go internal.App.Load()
+			go config.App.Load()
 		})
 
 		<-exit
-		rclone.Kill()
+		socket.Stop()
 		fmt.Println()
 		return nil
 	},

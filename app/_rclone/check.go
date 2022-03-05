@@ -1,4 +1,4 @@
-package rclone
+package _rclone
 
 import (
 	"bufio"

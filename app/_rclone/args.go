@@ -1,12 +1,6 @@
-package rclone
+package _rclone
 
-import (
-	"os"
-	"os/exec"
-
-	"github.com/anotherhope/rcloud/app/internal"
-)
-
+/*
 const ignore = "/.gitignore"
 
 func gitIgnore(d *internal.Repository) []string {
@@ -14,7 +8,7 @@ func gitIgnore(d *internal.Repository) []string {
 
 	if d.IsLocal(d.Source) {
 		if _, err := os.Stat(d.Source + ignore); err != nil {
-			ignores = append(ignores, "--exclude=\""+d.Source+ignore+"\"")
+			ignores = append(ignores, "--exclude=\""+path.Join(d.Source, ignore)+"\"")
 		}
 	}
 
@@ -27,3 +21,4 @@ func gitIgnore(d *internal.Repository) []string {
 
 	return ignores
 }
+*/

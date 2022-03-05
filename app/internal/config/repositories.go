@@ -1,15 +1,14 @@
-package internal
+package config
 
 import (
 	"fmt"
-	"os/exec"
-	"path/filepath"
-	"sort"
 	"strings"
+
+	"github.com/anotherhope/rcloud/app/internal/repositories"
 )
 
 func parent(name string) bool {
-	for _, d := range App.Repositories {
+	for _, d := range repositories.Repositories {
 		if strings.HasPrefix(d.Destination, name) {
 			return true
 		}
@@ -19,7 +18,7 @@ func parent(name string) bool {
 }
 
 func sub(name string) bool {
-	for _, d := range App.Repositories {
+	for _, d := range repositories.Repositories {
 		if strings.HasPrefix(name, d.Destination) {
 			return true
 		}
@@ -29,7 +28,7 @@ func sub(name string) bool {
 }
 
 func same(name string) bool {
-	for _, d := range App.Repositories {
+	for _, d := range repositories.Repositories {
 		if name == d.Destination {
 			return true
 		}
@@ -38,8 +37,8 @@ func same(name string) bool {
 	return false
 }
 
-func exists(d *Repository) bool {
-	for _, repository := range App.Repositories {
+func exists(d *repositories.Repository) bool {
+	for _, repository := range repositories.Repositories {
 		if repository.Name == d.Name {
 			return true
 		}
@@ -49,7 +48,7 @@ func exists(d *Repository) bool {
 }
 
 // Add repository in configuration file
-func Add(d *Repository) error {
+func Add(d *repositories.Repository) error {
 	var exitMessage error = nil
 	if same(d.Destination) {
 		exitMessage = fmt.Errorf("destination path already exist as a sync folder ")
@@ -66,7 +65,7 @@ func Add(d *Repository) error {
 	}
 
 	App.Set("repositories",
-		append(App.Repositories, d),
+		append(repositories.Repositories, d),
 	)
 
 	return exitMessage
@@ -74,11 +73,11 @@ func Add(d *Repository) error {
 
 // Del repository in configuration file
 func Del(n string) error {
-	for k, v := range App.Repositories {
+	for k, v := range repositories.Repositories {
 		if strings.HasPrefix(v.Name, n) {
 			App.Set("repositories", append(
-				App.Repositories[:k],
-				App.Repositories[k+1:]...,
+				repositories.Repositories[:k],
+				repositories.Repositories[k+1:]...,
 			))
 			return nil
 		}
@@ -87,38 +86,19 @@ func Del(n string) error {
 	return fmt.Errorf("repository not exists")
 }
 
+/*
 // List repositories in configuration file
-func List() []*Repository {
-	return App.Repositories
+func List() []*repositories.Repository {
+	return repositories.List()
 }
 
 // GetRepository repository by name
-func GetRepository(repositoryName string) *Repository {
-	for _, repository := range List() {
-		if repository.Name == repositoryName {
-			return repository
-		}
-	}
-
-	return nil
+func GetRepository(repositoryName string) *repositories.Repository {
+	return repositories.GetRepository(repositoryName)
 }
 
 // IsValid detect if remote repository is configured and valid
 func IsValid(path string, isRemote bool) (string, error) {
-	if strings.Contains(path, ":") {
-		remote := strings.Split(path, ":")[0]
-		output, err := exec.Command("rclone", "listremotes").Output()
-		if err != nil {
-			return path, err
-		}
-
-		availableChoices := strings.Split(string(output), "\n")
-		if i := sort.SearchStrings(availableChoices, remote+":"); i < 0 {
-			return path, fmt.Errorf("rclone remote not available")
-		}
-
-		return path, nil
-	}
-
-	return filepath.Abs(path)
+	return repositories.IsValid(path, isRemote)
 }
+*/

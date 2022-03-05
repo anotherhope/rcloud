@@ -7,19 +7,19 @@ import (
 
 // Queue holds name, list of actions and context with cancel.
 type Queue struct {
-	actions chan Action
+	actions chan func()
 	ctx     context.Context
 	cancel  context.CancelFunc
 }
 
 // Addactions adds actions to the queue and cancels channel.
-func (q *Queue) Addactions(actions map[string]Action) {
+func (q *Queue) Addactions(actions map[string]func()) {
 	var wg sync.WaitGroup
 	wg.Add(len(actions))
 
 	for _, action := range actions {
 		// Goroutine which adds Action to the queue.
-		go func(action Action) {
+		go func(action func()) {
 			q.AddAction(action)
 			wg.Done()
 		}(action)
@@ -32,7 +32,7 @@ func (q *Queue) Addactions(actions map[string]Action) {
 }
 
 // AddAction sends Action to the channel.
-func (q *Queue) AddAction(Action Action) {
+func (q *Queue) AddAction(Action func()) {
 	q.actions <- Action
 }
 
@@ -41,7 +41,7 @@ func NewQueue() *Queue {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	return &Queue{
-		actions: make(chan Action),
+		actions: make(chan func()),
 		ctx:     ctx,
 		cancel:  cancel,
 	}

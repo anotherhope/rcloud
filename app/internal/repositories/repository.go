@@ -1,10 +1,8 @@
-package internal
+package repositories
 
 import (
 	"fmt"
 	"strings"
-
-	"github.com/anotherhope/rcloud/app/internal/watcher"
 )
 
 // Repository is the structure of syncronized folder
@@ -15,44 +13,62 @@ type Repository struct {
 	RTS         bool     `mapstructure:"rts"`
 	Args        []string `mapstructure:"args"`
 	status      string
-	watcher     *watcher.Watcher
+	//watcher     *watcher.Watcher
 }
 
 func (d *Repository) Listen() {
-	if d.IsLocal(d.Source) {
-		d.SetStatus("idle")
-		d.watcher, _ = watcher.Register(d.Name, d.Source)
-	} else {
-		fmt.Println("Todo")
+	d.SetStatus("idle")
+	if !IsLocal(d.Source) {
+		fmt.Println("Todo remote:local or remote:remote")
 	}
 }
 
+/*
 func (d *Repository) Destroy() {
 	if d.watcher != nil {
 		d.watcher.Destroy()
 	}
 }
+*/
+
+// IsSourceLocal return if path is a local path
+func (d *Repository) IsSourceLocal() bool {
+	return !IsRemote(d.Source)
+}
+
+// IsSourceRemote return if path is a local path
+func (d *Repository) IsSourceRemote() bool {
+	return IsRemote(d.Source)
+}
+
+// IsDestinationLocal return if path is a local path
+func (d *Repository) IsDestinationLocal() bool {
+	return !IsRemote(d.Destination)
+}
+
+// IsDestinationRemote return if path is a local path
+func (d *Repository) IsDestinationRemote() bool {
+	return IsRemote(d.Destination)
+}
 
 // IsLocal return if path is a local path
-func (d *Repository) IsLocal(path string) bool {
-	return !d.IsRemote(path)
+func IsLocal(path string) bool {
+	return !IsRemote(path)
 }
 
 // IsRemote return if path is remote cloud provider
-func (d *Repository) IsRemote(path string) bool {
+func IsRemote(path string) bool {
 	return strings.Contains(path, ":")
 }
 
 // Start synchronization for the current repository
-func (d *Repository) Start() error {
+func (d *Repository) Start() {
 	d.RTS = true
-	return App.Save()
 }
 
 // Stop synchronization for the current repository
-func (d *Repository) Stop() error {
+func (d *Repository) Stop() {
 	d.RTS = false
-	return App.Save()
 }
 
 // GetStatus is Getter for Status

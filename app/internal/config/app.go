@@ -1,8 +1,11 @@
-package internal
+package config
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/anotherhope/rcloud/app/internal/repositories"
+	"github.com/anotherhope/rcloud/app/internal/watcher"
 	"github.com/spf13/viper"
 )
 
@@ -11,17 +14,21 @@ var App *Rcloud
 
 // Rcloud structure is configuration file for Rcloud
 type Rcloud struct {
-	Args         []string
-	Repositories []*Repository
+	//Args         []string
+	Repositories *[]*repositories.Repository
+	Watcher      map[string]*watcher.Watcher
 }
 
 func (r *Rcloud) Load() {
-	for _, repository := range App.Repositories {
-		repository.Destroy()
+	for _, watcher := range App.Watcher {
+		watcher.Destroy()
 	}
 	UpdateConfig()
-	for _, repository := range App.Repositories {
-		repository.Listen()
+	for _, r := range repositories.Repositories {
+		if r.IsSourceLocal() {
+			App.Watcher[r.Name], _ = watcher.Register(r.Name, r.Source)
+			go App.Watcher[r.Name].Status(r)
+		}
 	}
 }
 
@@ -39,17 +46,19 @@ func UpdateConfig() {
 	viper.ReadInConfig()
 
 	App = &Rcloud{
-		Args:         []string{},
-		Repositories: []*Repository{},
+		Repositories: &repositories.Repositories,
+		Watcher:      map[string]*watcher.Watcher{},
 	}
 
-	viper.Unmarshal(App)
+	viper.Unmarshal(App.Repositories)
 }
 
 func init() {
+	home, _ := os.UserHomeDir()
+
 	viper.SetConfigName("rcloud")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("$HOME/.config/rcloud")
+	viper.AddConfigPath(home + "/.config/rcloud")
 
 	UpdateConfig()
 
@@ -59,8 +68,9 @@ func init() {
 		}
 	}
 
-	viper.SetDefault("config", App.Args)
-	viper.SetDefault("repositories", App.Repositories)
+	//viper.SetDefault("config", App.Args)
+	//viper.SetDefault("repositories", App.Repositories)
+
 	viper.Unmarshal(App)
 	viper.SafeWriteConfig()
 	viper.WatchConfig()

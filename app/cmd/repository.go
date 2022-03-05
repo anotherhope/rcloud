@@ -4,7 +4,8 @@ import (
 	"crypto/sha1"
 	"fmt"
 
-	"github.com/anotherhope/rcloud/app/internal"
+	"github.com/anotherhope/rcloud/app/internal/config"
+	"github.com/anotherhope/rcloud/app/internal/repositories"
 	"github.com/spf13/cobra"
 )
 
@@ -22,18 +23,18 @@ var repositoryStart = &cobra.Command{
 		var source = args[0]
 		var destination = args[1]
 
-		if source, err = internal.IsValid(source, false); err != nil {
+		if source, err = repositories.IsValid(source, false); err != nil {
 			return err
 		}
 
-		if destination, err = internal.IsValid(destination, true); err != nil {
+		if destination, err = repositories.IsValid(destination, true); err != nil {
 			return err
 		}
 
 		h := sha1.New()
 		h.Write([]byte(source + destination))
 
-		return internal.Add(&internal.Repository{
+		return config.Add(&repositories.Repository{
 			Name:        fmt.Sprintf("%x", h.Sum(nil)),
 			Source:      source,
 			Destination: destination,
@@ -47,7 +48,7 @@ var repositoryStop = &cobra.Command{
 	Use:   "del <repository>",
 	Short: "Delete synchronized repository",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return internal.Del(args[0])
+		return config.Del(args[0])
 	},
 	DisableFlagsInUseLine: true,
 }
