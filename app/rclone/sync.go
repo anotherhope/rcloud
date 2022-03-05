@@ -42,9 +42,13 @@ func Sync(rid string) {
 	for {
 		_, _, err := buf.ReadLine()
 		if err == io.EOF {
-			r.SetStatus("idle")
 			process.Command.Process.Kill()
 			process.Command.Process.Wait()
+			if r.RTS {
+				r.SetStatus("idle")
+			} else {
+				r.SetStatus("")
+			}
 			break
 		}
 	}

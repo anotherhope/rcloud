@@ -27,7 +27,8 @@ var daemonCmd = &cobra.Command{
 		go config.App.Load()
 
 		viper.OnConfigChange(func(e fsnotify.Event) {
-			go config.App.Load()
+			fmt.Println("configuration has change")
+			config.App.Load()
 		})
 
 		<-exit

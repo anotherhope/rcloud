@@ -30,10 +30,15 @@ func (r *Rcloud) Load() {
 	}
 	UpdateConfig()
 	for _, r := range repositories.Repositories {
-		if r.IsSourceLocal() {
-			App.Watcher[r.Name], _ = watcher.Register(r.Name, r.Source)
+		fmt.Println(r.Name, r.RTS)
+		if r.RTS {
+			if r.IsSourceLocal() {
+				App.Watcher[r.Name], _ = watcher.Register(r.Name, r.Source)
+			} else {
+				App.Timer[r.Name] = timer.Register(r.Name, 1*time.Minute)
+			}
 		} else {
-			App.Timer[r.Name] = timer.Register(r.Name, 1*time.Minute)
+			r.SetStatus("")
 		}
 	}
 }
@@ -57,7 +62,7 @@ func UpdateConfig() {
 		Timer:        map[string]*timer.Timer{},
 	}
 
-	viper.Unmarshal(App.Repositories)
+	viper.Unmarshal(App)
 }
 
 func init() {
@@ -77,7 +82,6 @@ func init() {
 	//viper.SetDefault("config", App.Args)
 	//viper.SetDefault("repositories", App.Repositories)
 
-	viper.Unmarshal(App)
 	viper.SafeWriteConfig()
 	viper.WatchConfig()
 }

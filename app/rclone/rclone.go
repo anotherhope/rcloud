@@ -38,7 +38,11 @@ func Make(rid string, event fsnotify.Event) func() {
 			if err == io.EOF {
 				process.Command.Process.Kill()
 				process.Command.Process.Wait()
-				r.SetStatus("idle")
+				if r.RTS {
+					r.SetStatus("idle")
+				} else {
+					r.SetStatus("")
+				}
 				break
 			}
 		}
