@@ -2,7 +2,6 @@ package rclone
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"path"
 
@@ -43,12 +42,8 @@ func Sync(rid string) {
 		_, _, err := buf.ReadLine()
 		if err == io.EOF {
 			process.Command.Process.Kill()
-			if ps, exitErr := process.Command.Process.Wait(); ps.ExitCode() > 0 {
-				fmt.Println("bbb", exitErr, err)
-			}
+			process.Command.Process.Wait()
 			break
-		} else if err != nil {
-			fmt.Println("aaa", err)
 		}
 	}
 }

@@ -1,7 +1,6 @@
 package timer
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/anotherhope/rcloud/app/rclone"
@@ -16,11 +15,9 @@ func (t *Timer) Tick() {
 	var lock bool = false
 	for range t.ticker.C {
 		if !lock {
-			fmt.Println("start")
 			lock = true
 			rclone.Sync(t.rid)
 			lock = false
-			fmt.Println("stop")
 		}
 	}
 }
