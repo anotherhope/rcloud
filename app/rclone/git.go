@@ -6,6 +6,7 @@ import (
 	"path"
 
 	"github.com/anotherhope/rcloud/app/internal/repositories"
+	"github.com/anotherhope/rcloud/app/internal/system"
 )
 
 func ignore(d *repositories.Repository) string {
@@ -23,9 +24,8 @@ func ignore(d *repositories.Repository) string {
 			return "--exclude=\"" + dst + "\""
 		}
 	} else if repositories.IsRemote(d.Source) && repositories.IsRemote(d.Destination) {
-		home, _ := os.UserHomeDir()
 		src := path.Join(d.Source, repositories.GitIgnore)
-		lcl := path.Join(home, ".config/rcloud/tmp", d.Name, repositories.GitIgnore)
+		lcl := path.Join(system.User.HomeDir, ".config/rcloud/tmp", d.Name, repositories.GitIgnore)
 		cmd := exec.Command("rclone", "copyto", src, lcl)
 		if err := cmd.Wait(); err == nil {
 			return "--exclude=\"" + lcl + "\""

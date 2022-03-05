@@ -2,9 +2,11 @@ package config
 
 import (
 	"fmt"
-	"os"
+	"time"
 
 	"github.com/anotherhope/rcloud/app/internal/repositories"
+	"github.com/anotherhope/rcloud/app/internal/system"
+	"github.com/anotherhope/rcloud/app/internal/timer"
 	"github.com/anotherhope/rcloud/app/internal/watcher"
 	"github.com/spf13/viper"
 )
@@ -14,20 +16,26 @@ var App *Rcloud
 
 // Rcloud structure is configuration file for Rcloud
 type Rcloud struct {
-	//Args         []string
 	Repositories *[]*repositories.Repository
 	Watcher      map[string]*watcher.Watcher
+	Timer        map[string]*timer.Timer
 }
 
 func (r *Rcloud) Load() {
 	for _, watcher := range App.Watcher {
 		watcher.Destroy()
 	}
+	for _, timer := range App.Timer {
+		timer.Destroy()
+	}
 	UpdateConfig()
 	for _, r := range repositories.Repositories {
 		if r.IsSourceLocal() {
 			App.Watcher[r.Name], _ = watcher.Register(r.Name, r.Source)
 			go App.Watcher[r.Name].Status(r)
+		} else {
+			App.Timer[r.Name] = timer.Register(5 * time.Second)
+			go App.Timer[r.Name].Tick()
 		}
 	}
 }
@@ -54,11 +62,10 @@ func UpdateConfig() {
 }
 
 func init() {
-	home, _ := os.UserHomeDir()
 
 	viper.SetConfigName("rcloud")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(home + "/.config/rcloud")
+	viper.AddConfigPath(system.User.HomeDir + "/.config/rcloud")
 
 	UpdateConfig()
 

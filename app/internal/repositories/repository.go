@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -13,23 +12,7 @@ type Repository struct {
 	RTS         bool     `mapstructure:"rts"`
 	Args        []string `mapstructure:"args"`
 	status      string
-	//watcher     *watcher.Watcher
 }
-
-func (d *Repository) Listen() {
-	d.SetStatus("idle")
-	if !IsLocal(d.Source) {
-		fmt.Println("Todo remote:local or remote:remote")
-	}
-}
-
-/*
-func (d *Repository) Destroy() {
-	if d.watcher != nil {
-		d.watcher.Destroy()
-	}
-}
-*/
 
 // IsSourceLocal return if path is a local path
 func (d *Repository) IsSourceLocal() bool {

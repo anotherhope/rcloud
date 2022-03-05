@@ -26,14 +26,12 @@ type Watcher struct {
 func (w *Watcher) Queue() {
 	var c bool
 	var n = make(chan bool)
-	//var p = make(map[string]queue.Action)
 	var p = make(map[string]func())
 	var q *queue.Queue
 
 	for event := range w.change {
 		if !c {
 			c = true
-			//p = make(map[string]queue.Action)
 			p = make(map[string]func())
 			q = queue.NewQueue()
 			w.status <- "sync"
@@ -99,6 +97,7 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 	}
 
 	e := exclude(pathOfDirectory)
+	go rclone.Sync(rid)
 	filepath.Walk(pathOfDirectory, func(currentPath string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
