@@ -30,7 +30,6 @@ func (r *Rcloud) Load() {
 	}
 	UpdateConfig()
 	for _, r := range repositories.Repositories {
-		fmt.Println(r.Name, r.RTS)
 		if r.RTS {
 			if r.IsSourceLocal() {
 				App.Watcher[r.Name], _ = watcher.Register(r.Name, r.Source)

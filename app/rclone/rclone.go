@@ -36,8 +36,7 @@ func Make(rid string, event fsnotify.Event) func() {
 		for {
 			_, _, err := buf.ReadLine()
 			if err == io.EOF {
-				process.Command.Process.Kill()
-				process.Command.Process.Wait()
+				RemoveProcess(r.Name)
 				if r.RTS {
 					r.SetStatus("idle")
 				} else {

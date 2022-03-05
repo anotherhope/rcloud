@@ -47,4 +47,10 @@ serve:  ## Serve Markdown for preview
 	npm install
 	npm start
 
-#  /opt/homebrew/Library/Taps/homebrew/homebrew-core/
+test:
+	rm -rf bench
+	mkdir -p bench
+	number=1 ; while [[ $$number -le 100000 ]] ; do \
+        echo $$number > bench/file-$$number.txt; \
+        ((number = number + 1)) ; \
+    done

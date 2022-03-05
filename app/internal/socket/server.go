@@ -16,9 +16,11 @@ func Server() error {
 	}
 
 	for {
-		conn, _ := ln.Accept()
-		message, _ := bufio.NewReader(conn).ReadString('\n')
-		conn.Write(action.Do(message))
-		conn.Close()
+		conn, err := ln.Accept()
+		if err == nil {
+			message, _ := bufio.NewReader(conn).ReadString('\n')
+			conn.Write(action.Do(message))
+			conn.Close()
+		}
 	}
 }

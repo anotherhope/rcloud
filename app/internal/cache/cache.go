@@ -42,13 +42,13 @@ func (c *Cache) DetectChange(sourcePath string) bool {
 	}
 
 	original, _ := os.OpenFile(sourcePath, os.O_RDONLY, 0700)
-	defer original.Close()
-
 	cache, _ := os.OpenFile(cachePath, os.O_CREATE|os.O_RDWR, 0700)
-	defer cache.Close()
 
 	sourceChecksum := calculateChecksum(original)
 	cacheChecksum := getCacheCheksum(cache)
+
+	original.Close()
+	cache.Close()
 
 	return sourceChecksum != cacheChecksum
 }
@@ -87,19 +87,20 @@ func (c *Cache) Sign(sourcePath string, cachePath string) error {
 	if err != nil {
 		return err
 	}
-	defer source.Close()
 
 	cache, err := os.OpenFile(cachePath, os.O_CREATE|os.O_RDWR, 0600)
 	if err != nil {
 		return err
 	}
-	defer cache.Close()
 
 	cache.Truncate(0)
 	cache.Seek(0, 0)
 	cache.WriteString(
 		calculateChecksum(source),
 	)
+
+	source.Close()
+	cache.Close()
 
 	return nil
 }
