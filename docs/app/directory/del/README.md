@@ -1,9 +1,9 @@
-# Directory Add
-This command is used to manage syncronized directory
+# repository Add
+This command is used to manage syncronized repository
 
 ## Command:
 
 ### Local to Local
 `$ rcloud status`
 
-`$ rcloud directory del <rcloud_id>`
+`$ rcloud repository del <rcloud_id>`

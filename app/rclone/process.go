@@ -15,14 +15,14 @@ var mu = sync.Mutex{}
 var multiton = map[string]*Process{}
 
 // CreateProcess can create a new process for rclone
-func CreateProcess(directoryName string, args ...string) *Process {
+func CreateProcess(repositoryName string, args ...string) *Process {
 	mu.Lock()
 	defer mu.Unlock()
 
-	multiton[directoryName] = &Process{
+	multiton[repositoryName] = &Process{
 		Command: exec.Command("rclone", args...),
 		Type:    args[0],
 	}
 
-	return multiton[directoryName]
+	return multiton[repositoryName]
 }

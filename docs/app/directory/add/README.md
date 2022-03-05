@@ -1,5 +1,5 @@
-# Directory Add
-This command is used to manage syncronized directory
+# repository Add
+This command is used to manage syncronized repository
 
 ## Command:
 
@@ -7,13 +7,13 @@ This command is used to manage syncronized directory
 `$ rcloud config`
 
 ### Local to Local
-`$ rcloud directory add <local_path> <local_path>`
+`$ rcloud repository add <local_path> <local_path>`
 
 ### Local to Remote
-`$ rcloud directory add <local_path> <remote_path>`
+`$ rcloud repository add <local_path> <remote_path>`
 
 ### Remote to Local
-`$ rcloud directory add <remote_path> <local_path>`
+`$ rcloud repository add <remote_path> <local_path>`
 
 ### Remote to Remote
-`$ rcloud directory add <remote_path> <remote_path>`
+`$ rcloud repository add <remote_path> <remote_path>`

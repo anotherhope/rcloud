@@ -2,34 +2,54 @@ package rclone
 
 import (
 	"bufio"
-	"fmt"
 	"io"
+	"path"
 
-	"github.com/anotherhope/rcloud/app/internal"
+	"github.com/anotherhope/rcloud/app/internal/repositories"
 )
 
-// Sync execute Rclone sync command run all change
-func Sync(d *internal.Directory) string {
-	d.SetStatus("sync")
-	cmd := []string{"sync", d.Source, d.Destination}
-	cmd = append(cmd, d.Args...)
-	cmd = append(cmd, gitIgnore(d)...)
+func deleteEmpty(s []string) []string {
+	var r []string
+	for _, str := range s {
+		if str != "" {
+			r = append(r, str)
+		}
+	}
+	return r
+}
 
-	fmt.Println(d.Name, cmd) //
-	process := CreateProcess(d.Name, cmd...)
+func Sync(rid string) {
+	r := repositories.GetRepository(rid)
+	r.SetStatus("sync")
+
+	cmd := []string{}
+	cmd = append(cmd, r.Args...)
+	cmd = append(cmd, "sync")
+	cmd = append(cmd, ignore(r))
+	cmd = append(cmd, path.Join(r.Source))
+	cmd = append(cmd, path.Join(r.Destination))
+
+	cmd = deleteEmpty(cmd)
+
+	process := CreateProcess(r.Name, cmd...)
 
 	stderr, _ := process.Command.StderrPipe()
 	stdout, _ := process.Command.StdoutPipe()
 	combined := io.MultiReader(stderr, stdout)
-	process.Command.Start()
 	buf := bufio.NewReader(combined)
+
+	process.Command.Start()
 	for {
 		_, _, err := buf.ReadLine()
 		if err == io.EOF {
 			process.Command.Process.Kill()
+			process.Command.Process.Wait()
+			if r.RTS {
+				r.SetStatus("idle")
+			} else {
+				r.SetStatus("")
+			}
 			break
 		}
 	}
-
-	return "idle"
 }

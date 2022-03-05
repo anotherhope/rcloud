@@ -6,9 +6,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/anotherhope/rcloud/app/internal"
-	"github.com/anotherhope/rcloud/app/socket"
-	"github.com/anotherhope/rcloud/app/socket/message"
+	"github.com/anotherhope/rcloud/app/internal/repositories"
+	"github.com/anotherhope/rcloud/app/internal/socket"
+	"github.com/anotherhope/rcloud/app/internal/socket/message"
 	"github.com/spf13/cobra"
 )
 
@@ -22,7 +22,7 @@ var statusCmd = &cobra.Command{
 		var max = []int{9, 7, 5, 6, 11}
 		output = append(output, []string{"RCLOUD ID", "ENABLED", "STATUS", "SOURCE", "DESTINATION"})
 
-		for _, repository := range internal.App.Repositories {
+		for _, repository := range repositories.Repositories {
 			if max[0] < len(repository.Name[0:12]) {
 				max[0] = len(repository.Name[0:12])
 			}
@@ -31,7 +31,6 @@ var statusCmd = &cobra.Command{
 
 			client := socket.Client()
 			if client != nil {
-
 				m := &message.Message{
 					Request:  message.ReqStatus(repository.Name),
 					Response: &message.Response{},
@@ -66,7 +65,7 @@ var statusCmd = &cobra.Command{
 			)
 		}
 
-		if _, err := os.Stat(internal.SocketPath); errors.Is(err, os.ErrNotExist) {
+		if _, err := os.Stat(socket.SocketPath); errors.Is(err, os.ErrNotExist) {
 			fmt.Println("SERVICE: OFF")
 		} else {
 			fmt.Println("SERVICE: ON")
