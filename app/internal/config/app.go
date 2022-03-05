@@ -37,7 +37,7 @@ func (r *Rcloud) Load() {
 				App.Timer[r.Name] = timer.Register(r.Name, 1*time.Minute)
 			}
 		} else {
-			r.SetStatus("")
+			r.SetStatus("aaaaa")
 		}
 	}
 }

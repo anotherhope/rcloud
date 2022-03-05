@@ -90,8 +90,7 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 	}
 
 	e := exclude(pathOfDirectory)
-	go rclone.Sync(rid)
-	filepath.Walk(pathOfDirectory, func(currentPath string, info os.FileInfo, err error) error {
+	go filepath.Walk(pathOfDirectory, func(currentPath string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -145,6 +144,8 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 	}()
 
 	go w.Queue()
+
+	go rclone.Sync(rid)
 
 	return w, nil
 }

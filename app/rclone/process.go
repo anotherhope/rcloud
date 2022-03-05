@@ -2,7 +2,6 @@ package rclone
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"os/exec"
 	"sync"
@@ -20,7 +19,7 @@ var multiton = map[string]*Process{}
 
 // CreateProcess can create a new process for rclone
 func CreateProcess(repository *repositories.Repository, args ...string) {
-
+	repository.SetStatus("sync")
 	process := &Process{
 		Command: exec.Command("rclone", args...),
 	}
@@ -31,10 +30,8 @@ func CreateProcess(repository *repositories.Repository, args ...string) {
 	}
 	mu.Unlock()
 
-	stderr, err := process.Command.StderrPipe()
-	fmt.Println(err)
-	stdout, err := process.Command.StdoutPipe()
-	fmt.Println(err)
+	stderr, _ := process.Command.StderrPipe()
+	stdout, _ := process.Command.StdoutPipe()
 
 	combined := io.MultiReader(stderr, stdout)
 	buf := bufio.NewReader(combined)
@@ -54,8 +51,12 @@ func CreateProcess(repository *repositories.Repository, args ...string) {
 			if repository.RTS {
 				repository.SetStatus("idle")
 			} else {
-				repository.SetStatus("")
+				repository.SetStatus("bbbbbb")
 			}
+
+			stderr.Close()
+			stdout.Close()
+
 			break
 		} else if err != nil {
 			break
