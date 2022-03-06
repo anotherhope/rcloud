@@ -1,6 +1,7 @@
 package watcher
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -86,8 +87,8 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 	}
 
 	e := exclude(pathOfDirectory)
-	go rclone.Sync(rid)
-	filepath.Walk(pathOfDirectory, func(currentPath string, info os.FileInfo, err error) error {
+
+	err = filepath.Walk(pathOfDirectory, func(currentPath string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -99,6 +100,8 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 
 		return nil
 	})
+
+	fmt.Println(err)
 
 	go func() {
 		for event := range w.notify.Events {

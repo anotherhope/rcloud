@@ -30,15 +30,13 @@ func (r *Rcloud) Load() {
 	}
 	UpdateConfig()
 	for _, r := range repositories.Repositories {
-		fmt.Println(r.Name, r.RTS)
+		r.SetStatus("idle")
 		if r.RTS {
 			if r.IsSourceLocal() {
 				App.Watcher[r.Name], _ = watcher.Register(r.Name, r.Source)
 			} else {
 				App.Timer[r.Name] = timer.Register(r.Name, 1*time.Minute)
 			}
-		} else {
-			r.SetStatus("")
 		}
 	}
 }

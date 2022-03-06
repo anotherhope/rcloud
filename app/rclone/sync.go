@@ -1,8 +1,6 @@
 package rclone
 
 import (
-	"bufio"
-	"io"
 	"path"
 
 	"github.com/anotherhope/rcloud/app/internal/repositories"
@@ -31,25 +29,5 @@ func Sync(rid string) {
 
 	cmd = deleteEmpty(cmd)
 
-	process := CreateProcess(r.Name, cmd...)
-
-	stderr, _ := process.Command.StderrPipe()
-	stdout, _ := process.Command.StdoutPipe()
-	combined := io.MultiReader(stderr, stdout)
-	buf := bufio.NewReader(combined)
-
-	process.Command.Start()
-	for {
-		_, _, err := buf.ReadLine()
-		if err == io.EOF {
-			process.Command.Process.Kill()
-			process.Command.Process.Wait()
-			if r.RTS {
-				r.SetStatus("idle")
-			} else {
-				r.SetStatus("")
-			}
-			break
-		}
-	}
+	CreateProcess(r, cmd...)
 }
