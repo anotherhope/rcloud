@@ -48,9 +48,12 @@ serve:  ## Serve Markdown for preview
 	npm start
 
 test:
-	rm -rf ../bench
-	mkdir -p ../bench
-	number=1 ; while [[ $$number -le 200000 ]] ; do \
+#rm -rf ../bench
+#mkdir -p ../bench
+	number=1 ; while [[ $$number -le 100 ]] ; do \
         echo $$number > ../bench/file-$$number.txt; \
         ((number = number + 1)) ; \
     done
+
+kill:
+	ps aux | grep "rclone" | grep -v grep | awk '{print $$2}' | xargs kill -9

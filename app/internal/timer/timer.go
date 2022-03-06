@@ -12,7 +12,6 @@ type Timer struct {
 }
 
 func (t *Timer) Tick() {
-	rclone.Sync(t.rid)
 	var lock bool = false
 	for range t.ticker.C {
 		if !lock {
