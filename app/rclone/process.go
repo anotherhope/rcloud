@@ -24,13 +24,8 @@ func CreateProcess(repository *repositories.Repository, args ...string) {
 	fmt.Println(c)
 
 	repository.SetStatus("sync")
-	process := &Process{
-		Command: exec.Command("rclone", args...),
-	}
-	mu.Unlock()
-
 	mu.Lock()
-	multiton[repository.Name] = &Process{
+	process := &Process{
 		Command: exec.Command("rclone", args...),
 	}
 	mu.Unlock()
