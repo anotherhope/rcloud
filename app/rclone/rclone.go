@@ -7,9 +7,8 @@ import (
 	"github.com/fsnotify/fsnotify"
 )
 
-func Make(rid string, event fsnotify.Event) func() {
+func CopyOrRemove(r *repositories.Repository, event fsnotify.Event) func() {
 	return func() {
-		r := repositories.GetRepository(rid)
 		relative := event.Name[len(r.Source):]
 		cmd := []string{}
 		cmd = append(cmd, r.Args...)
@@ -23,5 +22,11 @@ func Make(rid string, event fsnotify.Event) func() {
 		}
 
 		CreateProcess(r, cmd...)
+	}
+}
+
+func Sync(r *repositories.Repository) func() {
+	return func() {
+		SyncFromRepository(r)
 	}
 }

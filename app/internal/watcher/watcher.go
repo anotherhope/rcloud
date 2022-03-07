@@ -10,6 +10,7 @@ import (
 
 	"github.com/aligator/nogo"
 	"github.com/anotherhope/rcloud/app/internal/cache"
+	"github.com/anotherhope/rcloud/app/internal/config/env"
 	"github.com/anotherhope/rcloud/app/internal/queue"
 	"github.com/anotherhope/rcloud/app/internal/repositories"
 	"github.com/anotherhope/rcloud/app/rclone"
@@ -29,6 +30,8 @@ func (w *Watcher) Queue() {
 	var p = make(map[string]func())
 	var q *queue.Queue
 
+	r := repositories.GetRepository(w.rid)
+
 	for event := range w.change {
 		if !c {
 			c = true
@@ -40,12 +43,17 @@ func (w *Watcher) Queue() {
 			}
 		}
 
-		p[event.Name] = rclone.Make(w.rid, event)
+		p[event.Name] = rclone.CopyOrRemove(r, event)
 
 		go func(p map[string]func()) {
 			select {
-			case <-time.After(250 * time.Millisecond):
-				q.Addactions(p)
+			case <-time.After(1 * time.Second):
+				if len(p) > env.MAX_FILES_BEFORE_COMPLETE_SYNC {
+					q.AddAction(rclone.Sync(r))
+					q.Cancel()
+				} else {
+					q.Addactions(p)
+				}
 				queue.NewWorker(q).Execute()
 				c = false
 			case <-n:
@@ -97,14 +105,18 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 		}
 
 		if !e.Match(currentPath, true) {
-			w.notify.Add(currentPath)
 			w.cache.Add(currentPath)
+			if info.IsDir() {
+				w.notify.Add(currentPath)
+			}
 		}
 
 		return nil
 	})
 
-	fmt.Println(err)
+	if err != nil {
+		os.Exit(0)
+	}
 
 	go func() {
 		for event := range w.notify.Events {
@@ -131,9 +143,10 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 							w.notify.Add(sourceParentDirectory)
 							sourceParentDirectory = path.Dir(sourceParentDirectory)
 						}
+
+						w.notify.Add(event.Name)
 					}
 
-					w.notify.Add(event.Name)
 					w.cache.Add(event.Name)
 					w.change <- event
 				} else if event.Op&fsnotify.Write == fsnotify.Write {
@@ -148,7 +161,7 @@ func Register(rid string, pathOfDirectory string) (*Watcher, error) {
 
 	go w.Queue()
 
-	go rclone.Sync(rid)
+	//go rclone.Sync(rid)
 
 	return w, nil
 }

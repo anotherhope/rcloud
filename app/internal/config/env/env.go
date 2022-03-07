@@ -1,0 +1,3 @@
+package env
+
+const MAX_FILES_BEFORE_COMPLETE_SYNC = 1000

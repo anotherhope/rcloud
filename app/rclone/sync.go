@@ -16,9 +16,12 @@ func deleteEmpty(s []string) []string {
 	return r
 }
 
-func Sync(rid string) {
-	//fmt.Println(rid, "sync")
+func SyncFromRepositoryName(rid string) {
 	r := repositories.GetRepository(rid)
+	SyncFromRepository(r)
+}
+
+func SyncFromRepository(r *repositories.Repository) {
 	cmd := []string{}
 	cmd = append(cmd, r.Args...)
 	cmd = append(cmd, "sync")

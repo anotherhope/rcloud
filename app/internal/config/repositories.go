@@ -85,20 +85,3 @@ func Del(n string) error {
 
 	return fmt.Errorf("repository not exists")
 }
-
-/*
-// List repositories in configuration file
-func List() []*repositories.Repository {
-	return repositories.List()
-}
-
-// GetRepository repository by name
-func GetRepository(repositoryName string) *repositories.Repository {
-	return repositories.GetRepository(repositoryName)
-}
-
-// IsValid detect if remote repository is configured and valid
-func IsValid(path string, isRemote bool) (string, error) {
-	return repositories.IsValid(path, isRemote)
-}
-*/

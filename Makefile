@@ -47,10 +47,12 @@ serve:  ## Serve Markdown for preview
 	npm install
 	npm start
 
+clear-bench:
+	rm -rf ../bench
+
 test:
-#rm -rf ../bench
-#mkdir -p ../bench
-	number=1 ; while [[ $$number -le 100 ]] ; do \
+	mkdir -p ../bench
+	number=1 ; while [[ $$number -le 30000 ]] ; do \
         echo $$number > ../bench/file-$$number.txt; \
         ((number = number + 1)) ; \
     done

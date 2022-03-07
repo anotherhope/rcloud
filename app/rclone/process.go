@@ -16,30 +16,27 @@ type Process struct {
 var mu = sync.Mutex{}
 var multiton = map[string]*Process{}
 
-var c = 0
-
 // CreateProcess can create a new process for rclone
 func CreateProcess(repository *repositories.Repository, args ...string) {
-	c++
-	fmt.Println(c)
-
+	fmt.Println("CreateProcess")
 	repository.SetStatus("sync")
 	mu.Lock()
 	process := &Process{
 		Command: exec.Command("rclone", args...),
 	}
 	mu.Unlock()
-
 	//stderr, _ := process.Command.StderrPipe()
 	//stdout, _ := process.Command.StdoutPipe()
 	//combined := io.MultiReader(stderr, stdout)
 	//buf := bufio.NewReader(combined)
 
-	if err := process.Command.Start(); err == nil {
+	if err := process.Command.Start(); err != nil {
+		fmt.Println(err)
+	} else {
 		process.Command.Process.Wait()
 		repository.SetStatus("idle")
 	}
-
+	// oki oki
 	//process.Command.Process.Kill()
 
 	//for {

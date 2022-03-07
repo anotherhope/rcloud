@@ -16,7 +16,7 @@ func (t *Timer) Tick() {
 	for range t.ticker.C {
 		if !lock {
 			lock = true
-			rclone.Sync(t.rid)
+			rclone.SyncFromRepositoryName(t.rid)
 			lock = false
 		}
 	}

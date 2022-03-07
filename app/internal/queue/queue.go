@@ -31,6 +31,11 @@ func (q *Queue) Addactions(actions map[string]func()) {
 	}()
 }
 
+// Cancel cancel context
+func (q *Queue) Cancel() {
+	q.cancel()
+}
+
 // AddAction sends Action to the channel.
 func (q *Queue) AddAction(Action func()) {
 	q.actions <- Action
